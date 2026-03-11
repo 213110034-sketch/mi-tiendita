@@ -3,292 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Hub Ultimate Pro ✨</title>
+    <title>Tienda Hub Franquicia Elite 🏆</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { 
             --primary: #5856D6; --success: #34C759; --danger: #FF3B30; 
             --warning: #FF9500; --info: #5AC8FA; --bg: #F2F2F7; --card: #FFFFFF;
         }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: #1C1C1E; }
-        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: slideIn 0.3s ease-out; }
+        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: fadeIn 0.2s ease; }
         .screen.active { display: block; }
-        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
         
         /* Dashboard */
-        .welcome-card { background: linear-gradient(135deg, #5856D6, #C694F9); color: white; border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(88, 86, 214, 0.2); }
+        .welcome-card { background: linear-gradient(135deg, #5856D6, #007AFF); color: white; border-radius: 25px; padding: 20px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,122,255,0.2); }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-card { background: var(--card); border-radius: 22px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
-        .menu-card:active { transform: scale(0.9); background: #f9f9f9; }
+        .menu-card { background: var(--card); border-radius: 20px; padding: 18px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .menu-card:active { transform: scale(0.95); background: #F9F9F9; }
         .menu-card i { margin-bottom: 8px; display: block; margin: auto; }
-        .menu-card span { font-weight: 800; font-size: 13px; display: block; margin-top: 5px; }
+        .menu-card span { font-weight: 700; font-size: 13px; display: block; }
 
-        .data-card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #E5E5EA; }
-        .btn-vender { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 900; cursor: pointer; }
-        .back-btn { background: white; border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; }
+        .data-card { background: var(--card); border-radius: 18px; padding: 15px; margin-bottom: 12px; border: 1px solid #EEE; position: relative; }
+        .sucursal-tag { background: #E5E5EA; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; color: #3A3A3C; margin-top: 5px; display: inline-block; }
         
-        input, select { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #DDD; border-radius: 15px; font-size: 16px; box-sizing: border-box; }
-        .ai-tip { background: #F0F0FF; border-left: 5px solid var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
-        .ai-tip b { color: var(--primary); display: block; margin-bottom: 5px; }
+        .btn { width: 100%; padding: 14px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; font-size: 15px; margin-bottom: 10px; transition: 0.2s; }
+        .btn:active { opacity: 0.8; }
+        
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #DDD; border-radius: 12px; box-sizing: border-box; font-size: 16px; font-family: inherit; }
+        .back-btn { background: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-right: 15px; cursor: pointer; }
+        
+        .ai-tip { background: #F0F0FF; border-left: 5px solid var(--primary); padding: 12px; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div id="scr-home" class="screen active">
     <div class="welcome-card">
-        <h2 id="txt-saludo">¡Hola, Jefe! 👋</h2>
-        <p id="txt-motivacion" style="margin: 5px 0 0; opacity: 0.9; font-style: italic;"></p>
-        <div style="margin-top:20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px;">
-            <span style="font-size: 11px; font-weight: bold; text-transform: uppercase;">💰 Venta de Hoy:</span>
-            <div id="home-caja" style="font-size: 32px; font-weight: 900;">$0.00</div>
+        <h2 id="txt-saludo" style="margin:0">¡Hola, Jefe! 👋</h2>
+        <p id="quote" style="font-size:13px; opacity:0.9; margin:8px 0 18px; font-style: italic; min-height: 32px;"></p>
+        <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.2); padding-top:15px;">
+            <div><small style="font-weight:bold; font-size:10px; opacity:0.8;">VENTAS HOY</small><div id="h-caja" style="font-size:24px; font-weight:900;">$0.00</div></div>
+            <div style="text-align:right;"><small style="font-weight:bold; font-size:10px; opacity:0.8;">GASTOS</small><div id="h-gastos" style="font-size:24px; font-weight:900; color:#FFD2D2;">$0.00</div></div>
         </div>
     </div>
 
     <div class="menu-grid">
-        <div class="menu-card" onclick="goTo('scr-inv')"><i data-lucide="shopping-basket" style="color:var(--primary)"></i><span>Inventario 🛒</span></div>
-        <div class="menu-card" onclick="goTo('scr-ai')"><i data-lucide="brain-circuit" style="color:#AF52DE"></i><span>Asesor AI 🧠</span></div>
-        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="book-user" style="color:var(--info)"></i><span>Fiados 📔</span></div>
-        <div class="menu-card" onclick="goTo('scr-calc')"><i data-lucide="coins" style="color:var(--success)"></i><span>Cambio 🪙</span></div>
-        <div class="menu-card" onclick="goTo('scr-prov')"><i data-lucide="truck" style="color:var(--warning)"></i><span>Proveedores 🚛</span></div>
-        <div class="menu-card" onclick="goTo('scr-alerts')"><i data-lucide="bell" style="color:var(--danger)"></i><span>Alertas 🚨</span></div>
+        <div class="menu-card" onclick="goTo('scr-inv')"><i data-lucide="package" style="color:var(--primary)"></i><span>Inventario</span></div>
+        <div class="menu-card" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin" style="color:var(--danger)"></i><span>Sucursales</span></div>
+        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="book-open" style="color:var(--info)"></i><span>Fiados</span></div>
+        <div class="menu-card" onclick="goTo('scr-gastos')"><i data-lucide="receipt" style="color:var(--warning)"></i><span>Gastos</span></div>
+        <div class="menu-card" onclick="goTo('scr-lista')"><i data-lucide="shopping-cart" style="color:var(--success)"></i><span>Mandado</span></div>
+        <div class="menu-card" onclick="goTo('scr-ai')"><i data-lucide="brain" style="color:#AF52DE"></i><span>Asesor AI</span></div>
+        <div class="menu-card" onclick="compartirCatalogo()"><i data-lucide="megaphone" style="color:var(--primary)"></i><span>Catálogo WA</span></div>
+        <div class="menu-card" onclick="goTo('scr-cloud')"><i data-lucide="cloud-cog" style="color:#8E8E93"></i><span>Respaldo</span></div>
     </div>
     
-    <button onclick="cerrarCaja()" style="width:100%; margin-top:20px; padding:15px; border-radius:15px; border:none; background:#8E8E93; color:white; font-weight:bold; cursor:pointer;">
-        🔒 Cerrar Caja del Día
-    </button>
+    <button onclick="cerrarCaja()" class="btn" style="background:#8E8E93; color:white; margin-top:20px;">🔒 Cerrar Día y Limpiar Caja</button>
 </div>
 
 <div id="scr-inv" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Mercancía 📦</h2>
+        <h2 style="margin:0;">Inventario 📦</h2>
     </div>
     <div class="data-card">
-        <input type="text" id="n" placeholder="Producto">
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="c" placeholder="Costo $">
-            <input type="number" id="v" placeholder="Venta $">
-        </div>
-        <input type="number" id="s" placeholder="Stock">
-        <button onclick="add()" class="btn-vender" style="width:100%; background:var(--primary);">✨ Guardar</button>
+        <input type="text" id="n" placeholder="Nombre del Producto">
+        <div style="display:flex; gap:10px;"><input type="number" id="v" placeholder="Precio Venta $"><input type="number" id="s" placeholder="Stock"></div>
+        <button onclick="add()" class="btn" style="background:var(--primary); color:white; margin:0;">Guardar Producto ✨</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar para vender..." oninput="render()">
+    <input type="text" id="search" placeholder="🔍 Buscar producto para vender..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
-<div id="scr-ai" class="screen">
+<div id="scr-sucursales" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Asesor 🧠</h2>
+        <h2 style="margin:0;">Sucursales 📍</h2>
     </div>
-    <div id="ai-content"></div>
+    <div class="data-card">
+        <p style="font-size:13px; margin-top:0;"><b>Llave de esta tienda:</b></p>
+        <textarea id="my-key" rows="2" style="font-size:10px; background:#f0f0f0;" readonly></textarea>
+    </div>
+    <div class="data-card">
+        <p style="font-size:13px; margin-top:0;"><b>Vincular otra tienda:</b></p>
+        <input type="text" id="suc-name" placeholder="Nombre (Ej: Sucursal Norte)">
+        <textarea id="suc-key" rows="2" placeholder="Pega la llave aquí..."></textarea>
+        <button onclick="vincularSucursal()" class="btn" style="background:var(--primary); color:white;">Vincular 🔗</button>
+    </div>
+    <div id="list-sucursales"></div>
 </div>
 
 <div id="scr-fiados" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Fiados 📔</h2>
+        <h2 style="margin:0;">Libro de Fiados 📔</h2>
     </div>
     <div class="data-card" style="background: #FFF9E6;">
-        <span style="font-size: 11px; font-weight: bold; color: #856404;">💸 DINERO EN LA CALLE:</span>
-        <h2 id="total-fiado" style="margin:5px 0; color: #856404;">$0.00</h2>
+        <small style="font-weight:bold; color:#856404;">DINERO EN LA CALLE</small>
+        <h2 id="total-fiado" style="margin:5px 0; color:#856404;">$0.00</h2>
     </div>
     <div class="data-card">
-        <input type="text" id="f-nom" placeholder="Nombre">
+        <input type="text" id="f-nom" placeholder="¿Quién te debe?">
         <input type="number" id="f-amo" placeholder="Monto $">
-        <button onclick="addFiado()" class="btn-vender" style="width:100%; background:var(--info);">📝 Anotar</button>
+        <button onclick="addFiado()" class="btn" style="background:var(--info); color:white;">Anotar Deuda</button>
     </div>
     <div id="list-fiados"></div>
 </div>
 
-<div id="scr-calc" class="screen">
+<div id="scr-gastos" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Cambio 🪙</h2>
-    </div>
-    <div class="data-card" style="text-align:center;">
-        <input type="number" id="ca-tot" placeholder="Total $" oninput="calcCambio()">
-        <input type="number" id="ca-rec" placeholder="Recibí $" oninput="calcCambio()">
-        <h1 id="ca-res" style="font-size:48px; margin:20px 0; color:var(--success);">$0.00</h1>
-    </div>
-</div>
-
-<div id="scr-prov" class="screen">
-    <div style="display:flex; align-items:center; margin-bottom:20px;">
-        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Visitas 🚛</h2>
+        <h2 style="margin:0;">Gastos de Hoy 💸</h2>
     </div>
     <div class="data-card">
-        <input type="text" id="pr-nom" placeholder="Empresa">
-        <select id="pr-dia">
-            <option value="">¿Qué día viene?</option>
-            <option value="Lunes">Lunes</option><option value="Martes">Martes</option>
-            <option value="Miércoles">Miércoles</option><option value="Jueves">Jueves</option>
-            <option value="Viernes">Viernes</option><option value="Sábado">Sábado</option>
-        </select>
-        <button onclick="addProv()" class="btn-vender" style="width:100%; background:var(--warning);">📅 Agendar</button>
+        <input type="text" id="g-nom" placeholder="Concepto (Luz, Renta, etc)">
+        <input type="number" id="g-amo" placeholder="¿Cuánto gastaste? $">
+        <button onclick="addGasto()" class="btn" style="background:var(--danger); color:white;">Registrar Gasto</button>
     </div>
-    <div id="list-prov"></div>
+    <div id="list-gastos"></div>
 </div>
 
-<div id="scr-alerts" class="screen">
+<div id="scr-lista" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Alertas 🚨</h2>
+        <h2 style="margin:0;">Mandado 🛒</h2>
     </div>
-    <div id="alert-list"></div>
+    <div id="list-mandado-auto"></div>
+    <div class="data-card">
+        <input type="text" id="l-item" placeholder="Agregar algo manual...">
+        <button onclick="addListaManual()" class="btn" style="background:var(--success); color:white;">Agregar a la lista</button>
+    </div>
+    <div id="list-mandado-manual"></div>
+    <button onclick="mandarListaWA()" class="btn" style="background:var(--primary); color:white;">Mandar Lista por WA 📱</button>
+</div>
+
+<div id="scr-ai" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Asesor AI 🧠</h2>
+    </div>
+    <div id="ai-content"></div>
+</div>
+
+<div id="scr-cloud" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Nube ☁️</h2>
+    </div>
+    <div class="data-card">
+        <p style="font-size:14px;"><b>Tu llave de respaldo:</b></p>
+        <textarea id="cloud-data" rows="4" readonly></textarea>
+        <button onclick="copiarCloud()" class="btn" style="background:var(--primary); color:white;">Copiar Llave 🔑</button>
+    </div>
+    <div class="data-card">
+        <p style="font-size:14px;"><b>Importar Respaldo:</b></p>
+        <textarea id="cloud-import" rows="2" placeholder="Pega el código aquí..."></textarea>
+        <button onclick="importarCloud()" class="btn" style="background:var(--success); color:white;">Restaurar Datos 🔄</button>
+    </div>
 </div>
 
 <script>
     // --- BASE DE DATOS ---
-    let db = JSON.parse(localStorage.getItem('tienda_pro_v12')) || [];
-    let fiados = JSON.parse(localStorage.getItem('fiados_v12')) || [];
-    let provs = JSON.parse(localStorage.getItem('provs_v12')) || [];
-    let caja = parseFloat(localStorage.getItem('caja_v12')) || 0;
+    let db = JSON.parse(localStorage.getItem('th_db_v15')) || [];
+    let fiados = JSON.parse(localStorage.getItem('th_fi_v15')) || [];
+    let gastos = JSON.parse(localStorage.getItem('th_ga_v15')) || [];
+    let sucursales = JSON.parse(localStorage.getItem('th_suc_v15')) || [];
+    let listaM = JSON.parse(localStorage.getItem('th_lm_v15')) || [];
+    let caja = parseFloat(localStorage.getItem('th_ca_v15')) || 0;
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-ai') generarConsejosAI();
+        if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
+        if(id === 'scr-cloud') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, fiados, gastos, sucursales, listaM, caja}));
+        if(id === 'scr-ai') generarAI();
         render();
     }
 
-    // --- FUNCIONES INVENTARIO ---
+    // --- FUNCIONES CORE ---
     function add() {
-        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), c = parseFloat(document.getElementById('c').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) {
-            db.push({ id: Date.now(), n, v, c, s });
-            saveAll();
-            ['n','c','v','s'].forEach(i => document.getElementById(i).value='');
-            render();
-        }
+        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
+        if(n && v) { db.push({id: Date.now(), n, v, s}); save(); document.getElementById('n').value=''; }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p && p.s > 0) {
-            p.s--; caja += p.v;
-            saveAll(); render();
-        } else { alert("🚫 ¡No hay mercancía!"); }
+        if(p && p.s > 0) { p.s--; caja += p.v; save(); }
+        else { alert("¡Sin stock!"); }
     }
 
-    function eliminarProducto(id) {
-        const p = db.find(x => x.id === id);
-        if(confirm(`¿Seguro que quieres eliminar "${p.n}"? 🗑️`)) {
-            db = db.filter(x => x.id !== id);
-            saveAll(); render();
-        }
+    function addGasto() {
+        const n = document.getElementById('g-nom').value, a = parseFloat(document.getElementById('g-amo').value);
+        if(n && a) { gastos.push({n, a}); save(); document.getElementById('g-nom').value=''; document.getElementById('g-amo').value=''; }
     }
 
-    // --- FUNCIONES FIADOS ---
     function addFiado() {
         const n = document.getElementById('f-nom').value, a = parseFloat(document.getElementById('f-amo').value);
-        if(n && a) {
-            fiados.push({ id: Date.now(), n, a, f: new Date().toLocaleDateString() });
-            saveAll(); document.getElementById('f-nom').value=''; document.getElementById('f-amo').value='';
-            render();
+        if(n && a) { fiados.push({id: Date.now(), n, a, fecha: new Date().toLocaleDateString()}); save(); document.getElementById('f-nom').value=''; }
+    }
+
+    function addListaManual() {
+        const i = document.getElementById('l-item').value;
+        if(i) { listaM.push(i); save(); document.getElementById('l-item').value=''; }
+    }
+
+    function vincularSucursal() {
+        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
+        if(name && key) {
+            try {
+                const data = JSON.parse(atob(key));
+                sucursales.push({id: Date.now(), name, inv: data.db});
+                save(); document.getElementById('suc-name').value=''; document.getElementById('suc-key').value='';
+                alert("Sucursal vinculada 🔗");
+            } catch(e) { alert("Llave inválida"); }
         }
     }
 
-    function cobrarFiado(id) {
-        fiados = fiados.filter(f => f.id !== id);
-        saveAll(); render();
-    }
-
-    function whatsappFiado(n, a) {
-        const msg = `Hola ${n} 👋, te saludo de la tienda. Te recuerdo el pendiente de $${a}. ✨`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-    }
-
-    // --- FUNCIONES OTROS ---
-    function addProv() {
-        const n = document.getElementById('pr-nom').value, d = document.getElementById('pr-dia').value;
-        if(n && d) { provs.push({n, d}); saveAll(); render(); }
-    }
-
-    function calcCambio() {
-        const t = parseFloat(document.getElementById('ca-tot').value)||0, r = parseFloat(document.getElementById('ca-rec').value)||0;
-        document.getElementById('ca-res').innerText = "$" + (r-t > 0 ? (r-t).toFixed(2) : "0.00");
+    // --- AUXILIARES ---
+    function save() {
+        localStorage.setItem('th_db_v15', JSON.stringify(db));
+        localStorage.setItem('th_fi_v15', JSON.stringify(fiados));
+        localStorage.setItem('th_ga_v15', JSON.stringify(gastos));
+        localStorage.setItem('th_suc_v15', JSON.stringify(sucursales));
+        localStorage.setItem('th_lm_v15', JSON.stringify(listaM));
+        localStorage.setItem('th_ca_v15', caja);
+        render();
     }
 
     function cerrarCaja() {
-        if(confirm(`💰 ¿Cerrar caja hoy con $${caja.toFixed(2)}?`)) { caja = 0; saveAll(); render(); }
+        if(confirm("¿Cerrar día? Se limpiarán las ventas y los gastos registrados hoy.")) {
+            caja = 0; gastos = []; save();
+        }
     }
 
-    function generarConsejosAI() {
-        const container = document.getElementById('ai-content');
-        container.innerHTML = '';
-        if(db.length === 0) return container.innerHTML = '<div class="data-card">Sin datos 📭</div>';
+    function mandarListaWA() {
+        let t = "🛒 *LISTA DE MANDADO*\n\n";
+        db.filter(p => p.s <= 3).forEach(p => t += `- ${p.n} (Solo quedan ${p.s})\n`);
+        listaM.forEach(m => t += `- ${m}\n`);
+        window.open(`https://wa.me/?text=${encodeURIComponent(t)}`);
+    }
+
+    function compartirCatalogo() {
+        let t = "🏪 *PRECIOS DE HOY*\n\n";
+        db.forEach(p => t += `${p.n} ... *$${p.v}*\n`);
+        window.open(`https://wa.me/?text=${encodeURIComponent(t)}`);
+    }
+
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("Copiado 🔑"); }
+
+    function importarCloud() {
+        try {
+            const d = JSON.parse(atob(document.getElementById('cloud-import').value));
+            db = d.db; fiados = d.fiados; gastos = d.gastos; sucursales = d.sucursales; listaM = d.listaM; caja = d.caja;
+            save(); alert("¡Restaurado! ✨"); goTo('scr-home');
+        } catch(e) { alert("Error al importar"); }
+    }
+
+    function generarAI() {
+        const c = document.getElementById('ai-content'); c.innerHTML = '';
         db.forEach(p => {
-            const safety = Math.ceil(p.s * 0.2);
-            container.innerHTML += `<div class="data-card">
+            const colchon = Math.ceil(p.s * 0.2);
+            c.innerHTML += `<div class="data-card">
                 <h3>${p.n}</h3>
-                <div class="ai-tip"><b>🛡️ Colchón de Emergencia:</b> Procura tener al menos ${safety} extra.</div>
-                <div class="ai-tip" style="background:#FFF4E5;"><b>📞 Cuándo pedir:</b> Si te quedan ${safety+2} avísale al proveedor.</div>
+                <div class="ai-tip"><b>🛡️ Colchón:</b> Ten al menos ${colchon} extra de reserva.</div>
+                <div class="ai-tip" style="background:#FFF4E5;"><b>📞 Pedido:</b> Llama al proveedor al llegar a ${colchon+2} pzs.</div>
             </div>`;
         });
     }
 
-    function saveAll() {
-        localStorage.setItem('tienda_pro_v12', JSON.stringify(db));
-        localStorage.setItem('fiados_v12', JSON.stringify(fiados));
-        localStorage.setItem('provs_v12', JSON.stringify(provs));
-        localStorage.setItem('caja_v12', caja);
-    }
-
     function render() {
-        document.getElementById('home-caja').innerText = "$" + caja.toFixed(2);
+        document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
+        document.getElementById('h-gastos').innerText = "$" + gastos.reduce((a,b)=>a+b.a,0).toFixed(2);
         
         // Render Inventario
-        const listI = document.getElementById('list-inv');
-        if(listI) {
+        const li = document.getElementById('list-inv');
+        if(li) {
             const q = document.getElementById('search').value.toLowerCase();
-            listI.innerHTML = '';
+            li.innerHTML = '';
             db.filter(p => p.n.toLowerCase().includes(q)).forEach(p => {
-                listI.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><b>${p.n}</b><br><small>Stock: ${p.s}</small></div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="btn-vender" onclick="vender(${p.id})">Vender 💸</button>
-                        <button onclick="eliminarProducto(${p.id})" style="border:none; background:#F2F2F7; color:var(--danger); padding:10px; border-radius:12px;"><i data-lucide="trash-2" style="width:18px"></i></button>
+                let sucsInfo = '';
+                sucursales.forEach(s => {
+                    let match = s.inv.find(i => i.n.toLowerCase() === p.n.toLowerCase());
+                    if(match) sucsInfo += `<span class="sucursal-tag">📍 ${s.name}: ${match.s}</span> `;
+                });
+                li.innerHTML += `<div class="data-card">
+                    <div style="display:flex; justify-content:space-between;"><b>${p.n}</b><b>$${p.v}</b></div>
+                    <small>Stock aquí: ${p.s}</small><br>${sucsInfo}
+                    <div style="margin-top:10px; display:flex; gap:8px;">
+                        <button onclick="vender(${p.id})" style="flex:1; background:var(--success); border:none; color:white; padding:10px; border-radius:10px; font-weight:bold;">Vender 💸</button>
+                        <button onclick="if(confirm('¿Borrar?')){db=db.filter(x=>x.id!=${p.id});save();}" style="background:#F2F2F7; border:none; color:var(--danger); padding:10px; border-radius:10px;"><i data-lucide="trash-2" style="width:18px"></i></button>
                     </div>
                 </div>`;
             });
         }
 
         // Render Fiados
-        const listF = document.getElementById('list-fiados');
-        let totalF = 0;
-        if(listF) {
-            listF.innerHTML = '';
+        const lf = document.getElementById('list-fiados');
+        if(lf) {
+            lf.innerHTML = ''; let tf = 0;
             fiados.forEach(f => {
-                totalF += f.a;
-                listF.innerHTML += `<div class="data-card">
-                    <b>👤 ${f.n}</b> - <span style="color:var(--danger)">$${f.a}</span>
+                tf += f.a;
+                lf.innerHTML += `<div class="data-card" style="border-left:5px solid ${f.a > 500 ? 'var(--danger)' : 'var(--info)'}">
+                    <b>${f.n}</b> <span style="float:right; color:var(--danger)">$${f.a}</span><br><small>${f.fecha}</small>
                     <div style="margin-top:10px; display:flex; gap:5px;">
-                        <button onclick="whatsappFiado('${f.n}', ${f.a})" style="flex:1; background:#25D366; color:white; border:none; padding:8px; border-radius:8px;">WhatsApp</button>
-                        <button onclick="cobrarFiado(${f.id})" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:8px;">Pagó</button>
+                        <button onclick="window.open('https://wa.me/?text=Hola ${f.n}, te recuerdo el pendiente de $${f.a}')" style="flex:1; background:#25D366; color:white; border:none; padding:8px; border-radius:8px;">WhatsApp</button>
+                        <button onclick="fiados=fiados.filter(x=>x.id!=${f.id});save();" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:8px;">Pagó</button>
                     </div>
                 </div>`;
             });
-            document.getElementById('total-fiado').innerText = "$" + totalF.toFixed(2);
+            document.getElementById('total-fiado').innerText = "$" + tf.toFixed(2);
         }
 
-        // Render Alertas
-        const listA = document.getElementById('alert-list');
-        if(listA) {
-            listA.innerHTML = '';
-            db.filter(p => p.s <= 3).forEach(p => {
-                listA.innerHTML += `<div class="data-card" style="border-left:5px solid var(--danger)">⚠️ <b>${p.n}</b> se está acabando (${p.s} pzs)</div>`;
-            });
-        }
+        // Render Gastos
+        const lg = document.getElementById('list-gastos');
+        if(lg) { lg.innerHTML = ''; gastos.forEach(g => lg.innerHTML += `<div class="data-card"><b>${g.n}</b> <span style="float:right; color:var(--danger)">-$${g.a}</span></div>`); }
+
+        // Render Lista
+        const lma = document.getElementById('list-mandado-auto');
+        if(lma) { lma.innerHTML = ''; db.filter(p => p.s <= 3).forEach(p => lma.innerHTML += `<div class="data-card" style="border-left:5px solid var(--warning)">⚠️ <b>${p.n}</b> (Quedan ${p.s})</div>`); }
+        const lmm = document.getElementById('list-mandado-manual');
+        if(lmm) { lmm.innerHTML = ''; listaM.forEach((m,i) => lmm.innerHTML += `<div class="data-card">${m} <button onclick="listaM.splice(${i},1);save();" style="float:right; border:none; background:none;">❌</button></div>`); }
 
         lucide.createIcons();
     }
 
+    // --- DINAMISMO Y FRASES ---
     window.onload = () => {
-        const frases = ["¡El que madruga vende más! ☕", "¡A darle que es mole de olla! 🔥", "¡Caja llena, corazón contento! 🚀"];
-        document.getElementById('txt-motivacion').innerText = frases[Math.floor(Math.random()*frases.length)];
+        const hrs = new Date().getHours();
+        const saludo = hrs < 12 ? "¡Buenos días, Jefe! 👋" : (hrs < 18 ? "¡Buenas tardes, Jefe! 😎" : "¡Buenas noches, Jefe! 🌙");
+        document.getElementById('txt-saludo').innerText = saludo;
+
+        const frases = [
+            "El que madruga vende más! ☕", "A darle que es mole de olla! 🔥", "Caja llena, corazón contento! 🚀",
+            "Clientela feliz, bolsillo feliz! 😊", "Hoy es un gran día para vender! 💰", "El que no enseña, no vende! ✨",
+            "Atiende con gusto y volverán con gusto! 🤝", "La constancia es la llave del éxito! 🔑", "Cada cliente es una oportunidad! 🌟",
+            "Si hay orden en la tienda, hay orden en la caja! 📋", "Sonríe, que la buena vibra también se vende! 😊",
+            "Un negocio que no se cuida, se descuida solo! 🧐", "A paso firme y con la frente en alto! 💪", "El éxito es la suma de pequeños detalles! 💎",
+            "Hoy vas a romper récord de ventas, Jefe! 📈", "Fiado es pariente de finado! 💀", "Mercancía que no se mueve, dinero que se duerme! 💤",
+            "El cambio exacto es cortesía de la casa! 🪙", "Donde hay disciplina, hay ganancia! 🏗️", "Trata a tu proveedor como a tu mejor aliado! 🚛",
+            "La limpieza vende más que la publicidad! 🧹", "No vendas productos, vende soluciones! 💡", "Quien cuida los centavos, junta los pesos! 🏦",
+            "Un cliente satisfecho es tu mejor vendedor! 📢", "La competencia te hace mejor, no te detengas! 🏁", "Hoy toca surtir, mañana toca cobrar! 🛒",
+            "El inventario es el corazón de tu negocio! ❤️", "Cada peso en caja es fruto de tu esfuerzo! 🧱", "Lo que se mide, se puede mejorar! 📊",
+            "Tú eres el alma de esta tienda, dale con todo! 🦁"
+        ];
+        document.getElementById('quote').innerText = '"' + frases[Math.floor(Math.random()*frases.length)] + '"';
         render();
     };
 </script>
