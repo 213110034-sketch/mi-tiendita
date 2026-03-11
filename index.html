@@ -3,245 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Hub Prestige Unlimited 💎</title>
+    <title>Tienda Hub Manager Pro 📈💎</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-            --prestige-bg: #05070A;
-            --glass: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent: #FACC15;
+            --bg: #F0F4F8;
+            --glass-card: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --primary: #1E293B;
+            --accent: #3B82F6;
             --success: #10B981;
             --danger: #F43F5E;
-            --text: #F8FAFC;
+            --text-main: #1E293B;
+            --text-dim: #64748B;
         }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--prestige-bg); 
-            color: var(--text); 
+            background-color: var(--bg); 
+            color: var(--text-main); 
             margin: 0; 
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at top right, #1E293B, #05070A);
-            min-height: 100vh;
+            padding-bottom: 50px;
+            background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent);
         }
 
-        /* Efecto Vidrio */
-        .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-        }
-
-        .screen { display: none; padding: 20px; animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .screen { display: none; padding: 25px 20px; animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
         .screen.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(30px) scale(0.95); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
-        }
-
-        /* Header de Lujo */
-        .premium-header {
-            padding: 30px 20px;
-            text-align: left;
-        }
-
-        .main-balance {
-            font-size: 42px;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin: 10px 0;
-            background: var(--gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Tarjetas de Menú */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
-        
-        .menu-card {
-            background: var(--glass);
+        .glass-panel {
+            background: var(--glass-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 24px;
-            text-align: left;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        /* Dashboard Hero */
+        .hero-card {
+            background: var(--primary);
+            color: white;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 20px 30px rgba(30, 41, 59, 0.15);
+            margin-bottom: 25px;
             position: relative;
             overflow: hidden;
         }
-
-        .menu-card:active { transform: scale(0.9); background: rgba(255,255,255,0.05); }
-
-        .menu-card i { 
-            color: var(--accent); 
-            width: 28px; height: 28px; 
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.4));
+        .hero-card::before {
+            content: "💰"; position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.1;
         }
 
-        .menu-card span { font-size: 14px; font-weight: 600; color: #94A3B8; display: block; }
-        .menu-card b { font-size: 16px; color: white; display: block; margin-top: 4px; }
+        .balance { font-size: 44px; font-weight: 800; letter-spacing: -2px; margin: 8px 0; color: #fff; }
 
-        /* Inputs y Botones Estilo Tesla */
-        input {
-            background: rgba(15, 23, 42, 0.6);
+        /* Menu Grid */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .menu-item {
+            background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            padding: 18px;
-            border-radius: 16px;
-            color: white;
-            font-size: 16px;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 12px;
+            border-radius: 22px;
+            padding: 22px;
+            transition: 0.3s;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .menu-item:active { transform: scale(0.92); background: white; }
+        .menu-item i { color: var(--accent); margin-bottom: 12px; filter: drop-shadow(0 4px 6px rgba(59,130,246,0.2)); }
+        .menu-item span { display: block; font-weight: 700; font-size: 15px; color: var(--primary); }
+
+        /* Inputs & Buttons */
+        input, select, textarea {
+            width: 100%; padding: 16px; border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 14px; margin-bottom: 12px; font-size: 16px;
+            background: rgba(255,255,255,0.6); box-sizing: border-box;
         }
 
-        .btn-gold {
-            background: var(--gold);
-            color: #000;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            padding: 20px;
-            border-radius: 18px;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(184, 134, 11, 0.3);
+        .btn {
+            width: 100%; padding: 18px; border-radius: 16px; border: none;
+            font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s;
         }
+        .btn-primary { 
+            background: var(--primary); color: white;
+            box-shadow: 0 8px 15px rgba(30, 41, 59, 0.2);
+        }
+        .btn-primary:active { transform: translateY(2px); box-shadow: none; }
 
         .back-btn {
-            width: 48px; height: 48px;
-            border-radius: 16px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px;
+            width: 45px; height: 45px; border-radius: 14px; border: 1px solid var(--glass-border);
+            background: var(--glass-card); margin-bottom: 15px; display: flex; align-items: center; justify-content: center;
         }
 
-        /* Historial y Listas */
+        /* Item Rows */
         .item-row {
-            padding: 20px;
-            margin-bottom: 12px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.03);
+            background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 18px; border-radius: 20px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: fadeIn 0.5s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 
-        .badge-stock {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-low { background: rgba(244,63,94,0.1); color: var(--danger); }
+        .badge-ok { background: rgba(16,185,129,0.1); color: var(--success); }
     </style>
 </head>
 <body>
 
 <div id="scr-home" class="screen active">
-    <div class="premium-header">
-        <small style="text-transform: uppercase; letter-spacing: 2px; color: #64748B; font-weight: 800;">Executive Dashboard</small>
-        <h1 id="txt-saludo" style="margin: 5px 0 0 0; font-weight: 400;">Good morning, Boss.</h1>
-        <div class="main-balance" id="h-caja">$0.00</div>
-        <p id="quote" style="color: #94A3B8; font-size: 14px; margin-top: 0;"></p>
+    <div style="padding: 10px 0 25px;">
+        <h2 id="txt-saludo" style="margin:0; font-weight: 800; font-size: 26px;">¡Hola, Jefe! 👋</h2>
+        <p id="quote" style="color: var(--text-dim); font-size: 14px; margin-top: 5px; font-weight: 500;"></p>
+    </div>
+
+    <div class="hero-card">
+        <small id="l-caja-hoy" style="text-transform: uppercase; font-weight: 700; opacity: 0.8; letter-spacing: 1px;">💰 Ventas de Hoy</small>
+        <div class="balance" id="h-caja">$0.00</div>
+        <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <span id="l-mes-acum" style="opacity:0.8">📈 Mes acumulado:</span>
+            <b id="h-mes" style="color: #6EE7B7; font-weight: 800;">$0.00</b>
+        </div>
     </div>
 
     <div class="menu-grid">
-        <div class="menu-card" onclick="goTo('scr-inv')"><i data-lucide="layers"></i><span>Global</span><b>Inventory</b></div>
-        <div class="menu-card" onclick="goTo('scr-reports')"><i data-lucide="pie-chart"></i><span>Analytics</span><b>Reports</b></div>
-        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="landmark"></i><span>Credit</span><b>Receivables</b></div>
-        <div class="menu-card" onclick="goTo('scr-gastos')"><i data-lucide="trending-down"></i><span>Outflow</span><b>Expenses</b></div>
+        <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package-search"></i><span id="m-inv">Inventario</span></div>
+        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="trending-up"></i><span id="m-rep">Reportes</span></div>
+        <div class="menu-item" onclick="goTo('scr-fiados')"><i data-lucide="users"></i><span id="m-fia">Fiados</span></div>
+        <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="settings-2"></i><span id="m-cfg">Ajustes</span></div>
     </div>
 
-    <div style="margin-top: 25px;">
-        <button onclick="finalizarTurno()" class="btn-gold">Finalize Turn & Archive</button>
-        <div style="display:flex; gap:12px; margin-top:15px;">
-            <button onclick="compartirCatalogo()" class="menu-card" style="flex:1; padding:15px; text-align:center;"><span>Share</span>Catalog</button>
-            <button onclick="goTo('scr-cloud')" class="menu-card" style="width:70px; padding:15px; text-align:center;"><i data-lucide="settings" style="margin:0"></i></button>
-        </div>
+    <button onclick="finalizarTurno()" class="btn btn-primary" style="margin-top:25px;" id="btn-cerrar">🔒 Cerrar Día y Archivar</button>
+</div>
+
+<div id="scr-inv" class="screen">
+    <button onclick="goTo('scr-home')" class="back-btn"><i data-lucide="arrow-left"></i></button>
+    <h2 id="h2-inv" style="font-weight: 800;">📦 Gestión de Stock</h2>
+    <div class="glass-panel" style="padding: 22px; margin-bottom: 20px;">
+        <input type="text" id="n" placeholder="Nombre del Producto">
+        <div style="display:flex; gap:10px;"><input type="number" id="v" placeholder="Precio $"><input type="number" id="s" placeholder="Stock"></div>
+        <button onclick="add()" class="btn btn-primary" id="btn-guardar">✨ Guardar Activo</button>
     </div>
+    <div id="list-inv"></div>
 </div>
 
 <div id="scr-reports" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-    <h1 style="margin-top:0">Market Intelligence</h1>
-    <div class="glass-panel" style="padding:20px; margin-bottom:20px;">
+    <button onclick="goTo('scr-home')" class="back-btn"><i data-lucide="arrow-left"></i></button>
+    <h2 id="h2-rep" style="font-weight: 800;">📊 Análisis de Ventas</h2>
+    <div class="glass-panel" style="padding: 20px; margin-bottom: 25px;">
         <canvas id="mainChart"></canvas>
     </div>
     <div id="history-list"></div>
 </div>
 
-<div id="scr-inv" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-    <h1 style="margin-top:0">Stock Management</h1>
-    <div class="glass-panel" style="padding:20px; margin-bottom:25px;">
-        <input type="text" id="n" placeholder="Product Identity">
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="v" placeholder="Price">
-            <input type="number" id="s" placeholder="Stock">
-        </div>
-        <button onclick="add()" class="btn-gold">Confirm Entry</button>
+<div id="scr-config" class="screen">
+    <button onclick="goTo('scr-home')" class="back-btn"><i data-lucide="arrow-left"></i></button>
+    <h2 id="h2-cfg" style="font-weight: 800;">⚙️ Configuración</h2>
+    
+    <div class="glass-panel" style="padding: 22px; margin-bottom: 20px;">
+        <label style="display:block; margin-bottom:10px; font-weight:700;" id="l-lang">🌐 Idioma / Language</label>
+        <select id="select-lang" onchange="changeLang()">
+            <option value="es">Español 🇲🇽</option>
+            <option value="en">English 🇺🇸</option>
+        </select>
     </div>
-    <input type="text" id="search" placeholder="🔍 Search Assets..." oninput="render()" style="border-radius:30px; padding-left:25px;">
-    <div id="list-inv"></div>
+
+    <div class="glass-panel" style="padding: 22px; margin-bottom: 20px;">
+        <label style="display:block; margin-bottom:10px; font-weight:700;" id="l-backup">🔑 Llave de Respaldo</label>
+        <textarea id="cloud-data" readonly style="font-size:10px; height:60px; background: rgba(0,0,0,0.03); border:none;"></textarea>
+        <button onclick="copiarCloud()" class="btn btn-primary" style="background:var(--accent); margin-top:10px;" id="btn-copy">📋 Copiar Datos</button>
+    </div>
 </div>
 
 <div id="scr-fiados" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-    <h1>Receivables</h1>
-    <div class="glass-panel" style="padding:30px; text-align:center; margin-bottom:20px;">
-        <small style="color:#94A3B8">CAPITAL AT RISK</small>
-        <div id="total-fiado" style="font-size:36px; font-weight:800; color:var(--danger)">$0.00</div>
+    <button onclick="goTo('scr-home')" class="back-btn"><i data-lucide="arrow-left"></i></button>
+    <h2 id="h2-fia" style="font-weight: 800;">📔 Libro de Fiados</h2>
+    <div class="glass-panel" style="padding: 22px; margin-bottom: 20px;">
+        <input type="text" id="f-nom" placeholder="Nombre del Cliente">
+        <input type="number" id="f-amo" placeholder="Monto a fiar $">
+        <button onclick="addFiado()" class="btn btn-primary" style="background: var(--danger);" id="btn-anotar">🖋️ Anotar Deuda</button>
     </div>
-    <div class="glass-panel" style="padding:20px;">
-        <input type="text" id="f-nom" placeholder="Client Name">
-        <input type="number" id="f-amo" placeholder="Amount">
-        <button onclick="addFiado()" class="btn-gold">Authorize Credit</button>
-    </div>
-    <div id="list-fiados" style="margin-top:20px;"></div>
-</div>
-
-<div id="scr-cloud" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-    <h1>Master Encryption</h1>
-    <div class="glass-panel" style="padding:20px;">
-        <small>System Backup Key</small>
-        <textarea id="cloud-data" style="background:transparent; border:1px solid #334155; margin-top:10px; font-family:monospace; font-size:10px;" rows="4" readonly></textarea>
-        <button onclick="copiarCloud()" class="btn-gold" style="margin-top:10px;">Copy Key</button>
-    </div>
+    <div id="list-fiados"></div>
 </div>
 
 <script>
-    // --- DATABASE ---
-    let db = JSON.parse(localStorage.getItem('th_prestige_db')) || [];
-    let fiados = JSON.parse(localStorage.getItem('th_prestige_fi')) || [];
-    let gastos = JSON.parse(localStorage.getItem('th_prestige_ga')) || [];
-    let historial = JSON.parse(localStorage.getItem('th_prestige_hi')) || [];
-    let caja = parseFloat(localStorage.getItem('th_prestige_ca')) || 0;
+    // --- MULTI-IDIOMA DINÁMICO ---
+    const i18n = {
+        es: {
+            saludo: "¡Hola, Jefe! 👋", cajaHoy: "💰 Ventas de Hoy", mesAcum: "📈 Mes acumulado:",
+            inv: "Inventario", rep: "Reportes", fia: "Fiados", cfg: "Ajustes",
+            btnCerrar: "🔒 Cerrar Día y Archivar", btnGuardar: "✨ Guardar Activo",
+            h2Inv: "📦 Gestión de Stock", h2Rep: "📊 Análisis de Ventas", h2Cfg: "⚙️ Ajustes",
+            lLang: "🌐 Seleccionar Idioma", lBackup: "🔑 Llave de Respaldo", btnCopy: "📋 Copiar Datos",
+            confirmCerrar: "¿Cerrar caja? Los datos se guardarán en el historial.", alertCopiado: "¡Copiado! 🔑 No olvides guardarlo.",
+            fiar: "🖋️ Anotar Deuda", precio: "Precio $", stock: "Stock", cliente: "Cliente", monto: "Monto $"
+        },
+        en: {
+            saludo: "Hello, Boss! 👋", cajaHoy: "💰 Today's Sales", mesAcum: "📈 Monthly Total:",
+            inv: "Inventory", rep: "Analytics", fia: "Debts", cfg: "Settings",
+            btnCerrar: "🔒 Close Day & Archive", btnGuardar: "✨ Save Asset",
+            h2Inv: "📦 Stock Manager", h2Rep: "📊 Sales Analysis", h2Cfg: "⚙️ System Settings",
+            lLang: "🌐 Select Language", lBackup: "🔑 Backup Key", btnCopy: "📋 Copy Data",
+            confirmCerrar: "Close register? Data will be moved to history.", alertCopiado: "Copied! 🔑 Save it somewhere safe.",
+            fiar: "🖋️ Record Debt", precio: "Price $", stock: "Stock", cliente: "Client", monto: "Amount $"
+        }
+    };
+
+    let currentLang = localStorage.getItem('th_glass_v2_lang') || 'es';
+    let db = JSON.parse(localStorage.getItem('th_glass_v2_db')) || [];
+    let fiados = JSON.parse(localStorage.getItem('th_glass_v2_fi')) || [];
+    let historial = JSON.parse(localStorage.getItem('th_glass_v2_hi')) || [];
+    let caja = parseFloat(localStorage.getItem('th_glass_v2_ca')) || 0;
     let chartInstance = null;
+
+    function applyLang() {
+        const t = i18n[currentLang];
+        document.getElementById('txt-saludo').innerText = t.saludo;
+        document.getElementById('l-caja-hoy').innerText = t.cajaHoy;
+        document.getElementById('l-mes-acum').innerText = t.mesAcum;
+        document.getElementById('m-inv').innerText = t.inv;
+        document.getElementById('m-rep').innerText = t.rep;
+        document.getElementById('m-fia').innerText = t.fia;
+        document.getElementById('m-cfg').innerText = t.cfg;
+        document.getElementById('btn-cerrar').innerText = t.btnCerrar;
+        document.getElementById('h2-inv').innerText = t.h2Inv;
+        document.getElementById('h2-rep').innerText = t.h2Rep;
+        document.getElementById('h2-cfg').innerText = t.h2Cfg;
+        document.getElementById('l-lang').innerText = t.lLang;
+        document.getElementById('l-backup').innerText = t.lBackup;
+        document.getElementById('btn-copy').innerText = t.btnCopy;
+        document.getElementById('btn-guardar').innerText = t.btnGuardar;
+        document.getElementById('btn-anotar').innerText = t.fiar;
+        document.getElementById('select-lang').value = currentLang;
+        
+        document.getElementById('n').placeholder = "Producto";
+        document.getElementById('v').placeholder = t.precio;
+        document.getElementById('s').placeholder = t.stock;
+        document.getElementById('f-nom').placeholder = t.cliente;
+        document.getElementById('f-amo').placeholder = t.monto;
+        
+        render();
+    }
+
+    function changeLang() {
+        currentLang = document.getElementById('select-lang').value;
+        localStorage.setItem('th_glass_v2_lang', currentLang);
+        applyLang();
+    }
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'scr-reports') initChart();
-        if(id === 'scr-cloud') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, fiados, gastos, historial, caja}));
+        if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, fiados, historial, caja}));
         render();
     }
 
-    // --- CORE LOGIC ---
+    // --- LÓGICA CORE ---
+    function save() {
+        localStorage.setItem('th_glass_v2_db', JSON.stringify(db));
+        localStorage.setItem('th_glass_v2_fi', JSON.stringify(fiados));
+        localStorage.setItem('th_glass_v2_hi', JSON.stringify(historial));
+        localStorage.setItem('th_glass_v2_ca', caja);
+        render();
+    }
+
     function add() {
         const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) { db.push({id: Date.now(), n, v, s}); save(); document.getElementById('n').value=''; }
+        if(n && v) { db.push({id: Date.now(), n, v, s}); save(); document.getElementById('n').value=''; document.getElementById('v').value=''; document.getElementById('s').value=''; }
     }
 
     function vender(id) {
@@ -251,69 +282,62 @@
 
     function addFiado() {
         const n = document.getElementById('f-nom').value, a = parseFloat(document.getElementById('f-amo').value);
-        if(n && a) { fiados.push({id: Date.now(), n, a, fecha: new Date().toLocaleDateString()}); save(); document.getElementById('f-nom').value=''; }
+        if(n && a) { fiados.push({id: Date.now(), n, a, fecha: new Date().toLocaleDateString()}); save(); document.getElementById('f-nom').value=''; document.getElementById('f-amo').value=''; }
     }
 
     function finalizarTurno() {
-        if(caja === 0 && gastos.length === 0) return;
-        if(confirm("Confirm Archive Process?")) {
-            const hoy = new Date().toLocaleDateString('es-MX', {day:'2-digit', month:'short'});
-            historial.push({ fecha: hoy, ventas: caja, gastos: gastos.reduce((a,b)=>a+b.a,0) });
-            caja = 0; gastos = [];
-            save(); goTo('scr-reports');
+        if(confirm(i18n[currentLang].confirmCerrar)) {
+            const hoy = new Date();
+            historial.push({ fecha: hoy.toLocaleDateString(), total: caja, mes: hoy.getMonth() });
+            caja = 0; save();
         }
-    }
-
-    function save() {
-        localStorage.setItem('th_prestige_db', JSON.stringify(db));
-        localStorage.setItem('th_prestige_fi', JSON.stringify(fiados));
-        localStorage.setItem('th_prestige_ga', JSON.stringify(gastos));
-        localStorage.setItem('th_prestige_hi', JSON.stringify(historial));
-        localStorage.setItem('th_prestige_ca', caja);
-        render();
     }
 
     function initChart() {
         const ctx = document.getElementById('mainChart').getContext('2d');
         if(chartInstance) chartInstance.destroy();
-        const data = historial.slice(-7);
+        const ultimos = historial.slice(-7);
         chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data.map(d => d.fecha),
-                datasets: [{
-                    label: 'Performance',
-                    data: data.map(d => d.ventas),
-                    borderColor: '#FACC15',
+                labels: ultimos.map(d => d.fecha),
+                datasets: [{ 
+                    label: 'Ventas', 
+                    data: ultimos.map(d => d.total), 
+                    borderColor: '#3B82F6', 
+                    tension: 0.4, 
+                    fill: true, 
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)',
                     borderWidth: 4,
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(250, 204, 21, 0.1)'
+                    pointRadius: 6,
+                    pointBackgroundColor: '#3B82F6'
                 }]
             },
             options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#64748B' } } } }
         });
-        
         const hl = document.getElementById('history-list');
-        hl.innerHTML = '';
+        hl.innerHTML = '<h3 style="margin-bottom:15px;">📜 Historial Reciente</h3>';
         historial.slice().reverse().forEach(h => {
-            hl.innerHTML += `<div class="item-row"><div><b>${h.fecha}</b></div><div style="color:var(--success); font-weight:800;">+$${h.ventas.toFixed(2)}</div></div>`;
+            hl.innerHTML += `<div class="item-row"><span>${h.fecha}</span><b style="color:var(--success)">+$${h.total.toFixed(2)}</b></div>`;
         });
     }
 
     function render() {
         document.getElementById('h-caja').innerText = "$" + caja.toLocaleString('en-US', {minimumFractionDigits: 2});
-        
+        const hoy = new Date();
+        const totalMes = historial.filter(h => h.mes === hoy.getMonth()).reduce((a,b)=>a+b.total, 0);
+        document.getElementById('h-mes').innerText = "$" + totalMes.toLocaleString('en-US', {minimumFractionDigits: 2});
+
         const li = document.getElementById('list-inv');
         if(li) {
-            const q = document.getElementById('search').value.toLowerCase();
             li.innerHTML = '';
-            db.filter(p => p.n.toLowerCase().includes(q)).forEach(p => {
+            db.forEach(p => {
+                const badge = p.s < 5 ? `<span class="badge badge-low">Bajo Stock</span>` : `<span class="badge badge-ok">En Stock</span>`;
                 li.innerHTML += `<div class="item-row">
-                    <div><b>${p.n}</b><br><span class="badge-stock" style="background:${p.s<5? 'rgba(244,63,94,0.1)' : 'rgba(16,185,129,0.1)'}; color:${p.s<5? 'var(--danger)' : 'var(--success)'}">${p.s} in stock</span></div>
-                    <div style="display:flex; align-items:center; gap:15px;">
+                    <div><b>${p.n}</b><br>${badge} <small>(${p.s})</small></div>
+                    <div style="display:flex; gap:12px; align-items:center;">
                         <b style="font-size:18px;">$${p.v}</b>
-                        <button onclick="vender(${p.id})" style="background:var(--accent); border:none; width:40px; height:40px; border-radius:12px; font-weight:800;">+</button>
+                        <button onclick="vender(${p.id})" style="background:var(--success); color:white; border:none; width:42px; height:42px; border-radius:12px; font-weight:800; box-shadow: 0 4px 10px rgba(16,185,129,0.2);">+</button>
                     </div>
                 </div>`;
             });
@@ -321,26 +345,23 @@
 
         const lf = document.getElementById('list-fiados');
         if(lf) {
-            let tf = 0; lf.innerHTML = '';
+            lf.innerHTML = '';
             fiados.forEach(f => {
-                tf += f.a;
-                lf.innerHTML += `<div class="item-row"><div><b>${f.n}</b><br><small>${f.fecha}</small></div><div style="color:var(--danger); font-weight:800;">$${f.a}</div></div>`;
+                lf.innerHTML += `<div class="item-row">
+                    <div><b>👤 ${f.n}</b><br><small style="color:var(--text-dim)">${f.fecha}</small></div>
+                    <b style="color:var(--danger)">$${f.amo}</b>
+                </div>`;
             });
-            document.getElementById('total-fiado').innerText = "$" + tf.toFixed(2);
         }
         lucide.createIcons();
     }
 
-    function compartirCatalogo() {
-        let t = "💎 *PRESTIGE CATALOG* 💎\n\n";
-        db.forEach(p => t += `⚜️ ${p.n.toUpperCase()} - *$${p.v}*\n`);
-        window.open(`https://wa.me/?text=${encodeURIComponent(t)}`);
-    }
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert(i18n[currentLang].alertCopiado); }
 
     window.onload = () => {
-        const frases = ["Focus on the vision.", "Capitalize on every moment.", "Master the inventory.", "Excellence is a habit.", "The clean shop sells more."];
+        const frases = ["¡Hoy es un gran día para vender! 🚀", "El éxito es la suma de pequeños esfuerzos. ✨", "Cuida tu stock, cuida tu dinero. 📦", "La disciplina es la clave del negocio. 🏦", "¡Dale con todo, Boss! 🦁"];
         document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
-        render();
+        applyLang();
     };
 </script>
 </body>
