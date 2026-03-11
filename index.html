@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tiendita Pro</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007AFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --ios-bg: #F2F2F7;
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-red: #FF3B30;
+            --ios-yellow: #FFCC00;
+            --ios-text: #1C1C1E;
+        }
+
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--ios-bg);
+            margin: 0;
+            color: var(--ios-text);
+            user-select: none;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 0.5px solid #D1D1D6;
+        }
+
+        .container { padding: 16px; max-width: 500px; margin: auto; }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .btn-main {
+            background: var(--ios-blue);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            width: 100%;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Estilos de inputs tipo iPhone */
+        input, select {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            background: #F9F9F9;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .prod-row {
+            display: flex;
+            background: white;
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            align-items: center;
+            border-left: 6px solid var(--ios-green);
+        }
+
+        .rojo { border-left-color: var(--ios-red); }
+        .azul { border-left-color: var(--ios-blue); }
+        .amarillo { border-left-color: var(--ios-yellow); }
+
+        .price-tag {
+            background: #E9F2FF;
+            color: var(--ios-blue);
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="margin:0; font-size:17px;">🏪 Mi Ayudante Pro</h1>
+</header>
+
+<div class="container">
+    <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <select id="tiendas" onchange="cambiarTienda()" style="margin:0; flex:1;"></select>
+        <button onclick="nuevaTienda()" style="background:var(--ios-blue); color:white; border:none; width:45px; border-radius:12px;">+</button>
+    </div>
+
+    <div class="price-tag" id="val-total">$0.00</div>
+
+    <div class="card">
+        <h2 style="font-size:14px; color:#8E8E93; margin-top:0;">📝 NUEVO PRODUCTO</h2>
+        <input type="text" id="nom" placeholder="¿Qué vas a registrar?">
+        <div style="display:flex; gap:10px;">
+            <input type="number" id="costo" placeholder="Costo $" oninput="calcSugerido()">
+            <input type="number" id="venta" placeholder="Venta $">
+        </div>
+        <div style="display:flex; gap:10px;">
+            <input type="number" id="stock" placeholder="Cantidad">
+            <input type="date" id="cad">
+        </div>
+        <button class="btn-main" onclick="agregar()">
+            <i data-lucide="save"></i> GUARDAR
+        </button>
+    </div>
+
+    <div class="card" id="c-graf" style="display:none; height:250px;">
+        <canvas id="graf"></canvas>
+    </div>
+
+    <div id="lista"></div>
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('tienda_final_v1')) || { "Sucursal 1": [] };
+    let actual = localStorage.getItem('t_act') || "Sucursal 1";
+    let chart;
+
+    function nuevaTienda() {
+        let n = prompt("Nombre de la sucursal:");
+        if(n) { db[n] = []; actual = n; guardar(); refreshSel(); }
+    }
+
+    function refreshSel() {
+        const s = document.getElementById('tiendas');
+        s.innerHTML = "";
+        Object.keys(db).forEach(t => s.innerHTML += `<option value="${t}" ${t===actual?'selected':''}>${t}</option>`);
+    }
+
+    function cambiarTienda() {
+        actual = document.getElementById('tiendas').value;
+        localStorage.setItem('t_act', actual);
+        render();
+    }
+
+    function calcSugerido() {
+        let c = parseFloat(document.getElementById('costo').value);
+        if(c > 0) document.getElementById('venta').value = (c / 0.70).toFixed(2);
+    }
+
+    function agregar() {
+        const n = document.getElementById('nom').value;
+        const v = parseFloat(document.getElementById('venta').value);
+        const s = parseInt(document.getElementById('stock').value);
+        const c = document.getElementById('cad').value;
+        if(!n || isNaN(v) || isNaN(s)) return;
+        db[actual].push({ id:Date.now(), n, v, s, c });
+        guardar();
+        document.querySelectorAll('input').forEach(i => i.value = "");
+    }
+
+    function guardar() {
+        localStorage.setItem('tienda_final_v1', JSON.stringify(db));
+        render();
+    }
+
+    function render() {
+        const l = document.getElementById('lista');
+        l.innerHTML = "";
+        let total = 0, st = { ok:0, r:0, a:0, y:0 };
+        const hoy = new Date();
+        const prox = new Date(); prox.setDate(hoy.getDate()+7);
+
+        db[actual].forEach(p => {
+            total += (p.v * p.s);
+            let cls = "", f = p.c ? new Date(p.c) : null;
+            if(p.s <= 0) { cls="rojo"; st.r++; }
+            else if(f && f <= hoy) { cls="azul"; st.a++; }
+            else if(f && f <= prox) { cls="azul"; st.a++; }
+            else if(p.s <= 3) { cls="amarillo"; st.y++; }
+            else { st.ok++; }
+
+            l.innerHTML += `<div class="prod-row ${cls}">
+                <div style="flex:1"><b>${p.n}</b><br><small>${p.s} pz · $${p.v}</small></div>
+                <button onclick="borrar(${p.id})" style="border:none; background:none; color:#D1D1D6;"><i data-lucide="trash-2"></i></button>
+            </div>`;
+        });
+
+        document.getElementById('val-total').innerText = "$ " + total.toLocaleString();
+        document.getElementById('c-graf').style.display = db[actual].length > 0 ? "block" : "none";
+        dibujar(st);
+        lucide.createIcons();
+    }
+
+    function dibujar(s) {
+        const ctx = document.getElementById('graf').getContext('2d');
+        if(chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type:'doughnut',
+            data: {
+                labels:['OK','Faltan','Vencen','Poco'],
+                datasets:[{data:[s.ok, s.r, s.a, s.y], backgroundColor:['#34C759','#FF3B30','#007AFF','#FFCC00']}]
+            },
+            options:{maintainAspectRatio:false}
+        });
+    }
+
+    function borrar(id) {
+        if(confirm("¿Quitar?")) { db[actual] = db[actual].filter(p => p.id !== id); guardar(); }
+    }
+
+    refreshSel();
+    render();
+</script>
+</body>
+</html>
