@@ -18,7 +18,6 @@
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
 
-        /* ANIMACIONES Y DINAMISMO */
         .btn:active, .menu-item:active, .back-btn:active, .btn-primary:active { transform: scale(0.92); transition: transform 0.1s; }
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); color: var(--success); } 100% { transform: scale(1); } }
         .pop-anim { animation: pop 0.3s ease; display: inline-block; }
@@ -27,7 +26,7 @@
         .balance { font-size: 38px; font-weight: 800; margin: 8px 0; transition: 0.3s; }
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.2s, background 0.2s; }
+        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.2s; }
         .menu-item i { color: var(--primary); margin-bottom: 12px; display: inline-block; }
 
         .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; }
@@ -45,18 +44,26 @@
         input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
         .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; cursor: pointer; }
         
-        /* FIRMA GÓTICA INCLINADA IZQUIERDA */
+        /* CALENDARIO ESTILO PRO */
+        .calendar-container { margin-top: 15px; background: var(--glass); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; font-size: 12px; }
+        .calendar-day { padding: 8px; border-radius: 10px; cursor: pointer; transition: 0.2s; position: relative; }
+        .calendar-day:hover { background: rgba(255,255,255,0.1); }
+        .has-data::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: var(--success); border-radius: 50%; }
+        .selected-day { background: var(--primary) !important; color: white; font-weight: bold; }
+
         .gothic-signature {
             position: fixed;
             bottom: 15px;
             left: 20px;
             font-family: 'UnifrakturMaguntia', serif;
             font-size: 24px;
-            font-style: italic; /* Inclinada */
+            font-style: italic;
             color: rgba(203, 213, 225, 0.3);
             pointer-events: none;
             z-index: 100;
-            transform: rotate(-5deg); /* Inclinación extra */
+            transform: rotate(-5deg);
         }
     </style>
 </head>
@@ -65,7 +72,7 @@
 <div id="scr-home" class="screen active">
     <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
         <div><h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe! 👋</h2><p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p></div>
-        <div style="background: var(--primary); padding: 8px; border-radius: 12px; cursor: pointer;" onclick="this.classList.add('pop-anim'); setTimeout(()=>this.classList.remove('pop-anim'),300);"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
+        <div style="background: var(--primary); padding: 8px; border-radius: 12px; cursor: pointer;"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
     </div>
     <div class="hero-card">
         <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -91,20 +98,18 @@
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
     <h2>📦 Inventario Dinámico</h2>
     <div class="data-card">
-        <input type="text" id="n" placeholder="Nombre del producto... 🏷️">
-        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo Compra 💵" oninput="calcAI()"><input type="number" id="v" placeholder="Venta Público 🤑"></div>
+        <input type="text" id="n" placeholder="Nombre... 🏷️">
+        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo 💵" oninput="calcAI()"><input type="number" id="v" placeholder="Venta 🤑"></div>
         <div id="ai-suggest" class="ai-box" style="display:none;">
-            <small style="color:var(--primary); font-weight:800;">💡 PRECIO INTELIGENTE:</small><br>
             <button class="btn-ai" onclick="setPrice(1.3)">+30%</button>
             <button class="btn-ai" onclick="setPrice(1.5)">+50%</button>
             <button class="btn-ai" onclick="setPrice('rec')">AI Sugerido 🤖</button>
         </div>
-        <input type="number" id="s" placeholder="Cantidad inicial 🔢">
-        <small style="font-size:10px; color:var(--text-dim)">Fecha de Caducidad ⏳ (Opcional):</small>
+        <input type="number" id="s" placeholder="Cantidad 🔢">
         <input type="date" id="caducidad">
         <button onclick="add()" class="btn btn-primary">Añadir al Stock ➕</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar en bodega..." oninput="render()">
+    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
@@ -114,9 +119,33 @@
     <div id="ai-prediction" class="hero-card" style="background: var(--accent); margin-bottom:15px;">
         <small class="stat-label" style="color:white; opacity:0.8">PROYECCIÓN SEMANAL 🚀</small>
         <div id="pred-ventas" class="balance" style="font-size:28px;">$0.00</div>
-        <small style="color:white">Ganancia estimada: <span id="pred-util" style="font-weight:bold;">$0.00</span> 💸</small>
+        <small style="color:white">Ganancia estimada: <span id="pred-util">$0.00</span> 💸</small>
     </div>
     <div id="ai-content"></div>
+</div>
+
+<div id="scr-reports" class="screen">
+    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
+    <h2>📊 Rendimiento 🏆</h2>
+    <div class="data-card"><canvas id="mainChart"></canvas></div>
+    
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)" style="background:none; border:none; color:white;"><i data-lucide="chevron-left"></i></button>
+            <b id="calendar-month"></b>
+            <button onclick="changeMonth(1)" style="background:none; border:none; color:white;"><i data-lucide="chevron-right"></i></button>
+        </div>
+        <div class="calendar-grid" id="calendar-days"></div>
+    </div>
+
+    <div id="selected-day-info" class="data-card" style="margin-top:15px; display:none; background: var(--primary); border:none;">
+        <h4 id="info-date" style="margin:0 0 5px 0; font-size:14px;"></h4>
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+            <span>Venta: <b id="info-vta"></b></span>
+            <span>Neto: <b id="info-neto"></b></span>
+        </div>
+    </div>
+    <div id="history-list"></div>
 </div>
 
 <div id="scr-config" class="screen">
@@ -131,11 +160,9 @@
         <option value="it">Italiano 🇮🇹</option>
     </select>
     <button onclick="copiarCloud()" class="btn btn-primary" style="margin-top:15px;">Respaldar Datos 🔑</button>
-    <textarea id="cloud-data" readonly style="margin-top:10px; height:40px; font-size:8px; opacity:0.3;"></textarea>
 </div>
 
-<div id="scr-reports" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📊 Rendimiento 🏆</h2><div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div></div>
-<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales 🏢</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre de la tienda"><textarea id="suc-key" placeholder="Pega la llave aquí..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Conectar 🔗</button></div><div id="list-sucursales"></div></div>
+<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales 🏢</h2><div id="list-sucursales"></div></div>
 
 <div class="gothic-signature">Cruzz</div>
 
@@ -145,11 +172,10 @@
     let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
     let caja = parseFloat(localStorage.getItem('the_ca')) || 0;
     let costoVendido = parseFloat(localStorage.getItem('the_cv')) || 0;
-    let metaVenta = parseFloat(localStorage.getItem('the_target')) || 1000;
     let lang = localStorage.getItem('the_lang') || 'es';
+    let currDate = new Date();
     let chartInstance = null;
 
-    // TEXTOS CON EMOJIS INTEGADOS PARA NO PERDERLOS AL CAMBIAR IDIOMA
     const i18n = {
         es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY 💰", l_costo: "COSTO 📦", l_util: "NETO 💎" },
         en: { inv: "Inventory", suc: "Stores", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES 💰", l_costo: "COST 📦", l_util: "PROFIT 💎" },
@@ -162,111 +188,92 @@
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-ai') generarAI();
-        if(id === 'scr-reports') renderChart();
-        if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, historial, caja, costoVendido}));
-        if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
+        if(id === 'scr-reports') { renderChart(); renderCalendar(); }
         render();
     }
 
-    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
+    function renderCalendar() {
+        const monthEl = document.getElementById('calendar-month');
+        const daysEl = document.getElementById('calendar-days');
+        daysEl.innerHTML = '';
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        monthEl.innerText = `${monthNames[currDate.getMonth()]} ${currDate.getFullYear()}`;
 
+        const firstDay = new Date(currDate.getFullYear(), currDate.getMonth(), 1).getDay();
+        const daysInMonth = new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) daysEl.innerHTML += '<div></div>';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${d}/${currDate.getMonth() + 1}/${currDate.getFullYear()}`;
+            const dayData = historial.find(h => h.fecha === dateStr);
+            const hasData = dayData ? 'has-data' : '';
+            daysEl.innerHTML += `<div class="calendar-day ${hasData}" onclick="showDayInfo('${dateStr}')">${d}</div>`;
+        }
+        lucide.createIcons();
+    }
+
+    function showDayInfo(fecha) {
+        const info = historial.find(h => h.fecha === fecha);
+        const panel = document.getElementById('selected-day-info');
+        if(info) {
+            panel.style.display = 'block';
+            document.getElementById('info-date').innerText = "Corte del " + fecha;
+            document.getElementById('info-vta').innerText = "$" + info.vta.toFixed(2);
+            document.getElementById('info-neto').innerText = "$" + info.neto.toFixed(2);
+        } else { panel.style.display = 'none'; }
+    }
+
+    function changeMonth(dir) { currDate.setMonth(currDate.getMonth() + dir); renderCalendar(); }
+
+    function finalizarDia() {
+        const fechaActual = new Date().toLocaleDateString();
+        if(confirm(`¿Cerrar día ${fechaActual}? 🔒`)) {
+            historial.push({ fecha: fechaActual, neto: caja - costoVendido, vta: caja });
+            caja = 0; costoVendido = 0; save(); alert("Corte guardado en el calendario. ✅");
+        }
+    }
+
+    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
     function applyLang() {
         const t = i18n[lang];
-        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerText = t[id.split('-')[1]];
-        });
+        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id.split('-')[1]]; });
         document.getElementById('l-caja').innerText = t.l_caja;
         document.getElementById('l-costo').innerText = t.l_costo;
         document.getElementById('l-util').innerText = t.l_util;
     }
 
-    function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
-    function setPrice(f) {
-        const c = parseFloat(document.getElementById('costo').value);
-        if(f === 'rec') f = c < 50 ? 1.8 : 1.4;
-        document.getElementById('v').value = Math.ceil(c * f);
+    function vender(id) {
+        let p = db.find(x => x.id === id);
+        if(p && p.s > 0) { 
+            p.s--; p.vtas++; caja += p.v; costoVendido += p.c; save();
+            const cajaEl = document.getElementById('h-caja');
+            cajaEl.classList.add('pop-anim'); setTimeout(()=>cajaEl.classList.remove('pop-anim'),300);
+        }
     }
 
     function add() {
         const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), 
               s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value),
               cad = document.getElementById('caducidad').value;
-        if(n && v) { 
-            db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); 
-            save(); 
-            document.getElementById('n').value=''; document.getElementById('costo').value=''; document.getElementById('v').value=''; document.getElementById('s').value=''; document.getElementById('caducidad').value=''; 
-        }
-    }
-
-    function vender(id) {
-        let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { 
-            p.s--; p.vtas++; caja += p.v; costoVendido += p.c; 
-            if(p.s <= 3) alert(`¡Poco stock de ${p.n}! 🚨`); 
-            save(); 
-            
-            // EFECTO DINÁMICO DE REBOTE EN LA CAJA
-            const cajaEl = document.getElementById('h-caja');
-            cajaEl.classList.remove('pop-anim');
-            void cajaEl.offsetWidth; // Trigger reflow
-            cajaEl.classList.add('pop-anim');
-            
-        } else { alert("¡Sin existencias! ❌"); }
-    }
-
-    function eliminar(id) {
-        if(confirm("¿Seguro que quieres eliminar este producto? 🗑️")) { db = db.filter(x => x.id !== id); save(); }
+        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); save(); }
     }
 
     function save() {
         localStorage.setItem('the_db', JSON.stringify(db)); localStorage.setItem('the_hi', JSON.stringify(historial));
-        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); localStorage.setItem('the_suc', JSON.stringify(sucursales)); render();
-    }
-
-    function generarAI() {
-        const c = document.getElementById('ai-content'); c.innerHTML = '';
-        const dias = historial.length || 1;
-        const promedioVenta = historial.reduce((a,b)=>a+b.vta,0) / dias;
-        const promedioUtil = historial.reduce((a,b)=>a+b.neto,0) / dias;
-        document.getElementById('pred-ventas').innerText = "$" + (promedioVenta * 7).toFixed(2);
-        document.getElementById('pred-util').innerText = "$" + (promedioUtil * 7).toFixed(2);
-        db.forEach(p => {
-            let avisoCad = "";
-            if(p.cad) {
-                const diff = (new Date(p.cad) - new Date()) / (1000*60*60*24);
-                if(diff < 7 && diff >= 0) avisoCad = `<p style="color:var(--warning); font-size:12px; font-weight:bold;">⚠️ Caduca en ${Math.ceil(diff)} días.</p>`;
-                if(diff < 0) avisoCad = `<p style="color:var(--danger); font-size:12px; font-weight:900;">❌ PRODUCTO CADUCADO.</p>`;
-            }
-            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">📈 Pronóstico: ${Math.ceil(p.vtas/dias * 7)} ventas/semana.</p></div>`;
-        });
+        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
     }
 
     function render() {
         document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
         document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
         document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
-        
-        const searchInput = document.getElementById('search');
-        const termino = searchInput ? searchInput.value.toLowerCase() : '';
-        const filtrados = db.filter(p => p.n.toLowerCase().includes(termino));
-
         const li = document.getElementById('list-inv');
         if(li) {
             li.innerHTML = '';
-            filtrados.forEach(p => {
+            db.forEach(p => {
                 let color = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
-                let cadTag = p.cad ? `<small style="display:block; font-size:10px; color:var(--text-dim)">Exp: ${p.cad} ⏳</small>` : "";
                 li.innerHTML += `<div class="data-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <b>${p.n}</b>
-                        <div>
-                            <b style="color:var(--primary); margin-right:15px; font-size:16px;">$${p.v}</b>
-                            <button onclick="eliminar(${p.id})" style="background:none; border:none; color:var(--danger); font-size:16px; cursor:pointer; padding:5px;">✖</button>
-                        </div>
-                    </div>
-                    ${cadTag}
+                    <div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div>
                     <div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div>
                     <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA + 🚀</button>
                 </div>`;
@@ -275,45 +282,19 @@
         lucide.createIcons();
     }
 
-    function finalizarDia() {
-        if(confirm("¿Cerrar el día y guardar progreso, Boss? 📊🔒")) {
-            const punteria = caja > 0 ? (100 - (Math.min(Math.abs(caja - metaVenta) / caja, 1) * 100)) : 0;
-            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, punteria: punteria });
-            caja = 0; costoVendido = 0; save(); alert("¡Día cerrado con éxito! Que mañana sea mejor. ✨");
-        }
-    }
-
     function renderChart() {
         const ctx = document.getElementById('mainChart').getContext('2d');
-        Chart.defaults.color = '#94A3B8';
         if(chartInstance) chartInstance.destroy();
         chartInstance = new Chart(ctx, { 
             type: 'line', 
             data: { 
                 labels: historial.slice(-7).map(h=>h.fecha), 
-                datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension:0.4 }] 
+                datasets: [{ label: 'Ventas $', data: historial.slice(-7).map(h=>h.vta), borderColor: '#3B82F6', fill: true, tension:0.4 }] 
             } 
         });
-        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px; color:#fff">Historial de Días 📅</h3>';
-        historial.slice().reverse().forEach(h => {
-            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b style="color:var(--success)">+$${h.neto.toFixed(2)}</b></div>`;
-        });
     }
 
-    function vincularSucursal() {
-        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
-        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); alert("¡Tienda Conectada! 🏢🔌"); } catch(e) { alert("Llave inválida. ❌"); } }
-    }
-
-    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("¡Llave copiada con éxito! Guárdala bien. 🔑✨"); }
-
-    window.onload = () => {
-        applyLang();
-        document.getElementById('lang-select').value = lang;
-        const frases = ["¡A darle con todo, Boss! 🔥", "Tu negocio crece hoy. 📈", "Control total, ganancia segura. 💎", "Haz que cada venta cuente. 💸"];
-        document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
-        render();
-    };
+    window.onload = () => { applyLang(); render(); };
 </script>
 </body>
 </html>
