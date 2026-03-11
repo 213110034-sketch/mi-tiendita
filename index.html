@@ -3,238 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Pro Hub</title>
+    <title>Tienda Hub Dinámica ✨</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { 
             --primary: #5856D6; --success: #34C759; --danger: #FF3B30; 
-            --warning: #FF9500; --bg: #F8F9FB; --card: #FFFFFF; --text: #1C1C1E;
+            --warning: #FF9500; --info: #5AC8FA; --bg: #F2F2F7; --card: #FFFFFF;
         }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: #1C1C1E; }
         
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); margin: 0; color: var(--text); overflow-x: hidden; }
-        
-        /* Pantallas */
-        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: slideUp 0.3s ease; }
+        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: slideIn 0.3s ease-out; }
         .screen.active { display: block; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        /* Dashboard Dinámico */
+        .welcome-card { background: linear-gradient(135deg, #5856D6, #C694F9); color: white; border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(88, 86, 214, 0.2); }
+        .welcome-card h2 { margin: 0; font-size: 24px; }
+        .welcome-card p { margin: 10px 0 0; opacity: 0.9; font-style: italic; }
 
-        /* Header Estilo App Store */
-        .main-header { padding: 30px 20px 10px; }
-        .main-header h1 { margin: 0; font-size: 28px; font-weight: 800; color: var(--primary); }
-        .main-header p { margin: 5px 0 0; color: #8E8E93; font-size: 14px; }
-
-        /* Menú de Inicio (Grid) */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        /* Menú Hub con Emojis */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .menu-card { 
             background: var(--card); border-radius: 22px; padding: 20px; text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02);
-            transition: transform 0.2s; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
         }
-        .menu-card:active { transform: scale(0.95); }
-        .menu-card i { margin-bottom: 10px; display: block; }
-        .menu-card span { font-weight: 700; font-size: 14px; display: block; }
+        .menu-card:active { transform: scale(0.9); background: #f9f9f9; }
+        .menu-card i { margin-bottom: 8px; display: block; margin: auto; }
+        .menu-card span { font-weight: 800; font-size: 13px; display: block; margin-top: 5px; }
 
-        /* Estilo Secciones */
-        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-        .back-btn { background: #EEE; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-        /* Tarjetas de Datos */
-        .data-card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .data-card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #E5E5EA; }
+        .btn-vender { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 900; box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3); }
+        .back-btn { background: white; border: none; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* Inputs Pro */
-        input, select { 
-            width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #E5E5EA; 
-            border-radius: 14px; font-size: 16px; background: #FAFAFA;
-        }
-        .btn-main { 
-            background: var(--primary); color: white; border: none; padding: 16px; 
-            border-radius: 14px; width: 100%; font-weight: 700; font-size: 16px; margin-top: 10px;
-        }
-
-        /* Lista de Productos */
-        .prod-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 0; border-bottom: 1px solid #F2F2F7; 
-        }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; display: inline-block; }
-
-        .suggestion-box { background: #F0F0FF; padding: 12px; border-radius: 12px; color: var(--primary); font-size: 13px; margin: 10px 0; border-left: 4px solid var(--primary); display: none; }
+        input { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #DDD; border-radius: 15px; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 8px rgba(88, 86, 214, 0.2); }
     </style>
 </head>
 <body>
 
 <div id="scr-home" class="screen active">
-    <div class="main-header">
-        <h1>Tienda Pro Hub 🏪</h1>
-        <p id="fecha-actual"></p>
+    <div class="welcome-card">
+        <h2 id="txt-saludo">¡Hola, Jefe! 👋</h2>
+        <p id="txt-motivacion">"El que no enseña, no vende".</p>
+        <div style="margin-top:20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px;">
+            <span style="font-size: 12px; font-weight: bold; text-transform: uppercase;">💰 Venta de Hoy:</span>
+            <div id="home-caja" style="font-size: 32px; font-weight: 900;">$0.00</div>
+        </div>
     </div>
 
     <div class="menu-grid">
-        <div class="menu-card" onclick="goTo('scr-inv')">
-            <i data-lucide="package" style="color:var(--primary); width:32px; height:32px; margin:auto;"></i>
-            <span>Inventario</span>
-        </div>
-        <div class="menu-card" onclick="goTo('scr-stats')">
-            <i data-lucide="bar-chart-3" style="color:var(--success); width:32px; height:32px; margin:auto;"></i>
-            <span>Finanzas</span>
-        </div>
-        <div class="menu-card" onclick="goTo('scr-alerts')">
-            <i data-lucide="alert-circle" style="color:var(--danger); width:32px; height:32px; margin:auto;"></i>
-            <span>Alertas</span>
-        </div>
-        <div class="menu-card" onclick="generarReporte()">
-            <i data-lucide="send" style="color:var(--warning); width:32px; height:32px; margin:auto;"></i>
-            <span>Compartir</span>
-        </div>
+        <div class="menu-card" onclick="goTo('scr-inv')"><i data-lucide="shopping-basket" style="color:var(--primary)"></i><span>Inventario 🛒</span></div>
+        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="users" style="color:var(--info)"></i><span>Fiados 📔</span></div>
+        <div class="menu-card" onclick="goTo('scr-stats')"><i data-lucide="trending-up" style="color:var(--success)"></i><span>Ganancias 📈</span></div>
+        <div class="menu-card" onclick="goTo('scr-calc')"><i data-lucide="coins" style="color:#AF52DE"></i><span>Cambio 🪙</span></div>
+        <div class="menu-card" onclick="goTo('scr-prov')"><i data-lucide="truck" style="color:var(--warning)"></i><span>Proveedores 🚛</span></div>
+        <div class="menu-card" onclick="goTo('scr-alerts')"><i data-lucide="alert-triangle" style="color:var(--danger)"></i><span>Alertas 🚨</span></div>
     </div>
-
-    <div class="data-card" style="margin-top:25px; background: linear-gradient(135deg, var(--primary), #8E8EEB); color: white;">
-        <h3 style="margin:0">Ganancia Estimada</h3>
-        <p style="font-size:32px; font-weight:800; margin:10px 0 0;" id="home-ganancia">$0</p>
-    </div>
+    
+    <button onclick="cerrarCaja()" style="width:100%; margin-top:20px; padding:15px; border-radius:15px; border:none; background:#8E8E93; color:white; font-weight:bold;">
+        🔒 Cerrar Caja del Día
+    </button>
 </div>
 
 <div id="scr-inv" class="screen">
-    <div class="section-header">
-        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-        <h2>Inventario</h2>
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Mercancía 📦</h2>
     </div>
     
     <div class="data-card">
-        <h3>+ Nuevo Producto</h3>
-        <input type="text" id="n" placeholder="Nombre">
-        <input type="number" id="c" placeholder="Costo $" oninput="recomendarPrecio()">
-        <div id="sugerencia" class="suggestion-box">Sug: <b id="precio-sug"></b></div>
-        <input type="number" id="v" placeholder="Venta $">
-        <input type="number" id="s" placeholder="Stock">
-        <input type="date" id="e">
-        <button class="btn-main" onclick="add()">Guardar Producto</button>
+        <input type="text" id="n" placeholder="Nombre (ej. Sabritas)">
+        <div style="display:flex; gap:10px;">
+            <input type="number" id="c" placeholder="Costo $">
+            <input type="number" id="v" placeholder="Venta $">
+        </div>
+        <input type="number" id="s" placeholder="Stock Inicial">
+        <button onclick="add()" class="btn-vender" style="width:100%; background:var(--primary);">✨ Guardar Producto</button>
     </div>
 
-    <input type="text" id="search" placeholder="Buscar producto..." oninput="render()" style="margin-bottom:15px;">
+    <input type="text" id="search" placeholder="🔍 Buscar producto para vender..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
-<div id="scr-stats" class="screen">
-    <div class="section-header">
-        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-        <h2>Finanzas</h2>
+<div id="scr-prov" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Proveedores 🚛</h2>
     </div>
-    
     <div class="data-card">
-        <label>Estrategia de Margen:</label>
-        <select id="margen-config" onchange="actualizarMargen()">
-            <option value="1.20">Económico (20%)</option>
-            <option value="1.30">Sano (30%)</option>
-            <option value="1.50">Premium (50%)</option>
+        <input type="text" id="pr-nom" placeholder="¿Quién te visita? (Ej: Bimbo)">
+        <select id="pr-dia" style="width:100%; padding:15px; border-radius:15px; border:1px solid #DDD; margin:8px 0;">
+            <option value="">¿Qué día viene?</option>
+            <option value="Lunes">Lunes 🗓️</option><option value="Martes">Martes 🗓️</option>
+            <option value="Miércoles">Miércoles 🗓️</option><option value="Jueves">Jueves 🗓️</option>
+            <option value="Viernes">Viernes 🗓️</option><option value="Sábado">Sábado 🗓️</option>
         </select>
+        <button onclick="addProv()" class="btn-vender" style="width:100%; background:var(--warning);">📅 Agendar Visita</button>
     </div>
-
-    <div class="data-card">
-        <canvas id="chartCaducidad"></canvas>
-    </div>
+    <div id="list-prov"></div>
 </div>
 
-<div id="scr-alerts" class="screen">
-    <div class="section-header">
-        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-        <h2>Alertas Críticas</h2>
+<div id="scr-calc" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">¿Cuánto cambio doy? 🪙</h2>
     </div>
-    <div id="alert-list"></div>
+    <div class="data-card" style="text-align:center;">
+        <input type="number" id="ca-tot" placeholder="Total a cobrar $" oninput="calcCambio()">
+        <input type="number" id="ca-rec" placeholder="Recibí con $" oninput="calcCambio()">
+        <div style="margin-top:20px; color:var(--success);">
+            <p style="margin:0; font-weight:bold;">REGRESA:</p>
+            <h1 id="ca-res" style="font-size:48px; margin:10px 0;">$0.00</h1>
+            <p id="calc-emoji" style="font-size:30px;">🤝</p>
+        </div>
+    </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('tienda_v8')) || [];
-    let configMargen = localStorage.getItem('margen_pref') || "1.30";
-    let myChart;
+    let db = JSON.parse(localStorage.getItem('db_final_emo')) || [];
+    let provs = JSON.parse(localStorage.getItem('p_final_emo')) || [];
+    let caja = parseFloat(localStorage.getItem('caja_dia_emo')) || 0;
+
+    // --- DINAMISMO Y SALUDOS ---
+    function actualizarSaludos() {
+        const hora = new Date().getHours();
+        const saludo = document.getElementById('txt-saludo');
+        const motivacion = document.getElementById('txt-motivacion');
+        
+        const frases = [
+            "¡El que madruga, vende más! ☕",
+            "¡A darle que es mole de olla! 🔥",
+            "¡Esa caja se va a llenar hoy! 🚀",
+            "¡Tu esfuerzo vale mucho, jefe! 🙌",
+            "¡Clientela feliz, bolsillo feliz! 😊"
+        ];
+        
+        if(hora < 12) saludo.innerText = "¡Buenos días, Jefe! 👋";
+        else if(hora < 18) saludo.innerText = "¡Buenas tardes, Jefe! 😎";
+        else saludo.innerText = "¡Buenas noches, Jefe! 🌙";
+        
+        motivacion.innerText = frases[Math.floor(Math.random() * frases.length)];
+    }
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        if(id === 'scr-home') actualizarSaludos();
         render();
     }
 
-    function actualizarMargen() {
-        configMargen = document.getElementById('margen-config').value;
-        localStorage.setItem('margen_pref', configMargen);
-    }
-
-    function recomendarPrecio() {
-        const costo = parseFloat(document.getElementById('c').value);
-        const box = document.getElementById('sugerencia');
-        if (costo > 0) {
-            document.getElementById('precio-sug').innerText = "$" + (costo * parseFloat(configMargen)).toFixed(2);
-            box.style.display = "block";
-        } else { box.style.display = "none"; }
+    function calcCambio() {
+        const t = parseFloat(document.getElementById('ca-tot').value)||0, r = parseFloat(document.getElementById('ca-rec').value)||0;
+        const res = r - t;
+        document.getElementById('ca-res').innerText = "$" + (res > 0 ? res.toFixed(2) : "0.00");
+        document.getElementById('calc-emoji').innerText = res > 0 ? "💰✨" : "🤝";
     }
 
     function add() {
-        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value);
-        if(!n || !v) return alert("Llena los campos");
-        db.push({ id: Date.now(), n, c: parseFloat(document.getElementById('c').value)||0, v, s: parseInt(document.getElementById('s').value)||0, e: document.getElementById('e').value });
-        localStorage.setItem('tienda_v8', JSON.stringify(db));
-        ['n','c','v','s','e'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('sugerencia').style.display="none";
-        render();
+        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), c = parseFloat(document.getElementById('c').value), s = parseInt(document.getElementById('s').value);
+        if(n && v) { 
+            db.push({id: Date.now(), n, v, c, s}); 
+            localStorage.setItem('db_final_emo', JSON.stringify(db));
+            ['n','c','v','s'].forEach(id => document.getElementById(id).value = '');
+            render();
+        }
+    }
+
+    function vender(id) {
+        let p = db.find(x => x.id === id);
+        if(p.s > 0) {
+            p.s--;
+            caja += p.v;
+            localStorage.setItem('caja_dia_emo', caja);
+            localStorage.setItem('db_final_emo', JSON.stringify(db));
+            render();
+        } else { alert("❌ ¡Híjole! Ya no tienes stock de este producto."); }
+    }
+
+    function addProv() {
+        const n = document.getElementById('pr-nom').value, d = document.getElementById('pr-dia').value;
+        if(n && d) { 
+            provs.push({n, d}); 
+            localStorage.setItem('p_final_emo', JSON.stringify(provs)); 
+            document.getElementById('pr-nom').value = '';
+            render(); 
+        }
+    }
+
+    function cerrarCaja() {
+        if(confirm(`⚠️ ¿Seguro que quieres cerrar caja con $${caja.toFixed(2)}?`)) {
+            caja = 0; localStorage.setItem('caja_dia_emo', 0); render();
+        }
     }
 
     function render() {
+        document.getElementById('home-caja').innerText = "$" + caja.toFixed(2) + (caja > 500 ? " 🔥" : "");
+        
         const list = document.getElementById('list-inv');
-        const alertList = document.getElementById('alert-list');
-        const q = document.getElementById('search').value.toLowerCase();
-        let tCosto = 0, tVenta = 0, ok=0, warn=0, crit=0;
-        
-        list.innerHTML = ''; alertList.innerHTML = '';
-        
-        db.forEach(p => {
-            tCosto += (p.c * p.s); tVenta += (p.v * p.s);
-            let diff = p.e ? (new Date(p.e) - new Date()) / 86400000 : 100;
-            let color = diff <= 3 ? 'var(--danger)' : (diff <= 15 ? 'var(--warning)' : 'var(--success)');
-            if(diff <= 3) crit++; else if(diff <= 15) warn++; else ok++;
-
-            // Lista Inventario
-            if(p.n.toLowerCase().includes(q)) {
-                list.innerHTML += `<div class="prod-row">
-                    <div><span class="status-dot" style="background:${color}"></span><b>${p.n}</b><br><small>$${p.v} | Stock: ${p.s}</small></div>
-                    <button onclick="del(${p.id})" style="background:none; border:none; color:var(--danger)"><i data-lucide="trash-2" style="width:18px"></i></button>
+        if(list) {
+            const q = document.getElementById('search').value.toLowerCase();
+            list.innerHTML = '';
+            db.filter(p => p.n.toLowerCase().includes(q)).forEach(p => {
+                let statusEmoji = p.s > 10 ? '📦' : (p.s > 0 ? '⚠️' : '🚫');
+                list.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><b>${statusEmoji} ${p.n}</b><br><small>$${p.v} | Quedan: ${p.s}</small></div>
+                    <button class="btn-vender" onclick="vender(${p.id})">Vender 💸</button>
                 </div>`;
-            }
+            });
+        }
 
-            // Alertas
-            if(p.s <= 0 || diff <= 15) {
-                alertList.innerHTML += `<div class="data-card" style="border-left: 5px solid ${p.s <= 0 ? 'var(--danger)' : 'var(--warning)'}">
-                    <b>${p.n}</b><br><span>${p.s <= 0 ? 'SIN STOCK' : 'Próximo a vencer: ' + p.e}</span>
-                </div>`;
-            }
-        });
-
-        document.getElementById('home-ganancia').innerText = '$' + (tVenta - tCosto).toLocaleString();
-        document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-        
-        if(document.getElementById('scr-stats').classList.contains('active')) initChart(ok, warn, crit);
+        const lp = document.getElementById('list-prov');
+        if(lp) {
+            lp.innerHTML = '';
+            provs.forEach(p => {
+                lp.innerHTML += `<div class="data-card"><b>🏢 ${p.n}</b><br><span>Visita: <span style="color:var(--primary); font-weight:bold;">${p.d}</span></span></div>`;
+            });
+        }
         lucide.createIcons();
     }
 
-    function initChart(ok, warn, crit) {
-        const ctx = document.getElementById('chartCaducidad').getContext('2d');
-        if (myChart) myChart.destroy();
-        myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: { labels: ['Sano', 'Alerta', 'Crítico'], datasets: [{ data: [ok, warn, crit], backgroundColor: ['#34C759', '#FF9500', '#FF3B30'], borderWidth: 0 }] },
-            options: { cutout: '80%', plugins: { legend: { position: 'bottom' } } }
-        });
-    }
-
-    function del(id) { if(confirm("¿Borrar?")) { db = db.filter(x => x.id !== id); localStorage.setItem('tienda_v8', JSON.stringify(db)); render(); } }
-    
-    function generarReporte() {
-        let msg = "📋 REPORTE TIENDA\n" + db.filter(p => p.s <= 0 || (p.e && (new Date(p.e)-new Date())/86400000 <= 15)).map(p => "- " + p.n).join("\n");
-        alert(msg);
-        navigator.clipboard.writeText(msg);
-    }
-
-    window.onload = () => { document.getElementById('margen-config').value = configMargen; render(); };
+    window.onload = () => {
+        actualizarSaludos();
+        render();
+    };
 </script>
 </body>
 </html>
