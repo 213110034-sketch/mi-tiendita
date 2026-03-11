@@ -9,31 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #0F172A; 
-            --glass: rgba(30, 41, 59, 0.7); 
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #3B82F6; 
-            --accent: #8B5CF6; 
-            --success: #10B981; 
-            --danger: #EF4444;
-            --warning: #F59E0B; 
-            --text-main: #F1F5F9; 
-            --text-dim: #94A3B8;
+            --bg: #0F172A; --glass: rgba(30, 41, 59, 0.7); --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #3B82F6; --accent: #8B5CF6; --success: #10B981; --danger: #EF4444;
+            --warning: #F59E0B; --text-main: #F1F5F9; --text-dim: #94A3B8;
         }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; background-attachment: fixed; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
         .screen { display: none; padding: 25px 20px; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-        .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); color: white; border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 25px; position: relative; overflow: hidden; }
-        .balance { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 8px 0; }
+        .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .balance { font-size: 38px; font-weight: 800; margin: 8px 0; }
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .menu-item { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; transition: 0.3s; cursor: pointer; text-align: center; }
+        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; }
         .menu-item i { color: var(--primary); margin-bottom: 12px; display: inline-block; }
-        .menu-item span { font-weight: 700; font-size: 13px; display: block; color: var(--text-main); }
 
-        .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; backdrop-filter: blur(8px); }
+        .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; }
         .ai-box { background: rgba(59, 130, 246, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0; border: 1px dashed var(--primary); }
         
         .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
@@ -41,23 +33,22 @@
         .bg-orange { background: rgba(245, 158, 11, 0.2); color: #FFDDAA; border: 1px solid var(--warning); }
         .bg-green { background: rgba(16, 185, 129, 0.2); color: #AAFFDD; border: 1px solid var(--success); }
         
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-ai { background: rgba(255,255,255,0.1); color: white; padding: 8px 12px; font-size: 10px; border-radius: 10px; border: 1px solid var(--glass-border); margin: 3px; }
         
-        input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
+        input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; }
         .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; }
         
-        /* ESTILO GÓTICO CHICANO */
-        .gothic-brand {
+        /* NUEVA FIRMA INFERIOR IZQUIERDA */
+        .gothic-signature {
+            position: fixed;
+            bottom: 15px;
+            left: 20px;
             font-family: 'UnifrakturMaguntia', serif;
-            font-size: 26px;
-            text-align: center;
-            margin-top: 30px;
-            color: #CBD5E1;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            opacity: 0.8;
+            font-size: 22px;
+            color: rgba(203, 213, 225, 0.4);
+            pointer-events: none;
+            z-index: 100;
         }
     </style>
 </head>
@@ -90,83 +81,65 @@
 
 <div id="scr-inv" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📦 Productos</h2>
+    <h2>📦 Inventario</h2>
     <div class="data-card">
         <input type="text" id="n" placeholder="Nombre...">
         <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo $" oninput="calcAI()"><input type="number" id="v" placeholder="Venta $"></div>
-        <div id="ai-suggest" class="ai-box" style="display:none;"><button class="btn-ai" onclick="setPrice(1.3)">+30%</button><button class="btn-ai" onclick="setPrice(1.5)">+50%</button></div>
-        <input type="number" id="s" placeholder="Cantidad"><button onclick="add()" class="btn btn-primary">Añadir</button>
+        <input type="number" id="s" placeholder="Cantidad">
+        <small style="font-size:10px; color:var(--text-dim)">Fecha de Caducidad (Opcional):</small>
+        <input type="date" id="caducidad">
+        <button onclick="add()" class="btn btn-primary">Guardar Producto</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()"><div id="list-inv"></div>
+    <div id="list-inv"></div>
 </div>
 
-<div id="scr-reports" class="screen">
+<div id="scr-ai" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📊 Rendimiento</h2>
-    <div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div>
+    <h2>🧠 Predicción AI</h2>
+    <div id="ai-prediction" class="hero-card" style="background: var(--accent); margin-bottom:15px;">
+        <small class="stat-label" style="color:white; opacity:0.8">PROYECCIÓN SEMANAL 🚀</small>
+        <div id="pred-ventas" class="balance" style="font-size:28px;">$0.00</div>
+        <small style="color:white">Ganancia estimada: <span id="pred-util">$0.00</span></small>
+    </div>
+    <div id="ai-content"></div>
 </div>
 
 <div id="scr-config" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
     <h2>⚙️ Ajustes</h2>
-    <select id="lang-select" onchange="changeLang()"><option value="es">Español 🇲🇽</option><option value="en">English 🇺🇸</option></select>
     <button onclick="copiarCloud()" class="btn btn-primary">Respaldar Datos 🔑</button>
-    <textarea id="cloud-data" readonly style="margin-top:10px; height:40px; font-size:8px; opacity:0.3;"></textarea>
-    
-    <div class="gothic-brand">By: Cruzzzito-ek</div>
 </div>
 
-<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre"><textarea id="suc-key" placeholder="Llave..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Conectar</button></div><div id="list-sucursales"></div></div>
-<div id="scr-ai" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>🧠 Asesor AI</h2><div id="ai-content"></div></div>
+<div id="scr-reports" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📊 Logros</h2><div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div></div>
+<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Tiendas</h2><div id="list-sucursales"></div></div>
+
+<div class="gothic-signature">Cruzz</div>
 
 <script>
     let db = JSON.parse(localStorage.getItem('the_db')) || [];
     let historial = JSON.parse(localStorage.getItem('the_hi')) || [];
-    let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
     let caja = parseFloat(localStorage.getItem('the_ca')) || 0;
     let costoVendido = parseFloat(localStorage.getItem('the_cv')) || 0;
-    let metaVenta = parseFloat(localStorage.getItem('the_target')) || 1000;
-    let lang = localStorage.getItem('the_lang') || 'es';
-    let chartInstance = null;
+    let metaVenta = 1000;
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-reports') renderChart();
-        if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
-        if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, historial, caja, costoVendido}));
         if(id === 'scr-ai') generarAI();
+        if(id === 'scr-reports') renderChart();
         render();
     }
 
-    function saveTarget() { metaVenta = parseFloat(document.getElementById('target-sales').value) || 0; localStorage.setItem('the_target', metaVenta); render(); }
-    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
-
-    function applyLang() {
-        const t = { es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY", l_costo: "COSTO", l_util: "GANANCIA" }, en: { inv: "Inventory", suc: "Branches", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "PROFIT" } }[lang];
-        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id.split('-')[1]]; });
-        document.getElementById('l-caja').innerText = t.l_caja; document.getElementById('l-costo').innerText = t.l_costo; document.getElementById('l-util').innerText = t.l_util;
-    }
-
-    function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
-    function setPrice(f) { const c = parseFloat(document.getElementById('costo').value); document.getElementById('v').value = Math.ceil(c * (f === 'rec' ? 1.5 : f)); }
-
     function add() {
-        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value);
-        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); }
+        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), 
+              s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value),
+              cad = document.getElementById('caducidad').value;
+        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); save(); }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { p.s--; p.vtas++; caja += p.v; costoVendido += p.c; if(p.s <= 3) alert(`¡Poco stock de ${p.n}! 🚨`); save(); }
-    }
-
-    function finalizarDia() {
-        if(confirm("¿Cerrar día? 📊")) {
-            const punteria = caja > 0 ? (100 - (Math.min(Math.abs(caja - metaVenta) / caja, 1) * 100)) : 0;
-            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, punteria: punteria });
-            caja = 0; costoVendido = 0; save();
-        }
+        if(p && p.s > 0) { p.s--; p.vtas++; caja += p.v; costoVendido += p.c; save(); }
     }
 
     function save() {
@@ -174,15 +147,24 @@
         localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
     }
 
-    function renderChart() {
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        if(chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(ctx, { type: 'line', data: { labels: historial.slice(-7).map(h=>h.fecha), datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', fill: true, tension:0.4 }] } });
-    }
-
     function generarAI() {
         const c = document.getElementById('ai-content'); c.innerHTML = '';
-        db.forEach(p => { c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--primary);">💡 Tip: Ten al menos ${Math.ceil(p.s*0.2)} en reserva. 🛡️</p></div>`; });
+        // IA DE PREDICCIÓN
+        const dias = historial.length || 1;
+        const promedioVenta = historial.reduce((a,b)=>a+b.vta,0) / dias;
+        const promedioUtil = historial.reduce((a,b)=>a+b.neto,0) / dias;
+        
+        document.getElementById('pred-ventas').innerText = "$" + (promedioVenta * 7).toFixed(2);
+        document.getElementById('pred-util').innerText = "$" + (promedioUtil * 7).toFixed(2);
+
+        db.forEach(p => {
+            let avisoCad = "";
+            if(p.cad) {
+                const diff = (new Date(p.cad) - new Date()) / (1000*60*60*24);
+                if(diff < 7) avisoCad = `<p style="color:var(--danger); font-size:11px;">⚠️ Caduca en ${Math.ceil(diff)} días.</p>`;
+            }
+            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">IA: Se estima vender ${Math.ceil(p.vtas/dias * 7)} unidades esta semana.</p></div>`;
+        });
     }
 
     function render() {
@@ -193,20 +175,20 @@
         if(li) {
             li.innerHTML = '';
             db.forEach(p => {
-                let color = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
-                li.innerHTML += `<div class="data-card"><div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div><div style="margin-top:10px;"><span class="badge ${color}">Stock: ${p.s}</span></div><button onclick="vender(${p.id})" class="btn-primary" style="margin-top:15px; width:100%;">VENTA +</button></div>`;
+                let color = p.s <= 3 ? 'bg-red' : 'bg-green';
+                let cadTag = p.cad ? `<small style="display:block; font-size:10px; color:var(--text-dim)">Exp: ${p.cad}</small>` : "";
+                li.innerHTML += `<div class="data-card"><b>${p.n}</b>${cadTag}<div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div><button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA +</button></div>`;
             });
         }
         lucide.createIcons();
     }
 
-    window.onload = () => {
-        applyLang();
-        const frases = ["Vende con gusto. 😊", "Control total, ganancia segura. 💎", "¡A darle Jefe! 🔥"];
-        document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
-        render();
-    };
-    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("¡Llave copiada! 🔑"); }
+    function finalizarDia() {
+        historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja });
+        caja = 0; costoVendido = 0; save(); alert("Cierre exitoso.");
+    }
+
+    window.onload = () => { render(); lucide.createIcons(); };
 </script>
 </body>
 </html>
