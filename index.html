@@ -6,10 +6,10 @@
     <title>Mi Tienda Inteligente Pro 💎</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #0F172A; /* Fondo Obscuro */
+            --bg: #0F172A; 
             --glass: rgba(30, 41, 59, 0.7); 
             --glass-border: rgba(255, 255, 255, 0.1);
             --primary: #3B82F6; 
@@ -26,126 +26,100 @@
         @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
 
         .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); color: white; border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-bottom: 25px; position: relative; overflow: hidden; }
-        .hero-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%); pointer-events: none; }
-        
-        .balance { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 8px 0; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .balance { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 8px 0; }
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .menu-item { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; transition: 0.3s; cursor: pointer; text-align: center; }
-        .menu-item:active { transform: scale(0.95); background: rgba(59, 130, 246, 0.2); }
         .menu-item i { color: var(--primary); margin-bottom: 12px; display: inline-block; }
         .menu-item span { font-weight: 700; font-size: 13px; display: block; color: var(--text-main); }
 
         .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; backdrop-filter: blur(8px); }
         .ai-box { background: rgba(59, 130, 246, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0; border: 1px dashed var(--primary); }
         
-        /* SEMAFOROS */
         .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
-        .bg-red { background: rgba(239, 68, 68, 0.2); color: #FFAAAA; border: 1px solid var(--danger); box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .bg-red { background: rgba(239, 68, 68, 0.2); color: #FFAAAA; border: 1px solid var(--danger); }
         .bg-orange { background: rgba(245, 158, 11, 0.2); color: #FFDDAA; border: 1px solid var(--warning); }
         .bg-green { background: rgba(16, 185, 129, 0.2); color: #AAFFDD; border: 1px solid var(--success); }
         
         .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        .btn-primary { background: var(--primary); color: white; }
         .btn-ai { background: rgba(255,255,255,0.1); color: white; padding: 8px 12px; font-size: 10px; border-radius: 10px; border: 1px solid var(--glass-border); margin: 3px; }
         
         input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
-        input:focus { outline: 2px solid var(--primary); background: rgba(255,255,255,0.1); }
-        
         .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; }
-        .sucursal-tag { background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 8px; font-size: 10px; color: var(--text-dim); }
+        
+        /* ESTILO GÓTICO CHICANO */
+        .gothic-brand {
+            font-family: 'UnifrakturMaguntia', serif;
+            font-size: 26px;
+            text-align: center;
+            margin-top: 30px;
+            color: #CBD5E1;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
 
 <div id="scr-home" class="screen active">
     <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-            <h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe!</h2>
-            <p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p>
-        </div>
-        <div style="background: var(--primary); padding: 8px; border-radius: 12px; box-shadow: 0 0 15px rgba(59,130,246,0.5)">
-            <i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i>
-        </div>
+        <div><h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe!</h2><p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p></div>
+        <div style="background: var(--primary); padding: 8px; border-radius: 12px;"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
     </div>
-
     <div class="hero-card">
         <div style="display:flex; justify-content:space-between; align-items:start;">
-            <div>
-                <small id="l-caja" class="stat-label" style="color:var(--text-dim)">VENDIDO HOY 💰</small>
-                <div class="balance" id="h-caja">$0.00</div>
-            </div>
-            <div style="text-align:right">
-                <small class="stat-label" style="color:var(--text-dim)">PRECISIÓN 🎯</small>
-                <div id="h-mape" style="font-weight:800; font-size:20px; color: var(--success);">100%</div>
-            </div>
+            <div><small id="l-caja" class="stat-label" style="color:var(--text-dim)">VENDIDO HOY 💰</small><div class="balance" id="h-caja">$0.00</div></div>
+            <div style="text-align:right"><small class="stat-label" style="color:var(--text-dim)">PRECISIÓN 🎯</small><div id="h-mape" style="font-weight:800; font-size:20px; color: var(--success);">100%</div></div>
         </div>
-        
         <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-            <div><small id="l-costo" class="stat-label" style="opacity:0.6">COSTO 📦</small><div id="h-costos-v" style="color: #F87171; font-weight: 800; font-size: 18px;">$0</div></div>
-            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.6">NETO 💎</small><div id="h-util" style="color: var(--success); font-weight: 800; font-size: 18px;">$0</div></div>
+            <div><small id="l-costo" class="stat-label" style="opacity:0.6">COSTO 📦</small><div id="h-costos-v" style="color: #F87171; font-weight: 800;">$0</div></div>
+            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.6">NETO 💎</small><div id="h-util" style="color: var(--success); font-weight: 800;">$0</div></div>
         </div>
     </div>
-
     <div class="menu-grid">
         <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package"></i><span id="m-inv">Inventario</span></div>
         <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span id="m-suc">Tiendas</span></div>
         <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="bar-chart-2"></i><span id="m-rep">Mis Logros</span></div>
         <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain-circuit"></i><span id="m-ai">Asesor AI</span></div>
         <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="sliders"></i><span id="m-cfg">Ajustes</span></div>
-        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); border: none;"><i data-lucide="check-circle" style="color:white"></i><span style="color:white">Cerrar Día</span></div>
+        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success);"><i data-lucide="check-circle" style="color:white"></i><span style="color:white">Cerrar Día</span></div>
     </div>
 </div>
 
 <div id="scr-inv" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 id="h-inv">📦 Lista de Productos</h2>
+    <h2>📦 Productos</h2>
     <div class="data-card">
-        <input type="text" id="n" placeholder="Nombre del producto...">
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="costo" placeholder="Costo Compra $" oninput="calcAI()">
-            <input type="number" id="v" placeholder="Venta Público $">
-        </div>
-        <div id="ai-suggest" class="ai-box" style="display:none;">
-            <small style="color:var(--primary); font-weight:800;">💡 PRECIO INTELIGENTE:</small><br>
-            <button class="btn-ai" onclick="setPrice(1.3)">+30%</button>
-            <button class="btn-ai" onclick="setPrice(1.5)">+50%</button>
-            <button class="btn-ai" onclick="setPrice('rec')">AI Sugerido</button>
-        </div>
-        <input type="number" id="s" placeholder="Cantidad inicial">
-        <button onclick="add()" class="btn btn-primary">Añadir al Stock</button>
+        <input type="text" id="n" placeholder="Nombre...">
+        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo $" oninput="calcAI()"><input type="number" id="v" placeholder="Venta $"></div>
+        <div id="ai-suggest" class="ai-box" style="display:none;"><button class="btn-ai" onclick="setPrice(1.3)">+30%</button><button class="btn-ai" onclick="setPrice(1.5)">+50%</button></div>
+        <input type="number" id="s" placeholder="Cantidad"><button onclick="add()" class="btn btn-primary">Añadir</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar en bodega..." oninput="render()">
-    <div id="list-inv"></div>
+    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()"><div id="list-inv"></div>
 </div>
 
 <div id="scr-reports" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
     <h2>📊 Rendimiento</h2>
-    <div class="data-card">
-        <small class="stat-label">Meta de hoy ($)</small>
-        <input type="number" id="target-sales" oninput="saveTarget()">
-    </div>
-    <div class="data-card" style="background: #1E293B;"><canvas id="mainChart"></canvas></div>
-    <div id="history-list"></div>
+    <div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div>
 </div>
 
 <div id="scr-config" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
     <h2>⚙️ Ajustes</h2>
-    <select id="lang-select" onchange="changeLang()">
-        <option value="es">Español 🇲🇽</option>
-        <option value="en">English 🇺🇸</option>
-    </select>
+    <select id="lang-select" onchange="changeLang()"><option value="es">Español 🇲🇽</option><option value="en">English 🇺🇸</option></select>
     <button onclick="copiarCloud()" class="btn btn-primary">Respaldar Datos 🔑</button>
     <textarea id="cloud-data" readonly style="margin-top:10px; height:40px; font-size:8px; opacity:0.3;"></textarea>
+    
+    <div class="gothic-brand">By: Cruzzzito-ek</div>
 </div>
 
 <div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre"><textarea id="suc-key" placeholder="Llave..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Conectar</button></div><div id="list-sucursales"></div></div>
 <div id="scr-ai" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>🧠 Asesor AI</h2><div id="ai-content"></div></div>
 
 <script>
-    // --- TODA TU LÓGICA ORIGINAL SE MANTIENE INTACTA ---
     let db = JSON.parse(localStorage.getItem('the_db')) || [];
     let historial = JSON.parse(localStorage.getItem('the_hi')) || [];
     let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
@@ -155,18 +129,10 @@
     let lang = localStorage.getItem('the_lang') || 'es';
     let chartInstance = null;
 
-    const i18n = {
-        es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY", l_costo: "COSTO", l_util: "GANANCIA" },
-        en: { inv: "Inventory", suc: "Branches", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "PROFIT" }
-    };
-
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-reports') {
-            document.getElementById('target-sales').value = metaVenta;
-            renderChart();
-        }
+        if(id === 'scr-reports') renderChart();
         if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
         if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, historial, caja, costoVendido}));
         if(id === 'scr-ai') generarAI();
@@ -177,43 +143,26 @@
     function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
 
     function applyLang() {
-        const t = i18n[lang];
-        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerText = t[id.split('-')[1]];
-        });
-        document.getElementById('l-caja').innerText = t.l_caja;
-        document.getElementById('l-costo').innerText = t.l_costo;
-        document.getElementById('l-util').innerText = t.l_util;
+        const t = { es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY", l_costo: "COSTO", l_util: "GANANCIA" }, en: { inv: "Inventory", suc: "Branches", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "PROFIT" } }[lang];
+        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id.split('-')[1]]; });
+        document.getElementById('l-caja').innerText = t.l_caja; document.getElementById('l-costo').innerText = t.l_costo; document.getElementById('l-util').innerText = t.l_util;
     }
 
     function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
-    function setPrice(f) {
-        const c = parseFloat(document.getElementById('costo').value);
-        if(f === 'rec') f = c < 50 ? 1.8 : 1.4;
-        document.getElementById('v').value = Math.ceil(c * f);
-    }
+    function setPrice(f) { const c = parseFloat(document.getElementById('costo').value); document.getElementById('v').value = Math.ceil(c * (f === 'rec' ? 1.5 : f)); }
 
     function add() {
-        const n = document.getElementById('n').value, c = parseFloat(document.getElementById('costo').value), v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); document.getElementById('n').value=''; document.getElementById('costo').value=''; document.getElementById('v').value=''; document.getElementById('s').value=''; }
+        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value);
+        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { 
-            p.s--; 
-            p.vtas = (p.vtas || 0) + 1; 
-            caja += p.v; 
-            costoVendido += p.c; 
-            // ALERTA DE STOCK DINÁMICA
-            if(p.s <= 3) alert(`¡Atención! Solo te quedan ${p.s} de ${p.n}. 🚨`);
-            save(); 
-        } else { alert("¡Sin existencias! ❌"); }
+        if(p && p.s > 0) { p.s--; p.vtas++; caja += p.v; costoVendido += p.c; if(p.s <= 3) alert(`¡Poco stock de ${p.n}! 🚨`); save(); }
     }
 
     function finalizarDia() {
-        if(confirm("¿Cerrar el día, Boss? 📊")) {
+        if(confirm("¿Cerrar día? 📊")) {
             const punteria = caja > 0 ? (100 - (Math.min(Math.abs(caja - metaVenta) / caja, 1) * 100)) : 0;
             historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, punteria: punteria });
             caja = 0; costoVendido = 0; save();
@@ -221,105 +170,43 @@
     }
 
     function save() {
-        localStorage.setItem('the_db', JSON.stringify(db));
-        localStorage.setItem('the_hi', JSON.stringify(historial));
-        localStorage.setItem('the_ca', caja);
-        localStorage.setItem('the_cv', costoVendido);
-        localStorage.setItem('the_suc', JSON.stringify(sucursales));
-        render();
+        localStorage.setItem('the_db', JSON.stringify(db)); localStorage.setItem('the_hi', JSON.stringify(historial));
+        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
     }
 
     function renderChart() {
         const ctx = document.getElementById('mainChart').getContext('2d');
-        Chart.defaults.color = '#94A3B8';
         if(chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(ctx, { 
-            type: 'line', 
-            data: { 
-                labels: historial.slice(-7).map(h=>h.fecha), 
-                datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension:0.4 }] 
-            } 
-        });
-        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px; color:#fff">Historial de éxito</h3>';
-        historial.slice().reverse().forEach(h => {
-            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b>$${h.neto.toFixed(2)} (${h.punteria.toFixed(0)}% 🎯)</b></div>`;
-        });
+        chartInstance = new Chart(ctx, { type: 'line', data: { labels: historial.slice(-7).map(h=>h.fecha), datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', fill: true, tension:0.4 }] } });
     }
 
     function generarAI() {
         const c = document.getElementById('ai-content'); c.innerHTML = '';
-        db.forEach(p => {
-            const res = Math.ceil(p.s * 0.2);
-            c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--primary);">💡 Tip: Mantén al menos ${res} en reserva para nunca fallarle al cliente. 🛡️</p></div>`;
-        });
+        db.forEach(p => { c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--primary);">💡 Tip: Ten al menos ${Math.ceil(p.s*0.2)} en reserva. 🛡️</p></div>`; });
     }
 
     function render() {
         document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
         document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
         document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
-        
-        const ultimos = historial.slice(-5);
-        const avgPunteria = ultimos.length > 0 ? (ultimos.reduce((a,b)=>a+b.punteria,0) / ultimos.length) : 100;
-        const elMape = document.getElementById('h-mape');
-        elMape.innerText = avgPunteria.toFixed(0) + "%";
-        elMape.style.color = avgPunteria > 80 ? 'var(--success)' : 'var(--warning)';
-
         const li = document.getElementById('list-inv');
         if(li) {
             li.innerHTML = '';
             db.forEach(p => {
-                // SEMÁFOROS DINÁMICOS
-                let colorClass = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
-                let emojiStock = p.s <= 3 ? '🚨' : (p.s <= 8 ? '⚠️' : '✅');
-                let pesoEnVenta = caja > 0 ? ((p.vtas * p.v) / caja * 100) : 0;
-                
-                li.innerHTML += `<div class="data-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <b style="font-size:16px;">${p.n}</b>
-                        <b style="color:var(--primary)">$${p.v}</b>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                        <span class="badge ${colorClass}">${emojiStock} Stock: ${p.s}</span>
-                        <small style="font-weight:800; color:var(--text-dim)">Venta: ${pesoEnVenta.toFixed(0)}%</small>
-                    </div>
-                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:15px; width:100%; border-radius:12px; padding:12px; border:none; font-weight:700;">REGISTRAR VENTA +</button>
-                    <button onclick="if(confirm('¿Eliminar?')){db=db.filter(x=>x.id!=${p.id});save();}" style="background:none; border:none; color:var(--danger); font-size:10px; margin-top:8px; width:100%; opacity:0.6;">Eliminar producto</button>
-                </div>`;
+                let color = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
+                li.innerHTML += `<div class="data-card"><div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div><div style="margin-top:10px;"><span class="badge ${color}">Stock: ${p.s}</span></div><button onclick="vender(${p.id})" class="btn-primary" style="margin-top:15px; width:100%;">VENTA +</button></div>`;
             });
         }
         lucide.createIcons();
     }
 
-    function vincularSucursal() {
-        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
-        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); alert("¡Conectado! 🔌"); } catch(e) { alert("Llave inválida."); } }
-    }
-
     window.onload = () => {
         applyLang();
-        document.getElementById('lang-select').value = lang;
-        
-        // --- MÁS FRASES Y DINAMISMO ---
-        const frases = [
-            "¡Hoy es un gran día para hacer dinero! 💸",
-            "La disciplina es la clave del éxito. ✨",
-            "Un inventario ordenado vende por dos. 📦",
-            "¡Tus metas están cada vez más cerca! 🎯",
-            "El éxito no llega solo, se trabaja diario. 🔥",
-            "¡Dale una sonrisa a tus clientes! 😊",
-            "Control total, ganancia segura. 💎",
-            "¿Ya viste qué producto se vende más hoy? 📈"
-        ];
-        
-        const hora = new Date().getHours();
-        const saludo = hora < 12 ? "¡Buenos días, Jefe! 🌅" : (hora < 19 ? "¡Buenas tardes, Boss! ☀️" : "¡Noche de cierres, Jefe! 🌙");
-
+        const frases = ["Vende con gusto. 😊", "Control total, ganancia segura. 💎", "¡A darle Jefe! 🔥"];
         document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
-        document.getElementById('txt-saludo').innerText = saludo;
         render();
     };
-    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("¡Llave de respaldo copiada! 🔑"); }
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("¡Llave copiada! 🔑"); }
 </script>
 </body>
 </html>
