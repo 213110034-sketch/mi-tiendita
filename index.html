@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Hub Franquicia AI Elite 🏆</title>
+    <title>Mi Tienda Inteligente 🏆</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -50,67 +50,67 @@
 <div id="scr-home" class="screen active">
     <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
         <div>
-            <h2 id="txt-saludo" style="margin:0; font-weight: 800;">Hola, Jefe</h2>
+            <h2 id="txt-saludo" style="margin:0; font-weight: 800;">¡Hola, Jefe!</h2>
             <p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p>
         </div>
-        <i data-lucide="user-circle" style="width:32px; height:32px; color:var(--primary)"></i>
+        <i data-lucide="store" style="width:32px; height:32px; color:var(--primary)"></i>
     </div>
 
     <div class="hero-card">
         <div style="display:flex; justify-content:space-between; align-items:start;">
             <div>
-                <small id="l-caja" class="stat-label" style="color:rgba(255,255,255,0.7)">Ventas Hoy</small>
+                <small id="l-caja" class="stat-label" style="color:rgba(255,255,255,0.7)">Ventas del Día</small>
                 <div class="balance" id="h-caja">$0.00</div>
             </div>
             <div style="text-align:right">
-                <small class="stat-label" style="color:rgba(255,255,255,0.7)">Precisión (MAPE)</small>
-                <div id="h-mape" style="font-weight:800; font-size:18px;">0%</div>
+                <small class="stat-label" style="color:rgba(255,255,255,0.7)">Puntería en Ventas</small>
+                <div id="h-mape" style="font-weight:800; font-size:18px;">100%</div>
             </div>
         </div>
         
         <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-            <div><small id="l-costo" class="stat-label" style="opacity:0.7">Costo</small><div id="h-costos-v" style="color: #F87171; font-weight: 800;">$0</div></div>
-            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.7">Utilidad Real</small><div id="h-util" style="color: #34D399; font-weight: 800;">$0</div></div>
+            <div><small id="l-costo" class="stat-label" style="opacity:0.7">Inversión (Costo)</small><div id="h-costos-v" style="color: #F87171; font-weight: 800;">$0</div></div>
+            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.7">Ganancia Real</small><div id="h-util" style="color: #34D399; font-weight: 800;">$0</div></div>
         </div>
     </div>
 
     <div class="menu-grid">
         <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package"></i><span id="m-inv">Inventario</span></div>
-        <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span id="m-suc">Sucursales</span></div>
-        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="trending-up"></i><span id="m-rep">Métricas Pro</span></div>
+        <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span id="m-suc">Otras Tiendas</span></div>
+        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="trending-up"></i><span id="m-rep">Mis Logros</span></div>
         <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain"></i><span id="m-ai">Asesor AI</span></div>
         <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="settings"></i><span id="m-cfg">Ajustes</span></div>
-        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); color: white;"><i data-lucide="lock" style="color:white"></i><span>Cerrar Día</span></div>
+        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); color: white;"><i data-lucide="lock" style="color:white"></i><span>Cerrar y Calcular</span></div>
     </div>
 </div>
 
 <div id="scr-inv" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 id="h-inv">📦 Inventario e Índice IV</h2>
+    <h2 id="h-inv">📦 Lista de Productos</h2>
     <div class="data-card">
-        <input type="text" id="n" placeholder="Producto">
+        <input type="text" id="n" placeholder="¿Qué producto es?">
         <div style="display:flex; gap:10px;">
-            <input type="number" id="costo" placeholder="Costo $" oninput="calcAI()">
-            <input type="number" id="v" placeholder="Venta $">
+            <input type="number" id="costo" placeholder="¿Cuánto te costó? $" oninput="calcAI()">
+            <input type="number" id="v" placeholder="Precio de Venta $">
         </div>
         <div id="ai-suggest" class="ai-box" style="display:none;">
-            <small style="color:var(--accent); font-weight:800;">CALCUALDORA AI:</small><br>
-            <button class="btn-ai" onclick="setPrice(1.3)">30%</button>
-            <button class="btn-ai" onclick="setPrice(1.5)">50%</button>
-            <button class="btn-ai" onclick="setPrice('rec')">Sugerido</button>
+            <small style="color:var(--accent); font-weight:800;">💡 AYUDA PARA PONER PRECIO:</small><br>
+            <button class="btn-ai" onclick="setPrice(1.3)">Ganar 30%</button>
+            <button class="btn-ai" onclick="setPrice(1.5)">Ganar 50%</button>
+            <button class="btn-ai" onclick="setPrice('rec')">Lo más vendido</button>
         </div>
-        <input type="number" id="s" placeholder="Stock">
-        <button onclick="add()" class="btn btn-primary">Añadir</button>
+        <input type="number" id="s" placeholder="¿Cuántos tienes?">
+        <button onclick="add()" class="btn btn-primary">Guardar en Lista</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()">
+    <input type="text" id="search" placeholder="🔍 Buscar producto..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
 <div id="scr-reports" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📊 Métricas Avanzadas</h2>
+    <h2>📊 ¿Cómo va el negocio?</h2>
     <div class="data-card">
-        <small class="stat-label">Meta de Ventas Diaria</small>
+        <small class="stat-label">¿Cuánto quieres vender hoy?</small>
         <input type="number" id="target-sales" placeholder="$0.00" oninput="saveTarget()" style="margin:5px 0;">
     </div>
     <div class="data-card"><canvas id="mainChart"></canvas></div>
@@ -128,13 +128,13 @@
         </select>
     </div>
     <div class="data-card">
-        <button onclick="copiarCloud()" class="btn btn-primary">Copiar Respaldo 🔑</button>
+        <button onclick="copiarCloud()" class="btn btn-primary">Copiar Llave de Respaldo 🔑</button>
         <textarea id="cloud-data" readonly style="margin-top:10px; height:60px; font-size:8px; opacity:0.5;"></textarea>
     </div>
 </div>
 
-<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre Sucursal"><textarea id="suc-key" placeholder="Llave..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Vincular</button></div><div id="list-sucursales"></div></div>
-<div id="scr-ai" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>🧠 Asesor de Stock AI</h2><div id="ai-content"></div></div>
+<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Ver otras sucursales</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre de la otra tienda"><textarea id="suc-key" placeholder="Pega aquí la llave de la otra tienda..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Vincular Tienda</button></div><div id="list-sucursales"></div></div>
+<div id="scr-ai" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>🧠 Consejos de tu Asesor</h2><div id="ai-content"></div></div>
 
 <script>
     let db = JSON.parse(localStorage.getItem('the_db')) || [];
@@ -147,8 +147,8 @@
     let chartInstance = null;
 
     const i18n = {
-        es: { inv: "Inventario", suc: "Sucursales", rep: "Métricas Pro", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENTAS HOY", l_costo: "COSTO", l_util: "UTILIDAD REAL" },
-        en: { inv: "Inventory", suc: "Branches", rep: "Pro Metrics", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "REAL PROFIT" }
+        es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY", l_costo: "COSTO", l_util: "GANANCIA" },
+        en: { inv: "Inventory", suc: "Branches", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "PROFIT" }
     };
 
     function goTo(id) {
@@ -165,18 +165,19 @@
     }
 
     function saveTarget() { metaVenta = parseFloat(document.getElementById('target-sales').value) || 0; localStorage.setItem('the_target', metaVenta); render(); }
-
     function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
 
     function applyLang() {
         const t = i18n[lang];
-        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => document.getElementById(id).innerText = t[id.split('-')[1]]);
+        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerText = t[id.split('-')[1]];
+        });
         document.getElementById('l-caja').innerText = t.l_caja;
         document.getElementById('l-costo').innerText = t.l_costo;
         document.getElementById('l-util').innerText = t.l_util;
     }
 
-    // LÓGICA AI PRECIOS
     function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
     function setPrice(f) {
         const c = parseFloat(document.getElementById('costo').value);
@@ -186,20 +187,21 @@
 
     function add() {
         const n = document.getElementById('n').value, c = parseFloat(document.getElementById('costo').value), v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); document.getElementById('n').value=''; }
+        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); document.getElementById('n').value=''; document.getElementById('costo').value=''; document.getElementById('v').value=''; document.getElementById('s').value=''; }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
         if(p && p.s > 0) { p.s--; p.vtas = (p.vtas || 0) + 1; caja += p.v; costoVendido += p.c; save(); }
+        else { alert("¡Se acabó el producto!"); }
     }
 
     function finalizarDia() {
-        if(confirm("¿Cerrar día? Se calculará el MAPE (Error de predicción).")) {
-            // Cálculo MAPE: |VentaReal - Meta| / VentaReal
-            const error = caja > 0 ? (Math.abs(caja - metaVenta) / caja) * 100 : 0;
-            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, mape: error });
+        if(confirm("¿Quieres cerrar el día y guardar tus ganancias?")) {
+            const punteria = caja > 0 ? (100 - (Math.min(Math.abs(caja - metaVenta) / caja, 1) * 100)) : 0;
+            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, punteria: punteria });
             caja = 0; costoVendido = 0; save();
+            alert("Día guardado con éxito.");
         }
     }
 
@@ -219,12 +221,12 @@
             type: 'line', 
             data: { 
                 labels: historial.slice(-7).map(h=>h.fecha), 
-                datasets: [{ label: 'Utilidad $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', tension:0.4 }] 
+                datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', tension:0.4 }] 
             } 
         });
-        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px;">Registro Reciente</h3>';
+        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px;">Días anteriores</h3>';
         historial.slice().reverse().forEach(h => {
-            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b>Utilidad: $${h.neto.toFixed(2)} | MAPE: ${h.mape.toFixed(1)}%</b></div>`;
+            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b>Ganancia: $${h.neto.toFixed(2)} | Puntería: ${h.punteria.toFixed(0)}%</b></div>`;
         });
     }
 
@@ -232,7 +234,7 @@
         const c = document.getElementById('ai-content'); c.innerHTML = '';
         db.forEach(p => {
             const res = Math.ceil(p.s * 0.2);
-            c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--accent);">🛡️ Stock de Seguridad: Mantener ${res} unidades.</p></div>`;
+            c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--accent);">⚠️ Reserva de emergencia: Trata de tener siempre al menos ${res} unidades.</p></div>`;
         });
     }
 
@@ -241,29 +243,28 @@
         document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
         document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
         
-        // Calcular MAPE promedio para el Dashboard
         const ultimos = historial.slice(-5);
-        const avgMape = ultimos.length > 0 ? (ultimos.reduce((a,b)=>a+b.mape,0) / ultimos.length) : 0;
-        document.getElementById('h-mape').innerText = avgMape.toFixed(1) + "%";
-        document.getElementById('h-mape').style.color = avgMape < 20 ? 'var(--success)' : 'var(--danger)';
+        const avgPunteria = ultimos.length > 0 ? (ultimos.reduce((a,b)=>a+b.punteria,0) / ultimos.length) : 100;
+        document.getElementById('h-mape').innerText = avgPunteria.toFixed(0) + "%";
+        document.getElementById('h-mape').style.color = avgPunteria > 80 ? 'var(--success)' : 'var(--warning)';
 
         const li = document.getElementById('list-inv');
         if(li) {
             li.innerHTML = '';
-            // Índice de Ventas (IV): (Ventas del producto / Total Ventas en Caja) * 100
             db.forEach(p => {
                 let color = p.s < 5 ? 'bg-red' : (p.s < 10 ? 'bg-orange' : 'bg-green');
-                let iv = caja > 0 ? ((p.vtas * p.v) / caja * 100) : 0;
+                let pesoEnVenta = caja > 0 ? ((p.vtas * p.v) / caja * 100) : 0;
                 let sInfo = ''; sucursales.forEach(s => { let m = s.inv.find(i=>i.n===p.n); if(m) sInfo += `<span class="sucursal-tag">${s.name}: ${m.s}</span>`; });
                 
                 li.innerHTML += `<div class="data-card">
                     <div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="badge ${color}">Stock: ${p.s}</span>
-                        <small style="font-weight:800; color:var(--accent)">IV: ${iv.toFixed(1)}%</small>
+                        <span class="badge ${color}">Quedan: ${p.s}</span>
+                        <small style="font-weight:800; color:var(--accent)">Importancia: ${pesoEnVenta.toFixed(0)}%</small>
                     </div>
                     ${sInfo}<br>
-                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%; border-radius:10px; padding:10px; border:none;">Vender +</button>
+                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%; border-radius:10px; padding:10px; border:none;">Vender Producto +</button>
+                    <button onclick="if(confirm('¿Borrar?')){db=db.filter(x=>x.id!=${p.id});save();}" style="background:none; border:none; color:var(--danger); font-size:10px; margin-top:5px; width:100%;">Eliminar del catálogo</button>
                 </div>`;
             });
         }
@@ -272,17 +273,40 @@
 
     function vincularSucursal() {
         const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
-        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); } catch(e) { alert("Error"); } }
+        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); alert("Tienda conectada."); } catch(e) { alert("Error al conectar."); } }
     }
 
     window.onload = () => {
         applyLang();
         document.getElementById('lang-select').value = lang;
-        const fr = ["El IV alto indica tus productos estrella.", "MAPE bajo significa que conoces tu negocio.", "Controla el costo, asegura el futuro."];
-        document.getElementById('quote').innerText = fr[Math.floor(Math.random()*fr.length)];
+        
+        // --- DINAMISMO EN FRASES Y EMOJIS ---
+        const frases = [
+            "Vende con gusto y tus clientes volverán. 😊",
+            "Cuida tus monedas y tus pesos se cuidarán solos. 💰",
+            "Un negocio ordenado es un negocio próspero. 📈",
+            "¡Hoy es un gran día para romper récords! 🚀",
+            "El éxito es la suma de pequeños esfuerzos diarios. ✨",
+            "¡Ánimo Jefe, la caja te espera! 💸",
+            "La mejor publicidad es un cliente feliz. 🤝",
+            "Cada venta cuenta para tu gran meta. 🎯"
+        ];
+        
+        const saludos = [
+            "¡Hola, Jefe! 👋",
+            "¡Bienvenido de nuevo! 🏢",
+            "¿Listo para vender? 🛒",
+            "¡Qué gusto verte! 💎",
+            "A darle con todo, Boss 👊"
+        ];
+
+        document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
+        document.getElementById('txt-saludo').innerText = saludos[Math.floor(Math.random()*saludos.length)];
+        // ------------------------------------
+
         render();
     };
-    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("Copiado"); }
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("Llave copiada. Guárdala en un lugar seguro."); }
 </script>
 </body>
 </html>
