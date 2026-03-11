@@ -3,234 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tiendita Pro</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007AFF">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+    <title>Tiendita Pro Scan</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        :root {
-            --ios-bg: #F2F2F7;
-            --ios-blue: #007AFF;
-            --ios-green: #34C759;
-            --ios-red: #FF3B30;
-            --ios-yellow: #FFCC00;
-            --ios-text: #1C1C1E;
-        }
+        :root { --ios-blue: #007AFF; --ios-bg: #F2F2F7; --ios-card: #FFFFFF; }
+        body { font-family: -apple-system, sans-serif; background: var(--ios-bg); margin: 0; padding-bottom: 80px; }
+        
+        /* Cabecera */
+        header { background: var(--ios-blue); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; }
+        
+        /* Contenedor de Pestañas */
+        .tab-content { display: none; padding: 20px; }
+        .active { display: block; }
 
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--ios-bg);
-            margin: 0;
-            color: var(--ios-text);
-            user-select: none;
-        }
+        /* Tarjetas */
+        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        /* Navegación Inferior */
+        nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd; z-index: 1000; }
+        .nav-item { border: none; background: none; color: #8E8E93; display: flex; flex-direction: column; align-items: center; font-size: 10px; }
+        .nav-item.active-nav { color: var(--ios-blue); }
 
-        header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 0.5px solid #D1D1D6;
-        }
-
-        .container { padding: 16px; max-width: 500px; margin: auto; }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .btn-main {
-            background: var(--ios-blue);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            width: 100%;
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        /* Estilos de inputs tipo iPhone */
-        input, select {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border: 1px solid #E5E5EA;
-            border-radius: 12px;
-            background: #F9F9F9;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .prod-row {
-            display: flex;
-            background: white;
-            padding: 15px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            align-items: center;
-            border-left: 6px solid var(--ios-green);
-        }
-
-        .rojo { border-left-color: var(--ios-red); }
-        .azul { border-left-color: var(--ios-blue); }
-        .amarillo { border-left-color: var(--ios-yellow); }
-
-        .price-tag {
-            background: #E9F2FF;
-            color: var(--ios-blue);
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        /* Botones y Forms */
+        input { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; }
+        .btn { background: var(--ios-blue); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
+        
+        /* Cámara */
+        #reader { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 10px; display: none; }
+        
+        .prod-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 style="margin:0; font-size:17px;">🏪 Mi Ayudante Pro</h1>
+    <h2 style="margin:0">Tiendita Inteligente 🤖</h2>
+    <p id="sub-header" style="opacity:0.8; margin:5px 0 0 0;">Sección: Inventario</p>
 </header>
 
-<div class="container">
-    <div style="display:flex; gap:10px; margin-bottom:20px;">
-        <select id="tiendas" onchange="cambiarTienda()" style="margin:0; flex:1;"></select>
-        <button onclick="nuevaTienda()" style="background:var(--ios-blue); color:white; border:none; width:45px; border-radius:12px;">+</button>
-    </div>
-
-    <div class="price-tag" id="val-total">$0.00</div>
+<div id="tab-inv" class="tab-content active">
+    <button class="btn" style="background:#34C759" onclick="toggleScanner()">
+        <i data-lucide="scan"></i> ESCANEAR CÓDIGO
+    </button>
+    <div id="reader"></div>
 
     <div class="card">
-        <h2 style="font-size:14px; color:#8E8E93; margin-top:0;">📝 NUEVO PRODUCTO</h2>
-        <input type="text" id="nom" placeholder="¿Qué vas a registrar?">
+        <h3>+ Nuevo Producto</h3>
+        <input type="text" id="p-code" placeholder="Código (Escanear o manual)">
+        <input type="text" id="p-name" placeholder="Nombre del producto">
         <div style="display:flex; gap:10px;">
-            <input type="number" id="costo" placeholder="Costo $" oninput="calcSugerido()">
-            <input type="number" id="venta" placeholder="Venta $">
+            <input type="number" id="p-cost" placeholder="Costo $">
+            <input type="number" id="p-price" placeholder="Venta $">
         </div>
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="stock" placeholder="Cantidad">
-            <input type="date" id="cad">
-        </div>
-        <button class="btn-main" onclick="agregar()">
-            <i data-lucide="save"></i> GUARDAR
-        </button>
+        <input type="number" id="p-stock" placeholder="Cantidad Inicial">
+        <button class="btn" onclick="addProd()">Guardar Producto</button>
     </div>
 
-    <div class="card" id="c-graf" style="display:none; height:250px;">
-        <canvas id="graf"></canvas>
+    <div class="card">
+        <h3>Lista de Productos</h3>
+        <div id="list-inv"></div>
     </div>
-
-    <div id="lista"></div>
 </div>
 
+<div id="tab-sales" class="tab-content">
+    <div class="card" style="text-align:center;">
+        <p>Escanear producto para vender:</p>
+        <button class="btn" onclick="toggleScanner()">Cámara de Venta</button>
+    </div>
+    <div id="list-sales-today"></div>
+</div>
+
+<div id="tab-reports" class="tab-content">
+    <div class="card">
+        <h3>Pronóstico de Inventario</h3>
+        <div id="prediction-list">Aún no hay datos suficientes...</div>
+    </div>
+</div>
+
+<nav>
+    <button class="nav-item active-nav" onclick="switchTab('tab-inv', this)">
+        <i data-lucide="package"></i>Inventario
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-sales', this)">
+        <i data-lucide="shopping-cart"></i>Ventas
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-reports', this)">
+        <i data-lucide="trending-up"></i>Reportes
+    </button>
+</nav>
+
 <script>
-    let db = JSON.parse(localStorage.getItem('tienda_final_v1')) || { "Sucursal 1": [] };
-    let actual = localStorage.getItem('t_act') || "Sucursal 1";
-    let chart;
+    let db = JSON.parse(localStorage.getItem('smart_tienda_v2')) || [];
+    let sales = JSON.parse(localStorage.getItem('smart_ventas_v2')) || [];
+    let html5QrCode;
 
-    function nuevaTienda() {
-        let n = prompt("Nombre de la sucursal:");
-        if(n) { db[n] = []; actual = n; guardar(); refreshSel(); }
-    }
-
-    function refreshSel() {
-        const s = document.getElementById('tiendas');
-        s.innerHTML = "";
-        Object.keys(db).forEach(t => s.innerHTML += `<option value="${t}" ${t===actual?'selected':''}>${t}</option>`);
-    }
-
-    function cambiarTienda() {
-        actual = document.getElementById('tiendas').value;
-        localStorage.setItem('t_act', actual);
+    function switchTab(tabId, el) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+        document.getElementById(tabId).classList.add('active');
+        el.classList.add('active-nav');
+        document.getElementById('sub-header').innerText = "Sección: " + el.innerText;
         render();
     }
 
-    function calcSugerido() {
-        let c = parseFloat(document.getElementById('costo').value);
-        if(c > 0) document.getElementById('venta').value = (c / 0.70).toFixed(2);
+    function toggleScanner() {
+        const reader = document.getElementById('reader');
+        if (reader.style.display === 'block') {
+            html5QrCode.stop();
+            reader.style.display = 'none';
+        } else {
+            reader.style.display = 'block';
+            html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 },
+                (decodedText) => {
+                    document.getElementById('p-code').value = decodedText;
+                    // Si estamos en pestaña ventas, vender directo
+                    if(document.getElementById('tab-sales').classList.contains('active')) {
+                        venderPorCodigo(decodedText);
+                    }
+                    toggleScanner();
+                }
+            );
+        }
     }
 
-    function agregar() {
-        const n = document.getElementById('nom').value;
-        const v = parseFloat(document.getElementById('venta').value);
-        const s = parseInt(document.getElementById('stock').value);
-        const c = document.getElementById('cad').value;
-        if(!n || isNaN(v) || isNaN(s)) return;
-        db[actual].push({ id:Date.now(), n, v, s, c });
-        guardar();
-        document.querySelectorAll('input').forEach(i => i.value = "");
+    function addProd() {
+        const n = document.getElementById('p-name').value;
+        const c = document.getElementById('p-code').value;
+        const p = parseFloat(document.getElementById('p-price').value);
+        const s = parseInt(document.getElementById('p-stock').value);
+
+        if(!n || !p) return alert("Faltan datos");
+        db.push({ id: Date.now(), code: c, n, p, s });
+        save();
+        ['p-name','p-code','p-price','p-stock'].forEach(id => document.getElementById(id).value = '');
     }
 
-    function guardar() {
-        localStorage.setItem('tienda_final_v1', JSON.stringify(db));
+    function venderPorCodigo(code) {
+        let p = db.find(x => x.code === code);
+        if(p && p.s > 0) {
+            p.s--;
+            sales.push({ date: new Date(), name: p.n, price: p.p });
+            save();
+            alert("Vendido: " + p.n);
+        } else {
+            alert("Producto no encontrado o sin stock");
+        }
+    }
+
+    function save() {
+        localStorage.setItem('smart_tienda_v2', JSON.stringify(db));
+        localStorage.setItem('smart_ventas_v2', JSON.stringify(sales));
         render();
     }
 
     function render() {
-        const l = document.getElementById('lista');
-        l.innerHTML = "";
-        let total = 0, st = { ok:0, r:0, a:0, y:0 };
-        const hoy = new Date();
-        const prox = new Date(); prox.setDate(hoy.getDate()+7);
-
-        db[actual].forEach(p => {
-            total += (p.v * p.s);
-            let cls = "", f = p.c ? new Date(p.c) : null;
-            if(p.s <= 0) { cls="rojo"; st.r++; }
-            else if(f && f <= hoy) { cls="azul"; st.a++; }
-            else if(f && f <= prox) { cls="azul"; st.a++; }
-            else if(p.s <= 3) { cls="amarillo"; st.y++; }
-            else { st.ok++; }
-
-            l.innerHTML += `<div class="prod-row ${cls}">
-                <div style="flex:1"><b>${p.n}</b><br><small>${p.s} pz · $${p.v}</small></div>
-                <button onclick="borrar(${p.id})" style="border:none; background:none; color:#D1D1D6;"><i data-lucide="trash-2"></i></button>
+        const invList = document.getElementById('list-inv');
+        invList.innerHTML = '';
+        db.forEach(p => {
+            invList.innerHTML += `<div class="prod-item">
+                <div><b>${p.n}</b><br><small>Stock: ${p.s}</small></div>
+                <b>$${p.p}</b>
             </div>`;
         });
-
-        document.getElementById('val-total').innerText = "$ " + total.toLocaleString();
-        document.getElementById('c-graf').style.display = db[actual].length > 0 ? "block" : "none";
-        dibujar(st);
         lucide.createIcons();
     }
 
-    function dibujar(s) {
-        const ctx = document.getElementById('graf').getContext('2d');
-        if(chart) chart.destroy();
-        chart = new Chart(ctx, {
-            type:'doughnut',
-            data: {
-                labels:['OK','Faltan','Vencen','Poco'],
-                datasets:[{data:[s.ok, s.r, s.a, s.y], backgroundColor:['#34C759','#FF3B30','#007AFF','#FFCC00']}]
-            },
-            options:{maintainAspectRatio:false}
-        });
-    }
-
-    function borrar(id) {
-        if(confirm("¿Quitar?")) { db[actual] = db[actual].filter(p => p.id !== id); guardar(); }
-    }
-
-    refreshSel();
     render();
 </script>
 </body>
