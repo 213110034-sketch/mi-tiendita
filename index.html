@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Hub Dinámica ✨</title>
+    <title>Tienda Hub Ultimate Pro ✨</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,32 +12,25 @@
             --warning: #FF9500; --info: #5AC8FA; --bg: #F2F2F7; --card: #FFFFFF;
         }
         body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: #1C1C1E; }
-        
         .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: slideIn 0.3s ease-out; }
         .screen.active { display: block; }
         @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        /* Dashboard Dinámico */
+        /* Dashboard */
         .welcome-card { background: linear-gradient(135deg, #5856D6, #C694F9); color: white; border-radius: 25px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(88, 86, 214, 0.2); }
-        .welcome-card h2 { margin: 0; font-size: 24px; }
-        .welcome-card p { margin: 10px 0 0; opacity: 0.9; font-style: italic; }
-
-        /* Menú Hub con Emojis */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-card { 
-            background: var(--card); border-radius: 22px; padding: 20px; text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
-        }
+        .menu-card { background: var(--card); border-radius: 22px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
         .menu-card:active { transform: scale(0.9); background: #f9f9f9; }
         .menu-card i { margin-bottom: 8px; display: block; margin: auto; }
         .menu-card span { font-weight: 800; font-size: 13px; display: block; margin-top: 5px; }
 
         .data-card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 12px; border: 1px solid #E5E5EA; }
-        .btn-vender { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 900; box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3); }
-        .back-btn { background: white; border: none; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-vender { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 12px; font-weight: 900; cursor: pointer; }
+        .back-btn { background: white; border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; }
         
-        input { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #DDD; border-radius: 15px; font-size: 16px; transition: 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 8px rgba(88, 86, 214, 0.2); }
+        input, select { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #DDD; border-radius: 15px; font-size: 16px; box-sizing: border-box; }
+        .ai-tip { background: #F0F0FF; border-left: 5px solid var(--primary); padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
+        .ai-tip b { color: var(--primary); display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -45,23 +38,23 @@
 <div id="scr-home" class="screen active">
     <div class="welcome-card">
         <h2 id="txt-saludo">¡Hola, Jefe! 👋</h2>
-        <p id="txt-motivacion">"El que no enseña, no vende".</p>
+        <p id="txt-motivacion" style="margin: 5px 0 0; opacity: 0.9; font-style: italic;"></p>
         <div style="margin-top:20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 15px;">
-            <span style="font-size: 12px; font-weight: bold; text-transform: uppercase;">💰 Venta de Hoy:</span>
+            <span style="font-size: 11px; font-weight: bold; text-transform: uppercase;">💰 Venta de Hoy:</span>
             <div id="home-caja" style="font-size: 32px; font-weight: 900;">$0.00</div>
         </div>
     </div>
 
     <div class="menu-grid">
         <div class="menu-card" onclick="goTo('scr-inv')"><i data-lucide="shopping-basket" style="color:var(--primary)"></i><span>Inventario 🛒</span></div>
-        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="users" style="color:var(--info)"></i><span>Fiados 📔</span></div>
-        <div class="menu-card" onclick="goTo('scr-stats')"><i data-lucide="trending-up" style="color:var(--success)"></i><span>Ganancias 📈</span></div>
-        <div class="menu-card" onclick="goTo('scr-calc')"><i data-lucide="coins" style="color:#AF52DE"></i><span>Cambio 🪙</span></div>
+        <div class="menu-card" onclick="goTo('scr-ai')"><i data-lucide="brain-circuit" style="color:#AF52DE"></i><span>Asesor AI 🧠</span></div>
+        <div class="menu-card" onclick="goTo('scr-fiados')"><i data-lucide="book-user" style="color:var(--info)"></i><span>Fiados 📔</span></div>
+        <div class="menu-card" onclick="goTo('scr-calc')"><i data-lucide="coins" style="color:var(--success)"></i><span>Cambio 🪙</span></div>
         <div class="menu-card" onclick="goTo('scr-prov')"><i data-lucide="truck" style="color:var(--warning)"></i><span>Proveedores 🚛</span></div>
-        <div class="menu-card" onclick="goTo('scr-alerts')"><i data-lucide="alert-triangle" style="color:var(--danger)"></i><span>Alertas 🚨</span></div>
+        <div class="menu-card" onclick="goTo('scr-alerts')"><i data-lucide="bell" style="color:var(--danger)"></i><span>Alertas 🚨</span></div>
     </div>
     
-    <button onclick="cerrarCaja()" style="width:100%; margin-top:20px; padding:15px; border-radius:15px; border:none; background:#8E8E93; color:white; font-weight:bold;">
+    <button onclick="cerrarCaja()" style="width:100%; margin-top:20px; padding:15px; border-radius:15px; border:none; background:#8E8E93; color:white; font-weight:bold; cursor:pointer;">
         🔒 Cerrar Caja del Día
     </button>
 </div>
@@ -71,160 +64,231 @@
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
         <h2 style="margin:0;">Mercancía 📦</h2>
     </div>
-    
     <div class="data-card">
-        <input type="text" id="n" placeholder="Nombre (ej. Sabritas)">
+        <input type="text" id="n" placeholder="Producto">
         <div style="display:flex; gap:10px;">
             <input type="number" id="c" placeholder="Costo $">
             <input type="number" id="v" placeholder="Venta $">
         </div>
-        <input type="number" id="s" placeholder="Stock Inicial">
-        <button onclick="add()" class="btn-vender" style="width:100%; background:var(--primary);">✨ Guardar Producto</button>
+        <input type="number" id="s" placeholder="Stock">
+        <button onclick="add()" class="btn-vender" style="width:100%; background:var(--primary);">✨ Guardar</button>
     </div>
-
-    <input type="text" id="search" placeholder="🔍 Buscar producto para vender..." oninput="render()">
+    <input type="text" id="search" placeholder="🔍 Buscar para vender..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
-<div id="scr-prov" class="screen">
+<div id="scr-ai" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">Proveedores 🚛</h2>
+        <h2 style="margin:0;">Asesor 🧠</h2>
+    </div>
+    <div id="ai-content"></div>
+</div>
+
+<div id="scr-fiados" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Fiados 📔</h2>
+    </div>
+    <div class="data-card" style="background: #FFF9E6;">
+        <span style="font-size: 11px; font-weight: bold; color: #856404;">💸 DINERO EN LA CALLE:</span>
+        <h2 id="total-fiado" style="margin:5px 0; color: #856404;">$0.00</h2>
     </div>
     <div class="data-card">
-        <input type="text" id="pr-nom" placeholder="¿Quién te visita? (Ej: Bimbo)">
-        <select id="pr-dia" style="width:100%; padding:15px; border-radius:15px; border:1px solid #DDD; margin:8px 0;">
-            <option value="">¿Qué día viene?</option>
-            <option value="Lunes">Lunes 🗓️</option><option value="Martes">Martes 🗓️</option>
-            <option value="Miércoles">Miércoles 🗓️</option><option value="Jueves">Jueves 🗓️</option>
-            <option value="Viernes">Viernes 🗓️</option><option value="Sábado">Sábado 🗓️</option>
-        </select>
-        <button onclick="addProv()" class="btn-vender" style="width:100%; background:var(--warning);">📅 Agendar Visita</button>
+        <input type="text" id="f-nom" placeholder="Nombre">
+        <input type="number" id="f-amo" placeholder="Monto $">
+        <button onclick="addFiado()" class="btn-vender" style="width:100%; background:var(--info);">📝 Anotar</button>
     </div>
-    <div id="list-prov"></div>
+    <div id="list-fiados"></div>
 </div>
 
 <div id="scr-calc" class="screen">
     <div style="display:flex; align-items:center; margin-bottom:20px;">
         <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
-        <h2 style="margin:0;">¿Cuánto cambio doy? 🪙</h2>
+        <h2 style="margin:0;">Cambio 🪙</h2>
     </div>
     <div class="data-card" style="text-align:center;">
-        <input type="number" id="ca-tot" placeholder="Total a cobrar $" oninput="calcCambio()">
-        <input type="number" id="ca-rec" placeholder="Recibí con $" oninput="calcCambio()">
-        <div style="margin-top:20px; color:var(--success);">
-            <p style="margin:0; font-weight:bold;">REGRESA:</p>
-            <h1 id="ca-res" style="font-size:48px; margin:10px 0;">$0.00</h1>
-            <p id="calc-emoji" style="font-size:30px;">🤝</p>
-        </div>
+        <input type="number" id="ca-tot" placeholder="Total $" oninput="calcCambio()">
+        <input type="number" id="ca-rec" placeholder="Recibí $" oninput="calcCambio()">
+        <h1 id="ca-res" style="font-size:48px; margin:20px 0; color:var(--success);">$0.00</h1>
     </div>
 </div>
 
-<script>
-    let db = JSON.parse(localStorage.getItem('db_final_emo')) || [];
-    let provs = JSON.parse(localStorage.getItem('p_final_emo')) || [];
-    let caja = parseFloat(localStorage.getItem('caja_dia_emo')) || 0;
+<div id="scr-prov" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Visitas 🚛</h2>
+    </div>
+    <div class="data-card">
+        <input type="text" id="pr-nom" placeholder="Empresa">
+        <select id="pr-dia">
+            <option value="">¿Qué día viene?</option>
+            <option value="Lunes">Lunes</option><option value="Martes">Martes</option>
+            <option value="Miércoles">Miércoles</option><option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option><option value="Sábado">Sábado</option>
+        </select>
+        <button onclick="addProv()" class="btn-vender" style="width:100%; background:var(--warning);">📅 Agendar</button>
+    </div>
+    <div id="list-prov"></div>
+</div>
 
-    // --- DINAMISMO Y SALUDOS ---
-    function actualizarSaludos() {
-        const hora = new Date().getHours();
-        const saludo = document.getElementById('txt-saludo');
-        const motivacion = document.getElementById('txt-motivacion');
-        
-        const frases = [
-            "¡El que madruga, vende más! ☕",
-            "¡A darle que es mole de olla! 🔥",
-            "¡Esa caja se va a llenar hoy! 🚀",
-            "¡Tu esfuerzo vale mucho, jefe! 🙌",
-            "¡Clientela feliz, bolsillo feliz! 😊"
-        ];
-        
-        if(hora < 12) saludo.innerText = "¡Buenos días, Jefe! 👋";
-        else if(hora < 18) saludo.innerText = "¡Buenas tardes, Jefe! 😎";
-        else saludo.innerText = "¡Buenas noches, Jefe! 🌙";
-        
-        motivacion.innerText = frases[Math.floor(Math.random() * frases.length)];
-    }
+<div id="scr-alerts" class="screen">
+    <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="arrow-left"></i></button>
+        <h2 style="margin:0;">Alertas 🚨</h2>
+    </div>
+    <div id="alert-list"></div>
+</div>
+
+<script>
+    // --- BASE DE DATOS ---
+    let db = JSON.parse(localStorage.getItem('tienda_pro_v12')) || [];
+    let fiados = JSON.parse(localStorage.getItem('fiados_v12')) || [];
+    let provs = JSON.parse(localStorage.getItem('provs_v12')) || [];
+    let caja = parseFloat(localStorage.getItem('caja_v12')) || 0;
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-home') actualizarSaludos();
+        if(id === 'scr-ai') generarConsejosAI();
         render();
     }
 
-    function calcCambio() {
-        const t = parseFloat(document.getElementById('ca-tot').value)||0, r = parseFloat(document.getElementById('ca-rec').value)||0;
-        const res = r - t;
-        document.getElementById('ca-res').innerText = "$" + (res > 0 ? res.toFixed(2) : "0.00");
-        document.getElementById('calc-emoji').innerText = res > 0 ? "💰✨" : "🤝";
-    }
-
+    // --- FUNCIONES INVENTARIO ---
     function add() {
         const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), c = parseFloat(document.getElementById('c').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) { 
-            db.push({id: Date.now(), n, v, c, s}); 
-            localStorage.setItem('db_final_emo', JSON.stringify(db));
-            ['n','c','v','s'].forEach(id => document.getElementById(id).value = '');
+        if(n && v) {
+            db.push({ id: Date.now(), n, v, c, s });
+            saveAll();
+            ['n','c','v','s'].forEach(i => document.getElementById(i).value='');
             render();
         }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p.s > 0) {
-            p.s--;
-            caja += p.v;
-            localStorage.setItem('caja_dia_emo', caja);
-            localStorage.setItem('db_final_emo', JSON.stringify(db));
-            render();
-        } else { alert("❌ ¡Híjole! Ya no tienes stock de este producto."); }
+        if(p && p.s > 0) {
+            p.s--; caja += p.v;
+            saveAll(); render();
+        } else { alert("🚫 ¡No hay mercancía!"); }
     }
 
+    function eliminarProducto(id) {
+        const p = db.find(x => x.id === id);
+        if(confirm(`¿Seguro que quieres eliminar "${p.n}"? 🗑️`)) {
+            db = db.filter(x => x.id !== id);
+            saveAll(); render();
+        }
+    }
+
+    // --- FUNCIONES FIADOS ---
+    function addFiado() {
+        const n = document.getElementById('f-nom').value, a = parseFloat(document.getElementById('f-amo').value);
+        if(n && a) {
+            fiados.push({ id: Date.now(), n, a, f: new Date().toLocaleDateString() });
+            saveAll(); document.getElementById('f-nom').value=''; document.getElementById('f-amo').value='';
+            render();
+        }
+    }
+
+    function cobrarFiado(id) {
+        fiados = fiados.filter(f => f.id !== id);
+        saveAll(); render();
+    }
+
+    function whatsappFiado(n, a) {
+        const msg = `Hola ${n} 👋, te saludo de la tienda. Te recuerdo el pendiente de $${a}. ✨`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+    }
+
+    // --- FUNCIONES OTROS ---
     function addProv() {
         const n = document.getElementById('pr-nom').value, d = document.getElementById('pr-dia').value;
-        if(n && d) { 
-            provs.push({n, d}); 
-            localStorage.setItem('p_final_emo', JSON.stringify(provs)); 
-            document.getElementById('pr-nom').value = '';
-            render(); 
-        }
+        if(n && d) { provs.push({n, d}); saveAll(); render(); }
+    }
+
+    function calcCambio() {
+        const t = parseFloat(document.getElementById('ca-tot').value)||0, r = parseFloat(document.getElementById('ca-rec').value)||0;
+        document.getElementById('ca-res').innerText = "$" + (r-t > 0 ? (r-t).toFixed(2) : "0.00");
     }
 
     function cerrarCaja() {
-        if(confirm(`⚠️ ¿Seguro que quieres cerrar caja con $${caja.toFixed(2)}?`)) {
-            caja = 0; localStorage.setItem('caja_dia_emo', 0); render();
-        }
+        if(confirm(`💰 ¿Cerrar caja hoy con $${caja.toFixed(2)}?`)) { caja = 0; saveAll(); render(); }
+    }
+
+    function generarConsejosAI() {
+        const container = document.getElementById('ai-content');
+        container.innerHTML = '';
+        if(db.length === 0) return container.innerHTML = '<div class="data-card">Sin datos 📭</div>';
+        db.forEach(p => {
+            const safety = Math.ceil(p.s * 0.2);
+            container.innerHTML += `<div class="data-card">
+                <h3>${p.n}</h3>
+                <div class="ai-tip"><b>🛡️ Colchón de Emergencia:</b> Procura tener al menos ${safety} extra.</div>
+                <div class="ai-tip" style="background:#FFF4E5;"><b>📞 Cuándo pedir:</b> Si te quedan ${safety+2} avísale al proveedor.</div>
+            </div>`;
+        });
+    }
+
+    function saveAll() {
+        localStorage.setItem('tienda_pro_v12', JSON.stringify(db));
+        localStorage.setItem('fiados_v12', JSON.stringify(fiados));
+        localStorage.setItem('provs_v12', JSON.stringify(provs));
+        localStorage.setItem('caja_v12', caja);
     }
 
     function render() {
-        document.getElementById('home-caja').innerText = "$" + caja.toFixed(2) + (caja > 500 ? " 🔥" : "");
+        document.getElementById('home-caja').innerText = "$" + caja.toFixed(2);
         
-        const list = document.getElementById('list-inv');
-        if(list) {
+        // Render Inventario
+        const listI = document.getElementById('list-inv');
+        if(listI) {
             const q = document.getElementById('search').value.toLowerCase();
-            list.innerHTML = '';
+            listI.innerHTML = '';
             db.filter(p => p.n.toLowerCase().includes(q)).forEach(p => {
-                let statusEmoji = p.s > 10 ? '📦' : (p.s > 0 ? '⚠️' : '🚫');
-                list.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><b>${statusEmoji} ${p.n}</b><br><small>$${p.v} | Quedan: ${p.s}</small></div>
-                    <button class="btn-vender" onclick="vender(${p.id})">Vender 💸</button>
+                listI.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><b>${p.n}</b><br><small>Stock: ${p.s}</small></div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-vender" onclick="vender(${p.id})">Vender 💸</button>
+                        <button onclick="eliminarProducto(${p.id})" style="border:none; background:#F2F2F7; color:var(--danger); padding:10px; border-radius:12px;"><i data-lucide="trash-2" style="width:18px"></i></button>
+                    </div>
                 </div>`;
             });
         }
 
-        const lp = document.getElementById('list-prov');
-        if(lp) {
-            lp.innerHTML = '';
-            provs.forEach(p => {
-                lp.innerHTML += `<div class="data-card"><b>🏢 ${p.n}</b><br><span>Visita: <span style="color:var(--primary); font-weight:bold;">${p.d}</span></span></div>`;
+        // Render Fiados
+        const listF = document.getElementById('list-fiados');
+        let totalF = 0;
+        if(listF) {
+            listF.innerHTML = '';
+            fiados.forEach(f => {
+                totalF += f.a;
+                listF.innerHTML += `<div class="data-card">
+                    <b>👤 ${f.n}</b> - <span style="color:var(--danger)">$${f.a}</span>
+                    <div style="margin-top:10px; display:flex; gap:5px;">
+                        <button onclick="whatsappFiado('${f.n}', ${f.a})" style="flex:1; background:#25D366; color:white; border:none; padding:8px; border-radius:8px;">WhatsApp</button>
+                        <button onclick="cobrarFiado(${f.id})" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:8px;">Pagó</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('total-fiado').innerText = "$" + totalF.toFixed(2);
+        }
+
+        // Render Alertas
+        const listA = document.getElementById('alert-list');
+        if(listA) {
+            listA.innerHTML = '';
+            db.filter(p => p.s <= 3).forEach(p => {
+                listA.innerHTML += `<div class="data-card" style="border-left:5px solid var(--danger)">⚠️ <b>${p.n}</b> se está acabando (${p.s} pzs)</div>`;
             });
         }
+
         lucide.createIcons();
     }
 
     window.onload = () => {
-        actualizarSaludos();
+        const frases = ["¡El que madruga vende más! ☕", "¡A darle que es mole de olla! 🔥", "¡Caja llena, corazón contento! 🚀"];
+        document.getElementById('txt-motivacion').innerText = frases[Math.floor(Math.random()*frases.length)];
         render();
     };
 </script>
