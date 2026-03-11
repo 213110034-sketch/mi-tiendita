@@ -13,10 +13,10 @@
             --primary: #3B82F6; --accent: #8B5CF6; --success: #10B981; --danger: #EF4444;
             --warning: #F59E0B; --text-main: #F1F5F9; --text-dim: #94A3B8;
         }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 60px; }
         .screen { display: none; padding: 25px 20px; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
 
         .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
         .balance { font-size: 38px; font-weight: 800; margin: 8px 0; }
@@ -30,25 +30,26 @@
         
         .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
         .bg-red { background: rgba(239, 68, 68, 0.2); color: #FFAAAA; border: 1px solid var(--danger); }
-        .bg-orange { background: rgba(245, 158, 11, 0.2); color: #FFDDAA; border: 1px solid var(--warning); }
         .bg-green { background: rgba(16, 185, 129, 0.2); color: #AAFFDD; border: 1px solid var(--success); }
         
         .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; }
         .btn-primary { background: var(--primary); color: white; }
         
-        input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; }
+        input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
         .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; }
         
-        /* NUEVA FIRMA INFERIOR IZQUIERDA */
+        /* FIRMA GÓTICA INCLINADA IZQUIERDA */
         .gothic-signature {
             position: fixed;
             bottom: 15px;
             left: 20px;
             font-family: 'UnifrakturMaguntia', serif;
-            font-size: 22px;
-            color: rgba(203, 213, 225, 0.4);
+            font-size: 24px;
+            font-style: italic; /* Inclinada */
+            color: rgba(203, 213, 225, 0.3);
             pointer-events: none;
             z-index: 100;
+            transform: rotate(-5deg); /* Un toque extra de inclinación */
         }
     </style>
 </head>
@@ -86,7 +87,6 @@
         <input type="text" id="n" placeholder="Nombre...">
         <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo $" oninput="calcAI()"><input type="number" id="v" placeholder="Venta $"></div>
         <input type="number" id="s" placeholder="Cantidad">
-        <small style="font-size:10px; color:var(--text-dim)">Fecha de Caducidad (Opcional):</small>
         <input type="date" id="caducidad">
         <button onclick="add()" class="btn btn-primary">Guardar Producto</button>
     </div>
@@ -142,6 +142,10 @@
         if(p && p.s > 0) { p.s--; p.vtas++; caja += p.v; costoVendido += p.c; save(); }
     }
 
+    function eliminar(id) {
+        if(confirm("¿Eliminar producto?")) { db = db.filter(x => x.id !== id); save(); }
+    }
+
     function save() {
         localStorage.setItem('the_db', JSON.stringify(db)); localStorage.setItem('the_hi', JSON.stringify(historial));
         localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
@@ -149,21 +153,18 @@
 
     function generarAI() {
         const c = document.getElementById('ai-content'); c.innerHTML = '';
-        // IA DE PREDICCIÓN
         const dias = historial.length || 1;
         const promedioVenta = historial.reduce((a,b)=>a+b.vta,0) / dias;
         const promedioUtil = historial.reduce((a,b)=>a+b.neto,0) / dias;
-        
         document.getElementById('pred-ventas').innerText = "$" + (promedioVenta * 7).toFixed(2);
         document.getElementById('pred-util').innerText = "$" + (promedioUtil * 7).toFixed(2);
-
         db.forEach(p => {
             let avisoCad = "";
             if(p.cad) {
                 const diff = (new Date(p.cad) - new Date()) / (1000*60*60*24);
-                if(diff < 7) avisoCad = `<p style="color:var(--danger); font-size:11px;">⚠️ Caduca en ${Math.ceil(diff)} días.</p>`;
+                if(diff < 7) avisoCad = `<p style="color:var(--danger); font-size:11px;">⚠️ Caduca pronto.</p>`;
             }
-            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">IA: Se estima vender ${Math.ceil(p.vtas/dias * 7)} unidades esta semana.</p></div>`;
+            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">Pronóstico: ${Math.ceil(p.vtas/dias * 7)} ventas/semana.</p></div>`;
         });
     }
 
@@ -176,8 +177,11 @@
             li.innerHTML = '';
             db.forEach(p => {
                 let color = p.s <= 3 ? 'bg-red' : 'bg-green';
-                let cadTag = p.cad ? `<small style="display:block; font-size:10px; color:var(--text-dim)">Exp: ${p.cad}</small>` : "";
-                li.innerHTML += `<div class="data-card"><b>${p.n}</b>${cadTag}<div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div><button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA +</button></div>`;
+                li.innerHTML += `<div class="data-card">
+                    <div style="display:flex; justify-content:space-between"><b>${p.n}</b><button onclick="eliminar(${p.id})" style="background:none; border:none; color:var(--danger); font-size:12px;">✖</button></div>
+                    <div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div>
+                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA +</button>
+                </div>`;
             });
         }
         lucide.createIcons();
@@ -185,7 +189,7 @@
 
     function finalizarDia() {
         historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja });
-        caja = 0; costoVendido = 0; save(); alert("Cierre exitoso.");
+        caja = 0; costoVendido = 0; save(); alert("Día cerrado.");
     }
 
     window.onload = () => { render(); lucide.createIcons(); };
