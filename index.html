@@ -18,11 +18,16 @@
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
 
-        .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
-        .balance { font-size: 38px; font-weight: 800; margin: 8px 0; }
+        /* ANIMACIONES Y DINAMISMO */
+        .btn:active, .menu-item:active, .back-btn:active, .btn-primary:active { transform: scale(0.92); transition: transform 0.1s; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); color: var(--success); } 100% { transform: scale(1); } }
+        .pop-anim { animation: pop 0.3s ease; display: inline-block; }
+
+        .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .balance { font-size: 38px; font-weight: 800; margin: 8px 0; transition: 0.3s; }
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; }
+        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.2s, background 0.2s; }
         .menu-item i { color: var(--primary); margin-bottom: 12px; display: inline-block; }
 
         .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; }
@@ -30,13 +35,15 @@
         
         .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
         .bg-red { background: rgba(239, 68, 68, 0.2); color: #FFAAAA; border: 1px solid var(--danger); }
+        .bg-orange { background: rgba(245, 158, 11, 0.2); color: #FFDDAA; border: 1px solid var(--warning); }
         .bg-green { background: rgba(16, 185, 129, 0.2); color: #AAFFDD; border: 1px solid var(--success); }
         
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; }
+        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; }
+        .btn-ai { background: rgba(255,255,255,0.1); color: white; padding: 8px 12px; font-size: 10px; border-radius: 10px; border: 1px solid var(--glass-border); margin: 3px; cursor: pointer; }
         
         input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
-        .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; }
+        .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; cursor: pointer; }
         
         /* FIRMA GÓTICA INCLINADA IZQUIERDA */
         .gothic-signature {
@@ -49,7 +56,7 @@
             color: rgba(203, 213, 225, 0.3);
             pointer-events: none;
             z-index: 100;
-            transform: rotate(-5deg); /* Un toque extra de inclinación */
+            transform: rotate(-5deg); /* Inclinación extra */
         }
     </style>
 </head>
@@ -57,8 +64,8 @@
 
 <div id="scr-home" class="screen active">
     <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
-        <div><h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe!</h2><p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p></div>
-        <div style="background: var(--primary); padding: 8px; border-radius: 12px;"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
+        <div><h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe! 👋</h2><p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p></div>
+        <div style="background: var(--primary); padding: 8px; border-radius: 12px; cursor: pointer;" onclick="this.classList.add('pop-anim'); setTimeout(()=>this.classList.remove('pop-anim'),300);"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
     </div>
     <div class="hero-card">
         <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -76,20 +83,28 @@
         <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="bar-chart-2"></i><span id="m-rep">Mis Logros</span></div>
         <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain-circuit"></i><span id="m-ai">Asesor AI</span></div>
         <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="sliders"></i><span id="m-cfg">Ajustes</span></div>
-        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success);"><i data-lucide="check-circle" style="color:white"></i><span style="color:white">Cerrar Día</span></div>
+        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); border: none;"><i data-lucide="check-circle" style="color:white"></i><span style="color:white; font-weight: 800;">Cerrar Día 🔒</span></div>
     </div>
 </div>
 
 <div id="scr-inv" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📦 Inventario</h2>
+    <h2>📦 Inventario Dinámico</h2>
     <div class="data-card">
-        <input type="text" id="n" placeholder="Nombre...">
-        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo $" oninput="calcAI()"><input type="number" id="v" placeholder="Venta $"></div>
-        <input type="number" id="s" placeholder="Cantidad">
+        <input type="text" id="n" placeholder="Nombre del producto... 🏷️">
+        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo Compra 💵" oninput="calcAI()"><input type="number" id="v" placeholder="Venta Público 🤑"></div>
+        <div id="ai-suggest" class="ai-box" style="display:none;">
+            <small style="color:var(--primary); font-weight:800;">💡 PRECIO INTELIGENTE:</small><br>
+            <button class="btn-ai" onclick="setPrice(1.3)">+30%</button>
+            <button class="btn-ai" onclick="setPrice(1.5)">+50%</button>
+            <button class="btn-ai" onclick="setPrice('rec')">AI Sugerido 🤖</button>
+        </div>
+        <input type="number" id="s" placeholder="Cantidad inicial 🔢">
+        <small style="font-size:10px; color:var(--text-dim)">Fecha de Caducidad ⏳ (Opcional):</small>
         <input type="date" id="caducidad">
-        <button onclick="add()" class="btn btn-primary">Guardar Producto</button>
+        <button onclick="add()" class="btn btn-primary">Añadir al Stock ➕</button>
     </div>
+    <input type="text" id="search" placeholder="🔍 Buscar en bodega..." oninput="render()">
     <div id="list-inv"></div>
 </div>
 
@@ -99,7 +114,7 @@
     <div id="ai-prediction" class="hero-card" style="background: var(--accent); margin-bottom:15px;">
         <small class="stat-label" style="color:white; opacity:0.8">PROYECCIÓN SEMANAL 🚀</small>
         <div id="pred-ventas" class="balance" style="font-size:28px;">$0.00</div>
-        <small style="color:white">Ganancia estimada: <span id="pred-util">$0.00</span></small>
+        <small style="color:white">Ganancia estimada: <span id="pred-util" style="font-weight:bold;">$0.00</span> 💸</small>
     </div>
     <div id="ai-content"></div>
 </div>
@@ -107,48 +122,107 @@
 <div id="scr-config" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
     <h2>⚙️ Ajustes</h2>
-    <button onclick="copiarCloud()" class="btn btn-primary">Respaldar Datos 🔑</button>
+    <select id="lang-select" onchange="changeLang()">
+        <option value="es">Español 🇲🇽</option>
+        <option value="en">English 🇺🇸</option>
+        <option value="fr">Français 🇫🇷</option>
+        <option value="pt">Português 🇧🇷</option>
+        <option value="zh">中文 🇨🇳</option>
+        <option value="it">Italiano 🇮🇹</option>
+    </select>
+    <button onclick="copiarCloud()" class="btn btn-primary" style="margin-top:15px;">Respaldar Datos 🔑</button>
+    <textarea id="cloud-data" readonly style="margin-top:10px; height:40px; font-size:8px; opacity:0.3;"></textarea>
 </div>
 
-<div id="scr-reports" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📊 Logros</h2><div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div></div>
-<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Tiendas</h2><div id="list-sucursales"></div></div>
+<div id="scr-reports" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📊 Rendimiento 🏆</h2><div class="data-card"><canvas id="mainChart"></canvas></div><div id="history-list"></div></div>
+<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales 🏢</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre de la tienda"><textarea id="suc-key" placeholder="Pega la llave aquí..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Conectar 🔗</button></div><div id="list-sucursales"></div></div>
 
 <div class="gothic-signature">Cruzz</div>
 
 <script>
     let db = JSON.parse(localStorage.getItem('the_db')) || [];
     let historial = JSON.parse(localStorage.getItem('the_hi')) || [];
+    let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
     let caja = parseFloat(localStorage.getItem('the_ca')) || 0;
     let costoVendido = parseFloat(localStorage.getItem('the_cv')) || 0;
-    let metaVenta = 1000;
+    let metaVenta = parseFloat(localStorage.getItem('the_target')) || 1000;
+    let lang = localStorage.getItem('the_lang') || 'es';
+    let chartInstance = null;
+
+    // TEXTOS CON EMOJIS INTEGADOS PARA NO PERDERLOS AL CAMBIAR IDIOMA
+    const i18n = {
+        es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY 💰", l_costo: "COSTO 📦", l_util: "NETO 💎" },
+        en: { inv: "Inventory", suc: "Stores", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES 💰", l_costo: "COST 📦", l_util: "PROFIT 💎" },
+        fr: { inv: "Inventaire", suc: "Magasins", rep: "Statistiques", ai: "Conseiller IA", cfg: "Paramètres", l_caja: "VENTES AUJ. 💰", l_costo: "COÛT 📦", l_util: "PROFIT 💎" },
+        pt: { inv: "Estoque", suc: "Lojas", rep: "Estatísticas", ai: "Consultor IA", cfg: "Configurações", l_caja: "VENDAS HOJE 💰", l_costo: "CUSTO 📦", l_util: "LUCRO 💎" },
+        zh: { inv: "库存", suc: "商店", rep: "统计", ai: "AI顾问", cfg: "设置", l_caja: "今日销售 💰", l_costo: "成本 📦", l_util: "利润 💎" },
+        it: { inv: "Inventario", suc: "Negozi", rep: "Statistiche", ai: "Consulente IA", cfg: "Impostazioni", l_caja: "VENDITE OGGI 💰", l_costo: "COSTO 📦", l_util: "PROFITTO 💎" }
+    };
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'scr-ai') generarAI();
         if(id === 'scr-reports') renderChart();
+        if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, historial, caja, costoVendido}));
+        if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
         render();
+    }
+
+    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
+
+    function applyLang() {
+        const t = i18n[lang];
+        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerText = t[id.split('-')[1]];
+        });
+        document.getElementById('l-caja').innerText = t.l_caja;
+        document.getElementById('l-costo').innerText = t.l_costo;
+        document.getElementById('l-util').innerText = t.l_util;
+    }
+
+    function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
+    function setPrice(f) {
+        const c = parseFloat(document.getElementById('costo').value);
+        if(f === 'rec') f = c < 50 ? 1.8 : 1.4;
+        document.getElementById('v').value = Math.ceil(c * f);
     }
 
     function add() {
         const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), 
               s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value),
               cad = document.getElementById('caducidad').value;
-        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); save(); }
+        if(n && v) { 
+            db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); 
+            save(); 
+            document.getElementById('n').value=''; document.getElementById('costo').value=''; document.getElementById('v').value=''; document.getElementById('s').value=''; document.getElementById('caducidad').value=''; 
+        }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { p.s--; p.vtas++; caja += p.v; costoVendido += p.c; save(); }
+        if(p && p.s > 0) { 
+            p.s--; p.vtas++; caja += p.v; costoVendido += p.c; 
+            if(p.s <= 3) alert(`¡Poco stock de ${p.n}! 🚨`); 
+            save(); 
+            
+            // EFECTO DINÁMICO DE REBOTE EN LA CAJA
+            const cajaEl = document.getElementById('h-caja');
+            cajaEl.classList.remove('pop-anim');
+            void cajaEl.offsetWidth; // Trigger reflow
+            cajaEl.classList.add('pop-anim');
+            
+        } else { alert("¡Sin existencias! ❌"); }
     }
 
     function eliminar(id) {
-        if(confirm("¿Eliminar producto?")) { db = db.filter(x => x.id !== id); save(); }
+        if(confirm("¿Seguro que quieres eliminar este producto? 🗑️")) { db = db.filter(x => x.id !== id); save(); }
     }
 
     function save() {
         localStorage.setItem('the_db', JSON.stringify(db)); localStorage.setItem('the_hi', JSON.stringify(historial));
-        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
+        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); localStorage.setItem('the_suc', JSON.stringify(sucursales)); render();
     }
 
     function generarAI() {
@@ -162,9 +236,10 @@
             let avisoCad = "";
             if(p.cad) {
                 const diff = (new Date(p.cad) - new Date()) / (1000*60*60*24);
-                if(diff < 7) avisoCad = `<p style="color:var(--danger); font-size:11px;">⚠️ Caduca pronto.</p>`;
+                if(diff < 7 && diff >= 0) avisoCad = `<p style="color:var(--warning); font-size:12px; font-weight:bold;">⚠️ Caduca en ${Math.ceil(diff)} días.</p>`;
+                if(diff < 0) avisoCad = `<p style="color:var(--danger); font-size:12px; font-weight:900;">❌ PRODUCTO CADUCADO.</p>`;
             }
-            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">Pronóstico: ${Math.ceil(p.vtas/dias * 7)} ventas/semana.</p></div>`;
+            c.innerHTML += `<div class="data-card"><b>${p.n}</b>${avisoCad}<p style="font-size:12px; color:var(--primary);">📈 Pronóstico: ${Math.ceil(p.vtas/dias * 7)} ventas/semana.</p></div>`;
         });
     }
 
@@ -172,15 +247,28 @@
         document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
         document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
         document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
+        
+        const searchInput = document.getElementById('search');
+        const termino = searchInput ? searchInput.value.toLowerCase() : '';
+        const filtrados = db.filter(p => p.n.toLowerCase().includes(termino));
+
         const li = document.getElementById('list-inv');
         if(li) {
             li.innerHTML = '';
-            db.forEach(p => {
-                let color = p.s <= 3 ? 'bg-red' : 'bg-green';
+            filtrados.forEach(p => {
+                let color = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
+                let cadTag = p.cad ? `<small style="display:block; font-size:10px; color:var(--text-dim)">Exp: ${p.cad} ⏳</small>` : "";
                 li.innerHTML += `<div class="data-card">
-                    <div style="display:flex; justify-content:space-between"><b>${p.n}</b><button onclick="eliminar(${p.id})" style="background:none; border:none; color:var(--danger); font-size:12px;">✖</button></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b>${p.n}</b>
+                        <div>
+                            <b style="color:var(--primary); margin-right:15px; font-size:16px;">$${p.v}</b>
+                            <button onclick="eliminar(${p.id})" style="background:none; border:none; color:var(--danger); font-size:16px; cursor:pointer; padding:5px;">✖</button>
+                        </div>
+                    </div>
+                    ${cadTag}
                     <div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div>
-                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA +</button>
+                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA + 🚀</button>
                 </div>`;
             });
         }
@@ -188,11 +276,44 @@
     }
 
     function finalizarDia() {
-        historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja });
-        caja = 0; costoVendido = 0; save(); alert("Día cerrado.");
+        if(confirm("¿Cerrar el día y guardar progreso, Boss? 📊🔒")) {
+            const punteria = caja > 0 ? (100 - (Math.min(Math.abs(caja - metaVenta) / caja, 1) * 100)) : 0;
+            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, punteria: punteria });
+            caja = 0; costoVendido = 0; save(); alert("¡Día cerrado con éxito! Que mañana sea mejor. ✨");
+        }
     }
 
-    window.onload = () => { render(); lucide.createIcons(); };
+    function renderChart() {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        Chart.defaults.color = '#94A3B8';
+        if(chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(ctx, { 
+            type: 'line', 
+            data: { 
+                labels: historial.slice(-7).map(h=>h.fecha), 
+                datasets: [{ label: 'Ganancia $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension:0.4 }] 
+            } 
+        });
+        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px; color:#fff">Historial de Días 📅</h3>';
+        historial.slice().reverse().forEach(h => {
+            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b style="color:var(--success)">+$${h.neto.toFixed(2)}</b></div>`;
+        });
+    }
+
+    function vincularSucursal() {
+        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
+        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); alert("¡Tienda Conectada! 🏢🔌"); } catch(e) { alert("Llave inválida. ❌"); } }
+    }
+
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("¡Llave copiada con éxito! Guárdala bien. 🔑✨"); }
+
+    window.onload = () => {
+        applyLang();
+        document.getElementById('lang-select').value = lang;
+        const frases = ["¡A darle con todo, Boss! 🔥", "Tu negocio crece hoy. 📈", "Control total, ganancia segura. 💎", "Haz que cada venta cuente. 💸"];
+        document.getElementById('quote').innerText = frases[Math.floor(Math.random()*frases.length)];
+        render();
+    };
 </script>
 </body>
 </html>
