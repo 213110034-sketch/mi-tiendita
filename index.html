@@ -3,174 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tiendita Pro Scan</title>
+    <title>Tienda Pro Hub</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ios-blue: #007AFF; --ios-bg: #F2F2F7; --ios-card: #FFFFFF; }
-        body { font-family: -apple-system, sans-serif; background: var(--ios-bg); margin: 0; padding-bottom: 80px; }
+        :root { 
+            --primary: #5856D6; --success: #34C759; --danger: #FF3B30; 
+            --warning: #FF9500; --bg: #F8F9FB; --card: #FFFFFF; --text: #1C1C1E;
+        }
         
-        /* Cabecera */
-        header { background: var(--ios-blue); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); margin: 0; color: var(--text); overflow-x: hidden; }
         
-        /* Contenedor de Pestañas */
-        .tab-content { display: none; padding: 20px; }
-        .active { display: block; }
+        /* Pantallas */
+        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: slideUp 0.3s ease; }
+        .screen.active { display: block; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Tarjetas */
-        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        
-        /* Navegación Inferior */
-        nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #ddd; z-index: 1000; }
-        .nav-item { border: none; background: none; color: #8E8E93; display: flex; flex-direction: column; align-items: center; font-size: 10px; }
-        .nav-item.active-nav { color: var(--ios-blue); }
+        /* Header Estilo App Store */
+        .main-header { padding: 30px 20px 10px; }
+        .main-header h1 { margin: 0; font-size: 28px; font-weight: 800; color: var(--primary); }
+        .main-header p { margin: 5px 0 0; color: #8E8E93; font-size: 14px; }
 
-        /* Botones y Forms */
-        input { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #eee; border-radius: 10px; box-sizing: border-box; }
-        .btn { background: var(--ios-blue); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
+        /* Menú de Inicio (Grid) */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .menu-card { 
+            background: var(--card); border-radius: 22px; padding: 20px; text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.2s; cursor: pointer;
+        }
+        .menu-card:active { transform: scale(0.95); }
+        .menu-card i { margin-bottom: 10px; display: block; }
+        .menu-card span { font-weight: 700; font-size: 14px; display: block; }
+
+        /* Estilo Secciones */
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .back-btn { background: #EEE; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* Tarjetas de Datos */
+        .data-card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         
-        /* Cámara */
-        #reader { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 10px; display: none; }
-        
-        .prod-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; }
+        /* Inputs Pro */
+        input, select { 
+            width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #E5E5EA; 
+            border-radius: 14px; font-size: 16px; background: #FAFAFA;
+        }
+        .btn-main { 
+            background: var(--primary); color: white; border: none; padding: 16px; 
+            border-radius: 14px; width: 100%; font-weight: 700; font-size: 16px; margin-top: 10px;
+        }
+
+        /* Lista de Productos */
+        .prod-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 0; border-bottom: 1px solid #F2F2F7; 
+        }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; display: inline-block; }
+
+        .suggestion-box { background: #F0F0FF; padding: 12px; border-radius: 12px; color: var(--primary); font-size: 13px; margin: 10px 0; border-left: 4px solid var(--primary); display: none; }
     </style>
 </head>
 <body>
 
-<header>
-    <h2 style="margin:0">Tiendita Inteligente 🤖</h2>
-    <p id="sub-header" style="opacity:0.8; margin:5px 0 0 0;">Sección: Inventario</p>
-</header>
+<div id="scr-home" class="screen active">
+    <div class="main-header">
+        <h1>Tienda Pro Hub 🏪</h1>
+        <p id="fecha-actual"></p>
+    </div>
 
-<div id="tab-inv" class="tab-content active">
-    <button class="btn" style="background:#34C759" onclick="toggleScanner()">
-        <i data-lucide="scan"></i> ESCANEAR CÓDIGO
-    </button>
-    <div id="reader"></div>
-
-    <div class="card">
-        <h3>+ Nuevo Producto</h3>
-        <input type="text" id="p-code" placeholder="Código (Escanear o manual)">
-        <input type="text" id="p-name" placeholder="Nombre del producto">
-        <div style="display:flex; gap:10px;">
-            <input type="number" id="p-cost" placeholder="Costo $">
-            <input type="number" id="p-price" placeholder="Venta $">
+    <div class="menu-grid">
+        <div class="menu-card" onclick="goTo('scr-inv')">
+            <i data-lucide="package" style="color:var(--primary); width:32px; height:32px; margin:auto;"></i>
+            <span>Inventario</span>
         </div>
-        <input type="number" id="p-stock" placeholder="Cantidad Inicial">
-        <button class="btn" onclick="addProd()">Guardar Producto</button>
+        <div class="menu-card" onclick="goTo('scr-stats')">
+            <i data-lucide="bar-chart-3" style="color:var(--success); width:32px; height:32px; margin:auto;"></i>
+            <span>Finanzas</span>
+        </div>
+        <div class="menu-card" onclick="goTo('scr-alerts')">
+            <i data-lucide="alert-circle" style="color:var(--danger); width:32px; height:32px; margin:auto;"></i>
+            <span>Alertas</span>
+        </div>
+        <div class="menu-card" onclick="generarReporte()">
+            <i data-lucide="send" style="color:var(--warning); width:32px; height:32px; margin:auto;"></i>
+            <span>Compartir</span>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>Lista de Productos</h3>
-        <div id="list-inv"></div>
-    </div>
-</div>
-
-<div id="tab-sales" class="tab-content">
-    <div class="card" style="text-align:center;">
-        <p>Escanear producto para vender:</p>
-        <button class="btn" onclick="toggleScanner()">Cámara de Venta</button>
-    </div>
-    <div id="list-sales-today"></div>
-</div>
-
-<div id="tab-reports" class="tab-content">
-    <div class="card">
-        <h3>Pronóstico de Inventario</h3>
-        <div id="prediction-list">Aún no hay datos suficientes...</div>
+    <div class="data-card" style="margin-top:25px; background: linear-gradient(135deg, var(--primary), #8E8EEB); color: white;">
+        <h3 style="margin:0">Ganancia Estimada</h3>
+        <p style="font-size:32px; font-weight:800; margin:10px 0 0;" id="home-ganancia">$0</p>
     </div>
 </div>
 
-<nav>
-    <button class="nav-item active-nav" onclick="switchTab('tab-inv', this)">
-        <i data-lucide="package"></i>Inventario
-    </button>
-    <button class="nav-item" onclick="switchTab('tab-sales', this)">
-        <i data-lucide="shopping-cart"></i>Ventas
-    </button>
-    <button class="nav-item" onclick="switchTab('tab-reports', this)">
-        <i data-lucide="trending-up"></i>Reportes
-    </button>
-</nav>
+<div id="scr-inv" class="screen">
+    <div class="section-header">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
+        <h2>Inventario</h2>
+    </div>
+    
+    <div class="data-card">
+        <h3>+ Nuevo Producto</h3>
+        <input type="text" id="n" placeholder="Nombre">
+        <input type="number" id="c" placeholder="Costo $" oninput="recomendarPrecio()">
+        <div id="sugerencia" class="suggestion-box">Sug: <b id="precio-sug"></b></div>
+        <input type="number" id="v" placeholder="Venta $">
+        <input type="number" id="s" placeholder="Stock">
+        <input type="date" id="e">
+        <button class="btn-main" onclick="add()">Guardar Producto</button>
+    </div>
+
+    <input type="text" id="search" placeholder="Buscar producto..." oninput="render()" style="margin-bottom:15px;">
+    <div id="list-inv"></div>
+</div>
+
+<div id="scr-stats" class="screen">
+    <div class="section-header">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
+        <h2>Finanzas</h2>
+    </div>
+    
+    <div class="data-card">
+        <label>Estrategia de Margen:</label>
+        <select id="margen-config" onchange="actualizarMargen()">
+            <option value="1.20">Económico (20%)</option>
+            <option value="1.30">Sano (30%)</option>
+            <option value="1.50">Premium (50%)</option>
+        </select>
+    </div>
+
+    <div class="data-card">
+        <canvas id="chartCaducidad"></canvas>
+    </div>
+</div>
+
+<div id="scr-alerts" class="screen">
+    <div class="section-header">
+        <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
+        <h2>Alertas Críticas</h2>
+    </div>
+    <div id="alert-list"></div>
+</div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('smart_tienda_v2')) || [];
-    let sales = JSON.parse(localStorage.getItem('smart_ventas_v2')) || [];
-    let html5QrCode;
+    let db = JSON.parse(localStorage.getItem('tienda_v8')) || [];
+    let configMargen = localStorage.getItem('margen_pref') || "1.30";
+    let myChart;
 
-    function switchTab(tabId, el) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-        document.getElementById(tabId).classList.add('active');
-        el.classList.add('active-nav');
-        document.getElementById('sub-header').innerText = "Sección: " + el.innerText;
+    function goTo(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
         render();
     }
 
-    function toggleScanner() {
-        const reader = document.getElementById('reader');
-        if (reader.style.display === 'block') {
-            html5QrCode.stop();
-            reader.style.display = 'none';
-        } else {
-            reader.style.display = 'block';
-            html5QrCode = new Html5Qrcode("reader");
-            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 },
-                (decodedText) => {
-                    document.getElementById('p-code').value = decodedText;
-                    // Si estamos en pestaña ventas, vender directo
-                    if(document.getElementById('tab-sales').classList.contains('active')) {
-                        venderPorCodigo(decodedText);
-                    }
-                    toggleScanner();
-                }
-            );
-        }
+    function actualizarMargen() {
+        configMargen = document.getElementById('margen-config').value;
+        localStorage.setItem('margen_pref', configMargen);
     }
 
-    function addProd() {
-        const n = document.getElementById('p-name').value;
-        const c = document.getElementById('p-code').value;
-        const p = parseFloat(document.getElementById('p-price').value);
-        const s = parseInt(document.getElementById('p-stock').value);
-
-        if(!n || !p) return alert("Faltan datos");
-        db.push({ id: Date.now(), code: c, n, p, s });
-        save();
-        ['p-name','p-code','p-price','p-stock'].forEach(id => document.getElementById(id).value = '');
+    function recomendarPrecio() {
+        const costo = parseFloat(document.getElementById('c').value);
+        const box = document.getElementById('sugerencia');
+        if (costo > 0) {
+            document.getElementById('precio-sug').innerText = "$" + (costo * parseFloat(configMargen)).toFixed(2);
+            box.style.display = "block";
+        } else { box.style.display = "none"; }
     }
 
-    function venderPorCodigo(code) {
-        let p = db.find(x => x.code === code);
-        if(p && p.s > 0) {
-            p.s--;
-            sales.push({ date: new Date(), name: p.n, price: p.p });
-            save();
-            alert("Vendido: " + p.n);
-        } else {
-            alert("Producto no encontrado o sin stock");
-        }
-    }
-
-    function save() {
-        localStorage.setItem('smart_tienda_v2', JSON.stringify(db));
-        localStorage.setItem('smart_ventas_v2', JSON.stringify(sales));
+    function add() {
+        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value);
+        if(!n || !v) return alert("Llena los campos");
+        db.push({ id: Date.now(), n, c: parseFloat(document.getElementById('c').value)||0, v, s: parseInt(document.getElementById('s').value)||0, e: document.getElementById('e').value });
+        localStorage.setItem('tienda_v8', JSON.stringify(db));
+        ['n','c','v','s','e'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('sugerencia').style.display="none";
         render();
     }
 
     function render() {
-        const invList = document.getElementById('list-inv');
-        invList.innerHTML = '';
+        const list = document.getElementById('list-inv');
+        const alertList = document.getElementById('alert-list');
+        const q = document.getElementById('search').value.toLowerCase();
+        let tCosto = 0, tVenta = 0, ok=0, warn=0, crit=0;
+        
+        list.innerHTML = ''; alertList.innerHTML = '';
+        
         db.forEach(p => {
-            invList.innerHTML += `<div class="prod-item">
-                <div><b>${p.n}</b><br><small>Stock: ${p.s}</small></div>
-                <b>$${p.p}</b>
-            </div>`;
+            tCosto += (p.c * p.s); tVenta += (p.v * p.s);
+            let diff = p.e ? (new Date(p.e) - new Date()) / 86400000 : 100;
+            let color = diff <= 3 ? 'var(--danger)' : (diff <= 15 ? 'var(--warning)' : 'var(--success)');
+            if(diff <= 3) crit++; else if(diff <= 15) warn++; else ok++;
+
+            // Lista Inventario
+            if(p.n.toLowerCase().includes(q)) {
+                list.innerHTML += `<div class="prod-row">
+                    <div><span class="status-dot" style="background:${color}"></span><b>${p.n}</b><br><small>$${p.v} | Stock: ${p.s}</small></div>
+                    <button onclick="del(${p.id})" style="background:none; border:none; color:var(--danger)"><i data-lucide="trash-2" style="width:18px"></i></button>
+                </div>`;
+            }
+
+            // Alertas
+            if(p.s <= 0 || diff <= 15) {
+                alertList.innerHTML += `<div class="data-card" style="border-left: 5px solid ${p.s <= 0 ? 'var(--danger)' : 'var(--warning)'}">
+                    <b>${p.n}</b><br><span>${p.s <= 0 ? 'SIN STOCK' : 'Próximo a vencer: ' + p.e}</span>
+                </div>`;
+            }
         });
+
+        document.getElementById('home-ganancia').innerText = '$' + (tVenta - tCosto).toLocaleString();
+        document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+        
+        if(document.getElementById('scr-stats').classList.contains('active')) initChart(ok, warn, crit);
         lucide.createIcons();
     }
 
-    render();
+    function initChart(ok, warn, crit) {
+        const ctx = document.getElementById('chartCaducidad').getContext('2d');
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: ['Sano', 'Alerta', 'Crítico'], datasets: [{ data: [ok, warn, crit], backgroundColor: ['#34C759', '#FF9500', '#FF3B30'], borderWidth: 0 }] },
+            options: { cutout: '80%', plugins: { legend: { position: 'bottom' } } }
+        });
+    }
+
+    function del(id) { if(confirm("¿Borrar?")) { db = db.filter(x => x.id !== id); localStorage.setItem('tienda_v8', JSON.stringify(db)); render(); } }
+    
+    function generarReporte() {
+        let msg = "📋 REPORTE TIENDA\n" + db.filter(p => p.s <= 0 || (p.e && (new Date(p.e)-new Date())/86400000 <= 15)).map(p => "- " + p.n).join("\n");
+        alert(msg);
+        navigator.clipboard.writeText(msg);
+    }
+
+    window.onload = () => { document.getElementById('margen-config').value = configMargen; render(); };
 </script>
 </body>
 </html>
