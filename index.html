@@ -3,378 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tienda Hub Franquicia Ultimate 🏆💎</title>
+    <title>Tienda Hub Franquicia AI Elite 🏆</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #F8FAFC;
-            --glass: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --primary: #0F172A;
-            --accent: #3B82F6;
-            --success: #10B981;
-            --danger: #F43F5E;
-            --warning: #F59E0B;
-            --text-main: #1E293B;
-            --text-dim: #64748B;
+            --bg: #F8FAFC; --glass: rgba(255, 255, 255, 0.85); --glass-border: rgba(255, 255, 255, 0.6);
+            --primary: #0F172A; --accent: #3B82F6; --success: #10B981; --danger: #F43F5E;
+            --warning: #F59E0B; --text-main: #1E293B; --text-dim: #64748B;
         }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px;
-            background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent);
-        }
-
-        .screen { display: none; padding: 25px 20px; animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
+        .screen { display: none; padding: 25px 20px; animation: slideUp 0.3s ease-out; }
         .screen.active { display: block; }
-        @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity:0; transform: translateY(15px); } to { opacity:1; transform: translateY(0); } }
 
-        /* TARJETA ELITE */
-        .hero-card {
-            background: var(--primary); color: white; border-radius: 30px; padding: 25px;
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25); margin-bottom: 25px; position: relative; overflow: hidden;
-        }
-        .hero-card::after { content: "📈"; position: absolute; right: -10px; bottom: -10px; font-size: 90px; opacity: 0.1; }
-
-        .balance { font-size: 40px; font-weight: 800; letter-spacing: -2px; margin: 8px 0; }
-
-        /* GRID MENU */
+        .hero-card { background: var(--primary); color: white; border-radius: 30px; padding: 25px; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25); margin-bottom: 25px; position: relative; overflow: hidden; }
+        .balance { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin: 8px 0; }
+        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-item {
-            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border); border-radius: 22px; padding: 18px;
-            transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            text-align: left;
-        }
-        .menu-item:active { transform: scale(0.94); }
+        .menu-item { background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 22px; padding: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; }
         .menu-item i { color: var(--accent); margin-bottom: 10px; display: block; }
-        .menu-item span { font-weight: 700; font-size: 14px; color: var(--primary); }
+        .menu-item span { font-weight: 700; font-size: 13px; }
 
-        /* SEMÁFOROS Y LISTAS */
-        .data-card {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            padding: 18px; border-radius: 20px; margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 20px; margin-bottom: 12px; }
+        .ai-box { background: #EEF2FF; border-radius: 15px; padding: 15px; margin: 10px 0; border: 1px dashed var(--accent); }
+        
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
         .bg-red { background: rgba(244, 63, 94, 0.1); color: var(--danger); }
         .bg-orange { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
         .bg-green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-        .sucursal-tag { background: #E2E8F0; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; margin-top: 5px; display: inline-block; }
+        
+        .sucursal-tag { background: #E2E8F0; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; margin-top: 5px; display: inline-block; margin-right: 5px; }
+        .stat-label { font-size: 10px; font-weight: 700; opacity: 0.7; text-transform: uppercase; }
 
-        /* BOTONES E INPUTS */
-        .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; }
         .btn-primary { background: var(--primary); color: white; }
-        input, select, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.05); margin: 8px 0; font-family: inherit; box-sizing: border-box; font-size: 16px; }
+        .btn-ai { background: var(--accent); color: white; padding: 6px 10px; font-size: 10px; border-radius: 8px; border: none; margin: 2px; }
+        
+        input, select, textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); margin: 8px 0; box-sizing: border-box; font-family: inherit; }
         .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div id="scr-home" class="screen active">
-    <div style="margin-bottom: 20px;">
-        <h2 id="txt-saludo" style="margin:0; font-weight: 800;">Cargando...</h2>
-        <p id="quote" style="color: var(--text-dim); font-size: 14px; margin-top: 5px; min-height: 40px; font-weight: 500;"></p>
+    <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h2 id="txt-saludo" style="margin:0; font-weight: 800;">Hola, Jefe</h2>
+            <p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p>
+        </div>
+        <i data-lucide="user-circle" style="width:32px; height:32px; color:var(--primary)"></i>
     </div>
 
     <div class="hero-card">
-        <small style="font-weight: 700; opacity: 0.8; letter-spacing: 1px;">VENTAS HOY</small>
-        <div class="balance" id="h-caja">$0.00</div>
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+            <div>
+                <small id="l-caja" class="stat-label" style="color:rgba(255,255,255,0.7)">Ventas Hoy</small>
+                <div class="balance" id="h-caja">$0.00</div>
+            </div>
+            <div style="text-align:right">
+                <small class="stat-label" style="color:rgba(255,255,255,0.7)">Precisión (MAPE)</small>
+                <div id="h-mape" style="font-weight:800; font-size:18px;">0%</div>
+            </div>
+        </div>
+        
         <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-            <div><small style="opacity:0.7">GASTOS</small><div id="h-gastos" style="color: #F87171; font-weight: 800;">$0</div></div>
-            <div style="text-align: right;"><small style="opacity:0.7">NETO MES</small><div id="h-mes" style="color: #34D399; font-weight: 800;">$0</div></div>
+            <div><small id="l-costo" class="stat-label" style="opacity:0.7">Costo</small><div id="h-costos-v" style="color: #F87171; font-weight: 800;">$0</div></div>
+            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.7">Utilidad Real</small><div id="h-util" style="color: #34D399; font-weight: 800;">$0</div></div>
         </div>
     </div>
 
     <div class="menu-grid">
-        <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package"></i><span>Inventario</span></div>
-        <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span>Sucursales</span></div>
-        <div class="menu-item" onclick="goTo('scr-fiados')"><i data-lucide="book-open"></i><span>Fiados</span></div>
-        <div class="menu-item" onclick="goTo('scr-gastos')"><i data-lucide="wallet"></i><span>Gastos</span></div>
-        <div class="menu-item" onclick="goTo('scr-lista')"><i data-lucide="shopping-cart"></i><span>Mandado</span></div>
-        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="bar-chart-3"></i><span>Análisis</span></div>
-        <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain"></i><span>Asesor AI</span></div>
-        <div class="menu-item" onclick="goTo('scr-cloud')"><i data-lucide="cloud"></i><span>Respaldo</span></div>
+        <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package"></i><span id="m-inv">Inventario</span></div>
+        <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span id="m-suc">Sucursales</span></div>
+        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="trending-up"></i><span id="m-rep">Métricas Pro</span></div>
+        <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain"></i><span id="m-ai">Asesor AI</span></div>
+        <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="settings"></i><span id="m-cfg">Ajustes</span></div>
+        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); color: white;"><i data-lucide="lock" style="color:white"></i><span>Cerrar Día</span></div>
     </div>
-    
-    <button onclick="cerrarCaja()" class="btn btn-primary" style="margin-top:20px; background: #64748B;">🔒 Cerrar Día y Limpiar</button>
 </div>
 
 <div id="scr-inv" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">📦 Inventario Pro</h2>
+    <h2 id="h-inv">📦 Inventario e Índice IV</h2>
     <div class="data-card">
         <input type="text" id="n" placeholder="Producto">
-        <div style="display:flex; gap:10px;"><input type="number" id="v" placeholder="Precio $"><input type="number" id="s" placeholder="Stock"></div>
-        <button onclick="add()" class="btn btn-primary">Guardar Producto ✨</button>
+        <div style="display:flex; gap:10px;">
+            <input type="number" id="costo" placeholder="Costo $" oninput="calcAI()">
+            <input type="number" id="v" placeholder="Venta $">
+        </div>
+        <div id="ai-suggest" class="ai-box" style="display:none;">
+            <small style="color:var(--accent); font-weight:800;">CALCUALDORA AI:</small><br>
+            <button class="btn-ai" onclick="setPrice(1.3)">30%</button>
+            <button class="btn-ai" onclick="setPrice(1.5)">50%</button>
+            <button class="btn-ai" onclick="setPrice('rec')">Sugerido</button>
+        </div>
+        <input type="number" id="s" placeholder="Stock">
+        <button onclick="add()" class="btn btn-primary">Añadir</button>
     </div>
-    <input type="text" id="search" placeholder="🔍 Buscar para vender..." oninput="render()">
+    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()">
     <div id="list-inv"></div>
-</div>
-
-<div id="scr-sucursales" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">📍 Sucursales</h2>
-    <div class="data-card">
-        <small>Tu llave compartida:</small>
-        <textarea id="my-key" readonly style="font-size:10px;"></textarea>
-    </div>
-    <div class="data-card">
-        <input type="text" id="suc-name" placeholder="Nombre Sucursal">
-        <textarea id="suc-key" placeholder="Pega la llave aquí..."></textarea>
-        <button onclick="vincularSucursal()" class="btn btn-primary">Vincular Tienda 🔗</button>
-    </div>
-    <div id="list-sucursales"></div>
 </div>
 
 <div id="scr-reports" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">📊 Análisis de Rendimiento</h2>
-    <div class="data-card" style="background: white;">
-        <canvas id="mainChart"></canvas>
+    <h2>📊 Métricas Avanzadas</h2>
+    <div class="data-card">
+        <small class="stat-label">Meta de Ventas Diaria</small>
+        <input type="number" id="target-sales" placeholder="$0.00" oninput="saveTarget()" style="margin:5px 0;">
     </div>
+    <div class="data-card"><canvas id="mainChart"></canvas></div>
     <div id="history-list"></div>
 </div>
 
-<div id="scr-gastos" class="screen">
+<div id="scr-config" class="screen">
     <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">💸 Gastos Registrados</h2>
+    <h2>⚙️ Configuración</h2>
     <div class="data-card">
-        <input type="text" id="g-nom" placeholder="Concepto">
-        <input type="number" id="g-amo" placeholder="Monto $">
-        <button onclick="addGasto()" class="btn btn-primary" style="background:var(--danger)">Registrar Gasto</button>
+        <label>Idioma / Language</label>
+        <select id="lang-select" onchange="changeLang()">
+            <option value="es">Español 🇲🇽</option>
+            <option value="en">English 🇺🇸</option>
+        </select>
     </div>
-    <div id="list-gastos"></div>
-</div>
-
-<div id="scr-fiados" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">📔 Libro de Fiados</h2>
-    <div class="data-card" style="background: rgba(59,130,246,0.1); color: var(--accent); border:none;">
-        <small>TOTAL POR COBRAR</small>
-        <h2 id="total-fiado" style="margin:0">$0.00</h2>
-    </div>
-    <div class="data-card" style="margin-top:10px">
-        <input type="text" id="f-nom" placeholder="Cliente">
-        <input type="number" id="f-amo" placeholder="Monto $">
-        <button onclick="addFiado()" class="btn btn-primary">Anotar Deuda</button>
-    </div>
-    <div id="list-fiados"></div>
-</div>
-
-<div id="scr-lista" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">🛒 Lista de Mandado</h2>
-    <div id="list-mandado-auto"></div>
     <div class="data-card">
-        <input type="text" id="l-item" placeholder="Algo más...">
-        <button onclick="addListaManual()" class="btn btn-primary" style="background:var(--success)">Agregar Manual</button>
+        <button onclick="copiarCloud()" class="btn btn-primary">Copiar Respaldo 🔑</button>
+        <textarea id="cloud-data" readonly style="margin-top:10px; height:60px; font-size:8px; opacity:0.5;"></textarea>
     </div>
-    <div id="list-mandado-manual"></div>
-    <button onclick="mandarListaWA()" class="btn btn-primary">📱 Enviar por WhatsApp</button>
 </div>
 
-<div id="scr-ai" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">🧠 Estrategia AI</h2>
-    <div id="ai-content"></div>
-</div>
-
-<div id="scr-cloud" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2 style="font-weight:800">☁️ Respaldo Cloud</h2>
-    <textarea id="cloud-data" readonly rows="8" style="font-size:10px;"></textarea>
-    <button onclick="copiarCloud()" class="btn btn-primary">Copiar Llave 🔑</button>
-    <hr style="margin:20px 0; opacity:0.1">
-    <textarea id="cloud-import" placeholder="Pega llave para restaurar..."></textarea>
-    <button onclick="importarCloud()" class="btn btn-primary" style="background:var(--success)">Restaurar Datos 🔄</button>
-</div>
+<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales</h2><textarea id="my-key" readonly style="height:60px; font-size:10px;"></textarea><div class="data-card" style="margin-top:10px;"><input type="text" id="suc-name" placeholder="Nombre Sucursal"><textarea id="suc-key" placeholder="Llave..."></textarea><button onclick="vincularSucursal()" class="btn btn-primary">Vincular</button></div><div id="list-sucursales"></div></div>
+<div id="scr-ai" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>🧠 Asesor de Stock AI</h2><div id="ai-content"></div></div>
 
 <script>
-    // --- DB ---
-    let db = JSON.parse(localStorage.getItem('th_fr_db')) || [];
-    let fiados = JSON.parse(localStorage.getItem('th_fr_fi')) || [];
-    let gastos = JSON.parse(localStorage.getItem('th_fr_ga')) || [];
-    let sucursales = JSON.parse(localStorage.getItem('th_fr_suc')) || [];
-    let historial = JSON.parse(localStorage.getItem('th_fr_hi')) || [];
-    let listaM = JSON.parse(localStorage.getItem('th_fr_lm')) || [];
-    let caja = parseFloat(localStorage.getItem('th_fr_ca')) || 0;
+    let db = JSON.parse(localStorage.getItem('the_db')) || [];
+    let historial = JSON.parse(localStorage.getItem('the_hi')) || [];
+    let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
+    let caja = parseFloat(localStorage.getItem('the_ca')) || 0;
+    let costoVendido = parseFloat(localStorage.getItem('the_cv')) || 0;
+    let metaVenta = parseFloat(localStorage.getItem('the_target')) || 1000;
+    let lang = localStorage.getItem('the_lang') || 'es';
     let chartInstance = null;
+
+    const i18n = {
+        es: { inv: "Inventario", suc: "Sucursales", rep: "Métricas Pro", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENTAS HOY", l_costo: "COSTO", l_util: "UTILIDAD REAL" },
+        en: { inv: "Inventory", suc: "Branches", rep: "Pro Metrics", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES", l_costo: "COST", l_util: "REAL PROFIT" }
+    };
 
     function goTo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        if(id === 'scr-reports') {
+            document.getElementById('target-sales').value = metaVenta;
+            renderChart();
+        }
         if(id === 'scr-sucursales') document.getElementById('my-key').value = btoa(JSON.stringify({db}));
-        if(id === 'scr-cloud') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, fiados, gastos, sucursales, listaM, caja, historial}));
-        if(id === 'scr-reports') initChart();
+        if(id === 'scr-config') document.getElementById('cloud-data').value = btoa(JSON.stringify({db, historial, caja, costoVendido}));
         if(id === 'scr-ai') generarAI();
         render();
     }
 
-    // --- CORE ---
+    function saveTarget() { metaVenta = parseFloat(document.getElementById('target-sales').value) || 0; localStorage.setItem('the_target', metaVenta); render(); }
+
+    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
+
+    function applyLang() {
+        const t = i18n[lang];
+        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => document.getElementById(id).innerText = t[id.split('-')[1]]);
+        document.getElementById('l-caja').innerText = t.l_caja;
+        document.getElementById('l-costo').innerText = t.l_costo;
+        document.getElementById('l-util').innerText = t.l_util;
+    }
+
+    // LÓGICA AI PRECIOS
+    function calcAI() { document.getElementById('ai-suggest').style.display = document.getElementById('costo').value > 0 ? 'block' : 'none'; }
+    function setPrice(f) {
+        const c = parseFloat(document.getElementById('costo').value);
+        if(f === 'rec') f = c < 50 ? 1.8 : 1.4;
+        document.getElementById('v').value = Math.ceil(c * f);
+    }
+
     function add() {
-        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
-        if(n && v) { db.push({id: Date.now(), n, v, s}); save(); document.getElementById('n').value=''; }
+        const n = document.getElementById('n').value, c = parseFloat(document.getElementById('costo').value), v = parseFloat(document.getElementById('v').value), s = parseInt(document.getElementById('s').value);
+        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0}); save(); document.getElementById('n').value=''; }
     }
 
     function vender(id) {
         let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { p.s--; caja += p.v; save(); }
+        if(p && p.s > 0) { p.s--; p.vtas = (p.vtas || 0) + 1; caja += p.v; costoVendido += p.c; save(); }
     }
 
-    function addGasto() {
-        const n = document.getElementById('g-nom').value, a = parseFloat(document.getElementById('g-amo').value);
-        if(n && a) { gastos.push({id: Date.now(), n, a}); save(); document.getElementById('g-nom').value=''; }
-    }
-
-    function addFiado() {
-        const n = document.getElementById('f-nom').value, a = parseFloat(document.getElementById('f-amo').value);
-        if(n && a) { fiados.push({id: Date.now(), n, a, f: new Date().toLocaleDateString()}); save(); document.getElementById('f-nom').value=''; }
-    }
-
-    function addListaManual() {
-        const i = document.getElementById('l-item').value;
-        if(i) { listaM.push(i); save(); document.getElementById('l-item').value=''; }
-    }
-
-    function vincularSucursal() {
-        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
-        if(name && key) {
-            try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); alert("Sucursal vinculada!"); } 
-            catch(e) { alert("Llave inválida"); }
-        }
-    }
-
-    function cerrarCaja() {
-        if(confirm("¿Cerrar día? Se calculará utilidad y se limpiará la caja.")) {
-            const hoy = new Date();
-            const gT = gastos.reduce((a,b)=>a+b.a, 0);
-            historial.push({ fecha: hoy.toLocaleDateString(), mes: hoy.getMonth(), neto: caja - gT });
-            caja = 0; gastos = []; save();
+    function finalizarDia() {
+        if(confirm("¿Cerrar día? Se calculará el MAPE (Error de predicción).")) {
+            // Cálculo MAPE: |VentaReal - Meta| / VentaReal
+            const error = caja > 0 ? (Math.abs(caja - metaVenta) / caja) * 100 : 0;
+            historial.push({ fecha: new Date().toLocaleDateString(), neto: caja - costoVendido, vta: caja, mape: error });
+            caja = 0; costoVendido = 0; save();
         }
     }
 
     function save() {
-        localStorage.setItem('th_fr_db', JSON.stringify(db));
-        localStorage.setItem('th_fr_fi', JSON.stringify(fiados));
-        localStorage.setItem('th_fr_ga', JSON.stringify(gastos));
-        localStorage.setItem('th_fr_suc', JSON.stringify(sucursales));
-        localStorage.setItem('th_fr_hi', JSON.stringify(historial));
-        localStorage.setItem('th_fr_lm', JSON.stringify(listaM));
-        localStorage.setItem('th_fr_ca', caja);
+        localStorage.setItem('the_db', JSON.stringify(db));
+        localStorage.setItem('the_hi', JSON.stringify(historial));
+        localStorage.setItem('the_ca', caja);
+        localStorage.setItem('the_cv', costoVendido);
+        localStorage.setItem('the_suc', JSON.stringify(sucursales));
         render();
     }
 
-    function initChart() {
+    function renderChart() {
         const ctx = document.getElementById('mainChart').getContext('2d');
         if(chartInstance) chartInstance.destroy();
-        const ultimos = historial.slice(-7);
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ultimos.map(h => h.fecha),
-                datasets: [{ label: 'Utilidad Neta $', data: ultimos.map(h => h.neto), borderColor: '#3B82F6', tension: 0.4, fill: true, backgroundColor: 'rgba(59, 130, 246, 0.1)' }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+        chartInstance = new Chart(ctx, { 
+            type: 'line', 
+            data: { 
+                labels: historial.slice(-7).map(h=>h.fecha), 
+                datasets: [{ label: 'Utilidad $', data: historial.slice(-7).map(h=>h.neto), borderColor: '#3B82F6', tension:0.4 }] 
+            } 
         });
-        const hl = document.getElementById('history-list');
-        hl.innerHTML = '<h3 style="margin:20px 0 10px;">📜 Historial</h3>';
+        const hl = document.getElementById('history-list'); hl.innerHTML = '<h3 style="font-size:14px; margin-top:15px;">Registro Reciente</h3>';
         historial.slice().reverse().forEach(h => {
-            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between"><span>${h.fecha}</span><b>$${h.neto.toFixed(2)}</b></div>`;
+            hl.innerHTML += `<div class="data-card" style="display:flex; justify-content:space-between; font-size:12px;"><span>${h.fecha}</span><b>Utilidad: $${h.neto.toFixed(2)} | MAPE: ${h.mape.toFixed(1)}%</b></div>`;
         });
     }
 
     function generarAI() {
         const c = document.getElementById('ai-content'); c.innerHTML = '';
         db.forEach(p => {
-            const reserva = Math.ceil(p.s * 0.2);
-            c.innerHTML += `<div class="data-card">
-                <b>${p.n}</b>
-                <div style="background:#F0F9FF; border-left:4px solid var(--accent); padding:10px; margin-top:10px; border-radius:8px; font-size:13px;">
-                    💡 <b>Estrategia:</b> Mantén al menos ${reserva} unidades en reserva. Surtir cuando queden ${reserva + 2}.
-                </div>
-            </div>`;
+            const res = Math.ceil(p.s * 0.2);
+            c.innerHTML += `<div class="data-card"><b>${p.n}</b><p style="font-size:12px; color:var(--accent);">🛡️ Stock de Seguridad: Mantener ${res} unidades.</p></div>`;
         });
     }
 
     function render() {
         document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
-        document.getElementById('h-gastos').innerText = "$" + gastos.reduce((a,b)=>a+b.a, 0).toFixed(2);
-        const netoMes = historial.filter(h => h.mes === new Date().getMonth()).reduce((a,b)=>a+b.neto, 0);
-        document.getElementById('h-mes').innerText = "$" + netoMes.toFixed(2);
+        document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
+        document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
+        
+        // Calcular MAPE promedio para el Dashboard
+        const ultimos = historial.slice(-5);
+        const avgMape = ultimos.length > 0 ? (ultimos.reduce((a,b)=>a+b.mape,0) / ultimos.length) : 0;
+        document.getElementById('h-mape').innerText = avgMape.toFixed(1) + "%";
+        document.getElementById('h-mape').style.color = avgMape < 20 ? 'var(--success)' : 'var(--danger)';
 
-        // Inventario con Semáforo
         const li = document.getElementById('list-inv');
         if(li) {
-            const q = document.getElementById('search').value.toLowerCase();
             li.innerHTML = '';
-            db.filter(p => p.n.toLowerCase().includes(q)).forEach(p => {
+            // Índice de Ventas (IV): (Ventas del producto / Total Ventas en Caja) * 100
+            db.forEach(p => {
                 let color = p.s < 5 ? 'bg-red' : (p.s < 10 ? 'bg-orange' : 'bg-green');
-                let sucsInfo = '';
-                sucursales.forEach(s => {
-                    let match = s.inv.find(i => i.n.toLowerCase() === p.n.toLowerCase());
-                    if(match) sucsInfo += `<span class="sucursal-tag">📍 ${s.name}: ${match.s}</span> `;
-                });
+                let iv = caja > 0 ? ((p.vtas * p.v) / caja * 100) : 0;
+                let sInfo = ''; sucursales.forEach(s => { let m = s.inv.find(i=>i.n===p.n); if(m) sInfo += `<span class="sucursal-tag">${s.name}: ${m.s}</span>`; });
+                
                 li.innerHTML += `<div class="data-card">
                     <div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div>
-                    <span class="badge ${color}" style="margin: 8px 0; display:inline-block">Stock: ${p.s}</span><br>${sucsInfo}
-                    <div style="margin-top:10px; display:flex; gap:10px;">
-                        <button onclick="vender(${p.id})" style="flex:1; background:var(--success); color:white; border:none; padding:12px; border-radius:12px; font-weight:800;">Vender 💸</button>
-                        <button onclick="if(confirm('¿Borrar?')){db=db.filter(x=>x.id!=${p.id});save();}" style="background:#F1F5F9; border:none; color:var(--danger); width:45px; border-radius:12px;"><i data-lucide="trash-2"></i></button>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="badge ${color}">Stock: ${p.s}</span>
+                        <small style="font-weight:800; color:var(--accent)">IV: ${iv.toFixed(1)}%</small>
                     </div>
+                    ${sInfo}<br>
+                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%; border-radius:10px; padding:10px; border:none;">Vender +</button>
                 </div>`;
             });
         }
-
-        // Fiados
-        const lf = document.getElementById('list-fiados');
-        if(lf) {
-            let tf = 0; lf.innerHTML = '';
-            fiados.forEach(f => {
-                tf += f.a;
-                lf.innerHTML += `<div class="data-card">
-                    <div style="display:flex; justify-content:space-between"><b>👤 ${f.n}</b><b style="color:var(--danger)">$${f.a}</b></div>
-                    <small>${f.f}</small>
-                    <div style="margin-top:10px; display:flex; gap:8px;">
-                        <button onclick="window.open('https://wa.me/?text=Hola ${f.n}, recordatorio de pago de $${f.a}')" style="flex:1; background:#25D366; color:white; border:none; padding:8px; border-radius:10px;">WhatsApp</button>
-                        <button onclick="fiados=fiados.filter(x=>x.id!=${f.id});save();" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:10px;">Liquidado</button>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('total-fiado').innerText = "$" + tf.toFixed(2);
-        }
-
-        // Mandado
-        const lma = document.getElementById('list-mandado-auto');
-        if(lma) { lma.innerHTML = ''; db.filter(p => p.s <= 3).forEach(p => lma.innerHTML += `<div class="data-card" style="border-left:5px solid var(--warning)">⚠️ <b>${p.n}</b> (Quedan ${p.s})</div>`); }
-        const lmm = document.getElementById('list-mandado-manual');
-        if(lmm) { lmm.innerHTML = ''; listaM.forEach((m,i) => lmm.innerHTML += `<div class="data-card">${m} <button onclick="listaM.splice(${i},1);save();" style="float:right; border:none; background:none; color:var(--danger)">✕</button></div>`); }
-
         lucide.createIcons();
     }
 
-    function mandarListaWA() {
-        let t = "🛒 *LISTA DE MANDADO*\n\n";
-        db.filter(p => p.s <= 3).forEach(p => t += `- ${p.n} (Quedan ${p.s})\n`);
-        listaM.forEach(m => t += `- ${m}\n`);
-        window.open(`https://wa.me/?text=${encodeURIComponent(t)}`);
-    }
-
-    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("Copiado 🔑"); }
-    function importarCloud() {
-        try { const d = JSON.parse(atob(document.getElementById('cloud-import').value)); db=d.db; fiados=d.fiados; gastos=d.gastos; sucursales=d.sucursales; listaM=d.listaM; caja=d.caja; historial=d.historial; save(); alert("Restaurado! ✨"); goTo('scr-home'); } 
-        catch(e) { alert("Error"); }
+    function vincularSucursal() {
+        const name = document.getElementById('suc-name').value, key = document.getElementById('suc-key').value;
+        if(name && key) { try { sucursales.push({id: Date.now(), name, inv: JSON.parse(atob(key)).db}); save(); } catch(e) { alert("Error"); } }
     }
 
     window.onload = () => {
-        const hrs = new Date().getHours();
-        document.getElementById('txt-saludo').innerText = hrs < 12 ? "¡Buenos días, Jefe! 👋" : (hrs < 18 ? "¡Buenas tardes, Jefe! 😎" : "¡Buenas noches, Jefe! 🌙");
-        const f = ["Caja llena, corazón contento! 🚀", "El que no enseña, no vende! ✨", "Fiado es pariente de finado! 💀", "Lo que se mide, se mejora! 📊"];
-        document.getElementById('quote').innerText = '"' + f[Math.floor(Math.random()*f.length)] + '"';
+        applyLang();
+        document.getElementById('lang-select').value = lang;
+        const fr = ["El IV alto indica tus productos estrella.", "MAPE bajo significa que conoces tu negocio.", "Controla el costo, asegura el futuro."];
+        document.getElementById('quote').innerText = fr[Math.floor(Math.random()*fr.length)];
         render();
     };
+    function copiarCloud() { document.getElementById('cloud-data').select(); document.execCommand('copy'); alert("Copiado"); }
 </script>
 </body>
 </html>
