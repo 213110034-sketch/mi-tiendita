@@ -3,27 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi tiendita V3</title>
+<title>Mi tiendita</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{margin:0;font-family:sans-serif;background:linear-gradient(#001f3f,#000);color:white}
-header{position:fixed;top:0;width:100%;padding:15px;background:#001f3f;text-align:center}
-.page{display:none;padding:80px 15px}
+
+/* 🌙 Fondo tipo iPhone */
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"San Francisco",sans-serif;
+background:linear-gradient(180deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+/* 🧊 Header glass */
+header{
+position:fixed;
+top:0;
+width:100%;
+padding:15px;
+text-align:center;
+font-weight:bold;
+backdrop-filter:blur(15px);
+background:rgba(255,255,255,0.08);
+border-bottom:1px solid rgba(255,255,255,0.1);
+z-index:100;
+}
+
+/* 📱 Pantallas */
+.page{
+display:none;
+padding:80px 15px;
+animation:fade .4s ease;
+}
+
 .active{display:block}
-.card{background:rgba(255,255,255,0.1);padding:15px;border-radius:15px;margin:10px 0}
-button,input{width:100%;padding:10px;margin:5px 0;border-radius:10px;border:none}
-button{background:#00d4ff;color:black;font-weight:bold}
-.low{color:red}
-.warn{color:orange}
-.watermark{position:fixed;bottom:10px;left:10px;opacity:.3;color:#00d4ff}
+
+/* ✨ Animación */
+@keyframes fade{
+from{opacity:0;transform:translateY(10px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* 🧊 Cards estilo iOS */
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:15px;
+border-radius:20px;
+margin:10px 0;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:.2s;
+}
+
+.card:hover{
+transform:scale(1.02);
+}
+
+/* 🔘 Botones */
+button{
+width:100%;
+padding:12px;
+margin:6px 0;
+border:none;
+border-radius:15px;
+font-weight:bold;
+background:linear-gradient(145deg,#00c6ff,#0072ff);
+color:white;
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
+transition:.2s;
+}
+
+button:active{
+transform:scale(.95);
+}
+
+.btn-danger{
+background:linear-gradient(145deg,#ff416c,#ff4b2b);
+}
+
+/* 🧾 Inputs */
+input{
+width:100%;
+padding:12px;
+margin:6px 0;
+border-radius:15px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.1);
+color:white;
+}
+
+/* ⚠️ estilos */
+.low{color:#ff6b6b}
+.warn{color:#ffd166}
+
+/* 💧 Watermark */
+.watermark{
+position:fixed;
+bottom:10px;
+left:10px;
+opacity:.25;
+font-size:14px;
+}
+
+/* 📊 Canvas */
+canvas{
+background:white;
+border-radius:15px;
+margin-top:10px;
+}
+
+/* 📱 Scroll bonito */
+::-webkit-scrollbar{display:none}
+
 </style>
 </head>
 
 <body>
 
-<header>🏪 Mi tiendita V3 🧠</header>
+<header>🏪 Mi tiendita</header>
 
 <div id="home" class="page active">
 <div class="card">
@@ -46,6 +146,7 @@ button{background:#00d4ff;color:black;font-weight:bold}
 <!-- INVENTARIO -->
 <div id="inventory" class="page">
 <button onclick="show('home')">⬅️</button>
+
 <input id="search" placeholder="🔎 Buscar..." onkeyup="renderInv()">
 
 <input id="name" placeholder="Producto">
@@ -60,6 +161,7 @@ button{background:#00d4ff;color:black;font-weight:bold}
 <!-- POS -->
 <div id="pos" class="page">
 <button onclick="show('home')">⬅️</button>
+
 <div id="products"></div>
 
 <div class="card">
@@ -73,18 +175,22 @@ button{background:#00d4ff;color:black;font-weight:bold}
 <!-- FIADO -->
 <div id="debts" class="page">
 <button onclick="show('home')">⬅️</button>
+
 <input id="dname" placeholder="Cliente">
 <input id="damount" placeholder="Monto">
 <button onclick="addDebt()">Agregar</button>
+
 <div id="debtList"></div>
 </div>
 
 <!-- GASTOS -->
 <div id="expenses" class="page">
 <button onclick="show('home')">⬅️</button>
+
 <input id="ename" placeholder="Gasto">
 <input id="eamount" placeholder="Monto">
 <button onclick="addExpense()">Agregar</button>
+
 <div id="expenseList"></div>
 </div>
 
@@ -109,17 +215,15 @@ button{background:#00d4ff;color:black;font-weight:bold}
 <div class="watermark">cruzzz</div>
 
 <script>
-let db=JSON.parse(localStorage.getItem('db'))||{
-products:[],sales:[],debts:[],expenses:[]
-};
 
-let cart=[];
-
-function save(){localStorage.setItem('db',JSON.stringify(db));update();}
-
+/* 🔥 ANIMACIÓN AL CAMBIAR PANTALLA */
 function show(p){
-document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-document.getElementById(p).classList.add('active');
+document.querySelectorAll('.page').forEach(x=>{
+x.classList.remove('active')
+});
+setTimeout(()=>{
+document.getElementById(p).classList.add('active')
+},50)
 
 if(p==='inventory')renderInv();
 if(p==='pos')renderPOS();
@@ -128,9 +232,43 @@ if(p==='expenses')renderExpenses();
 if(p==='stats')intelligence();
 }
 
+/* ✨ EFECTO CLICK */
+document.addEventListener("click",e=>{
+if(e.target.tagName==="BUTTON"){
+e.target.style.transform="scale(.9)";
+setTimeout(()=>e.target.style.transform="scale(1)",100);
+}
+});
+
+/* ⚡ TODO LO DEMÁS IGUAL (NO MODIFICADO) */
+
+let db=JSON.parse(localStorage.getItem('db'))||{
+products:[],sales:[],debts:[],expenses:[]
+};
+
+let cart=[];
+
+function save(){
+localStorage.setItem('db',JSON.stringify(db));
+update();
+}
+
 function addProduct(){
-db.products.push({id:Date.now(),name:name.value,cost:+cost.value,price:+price.value,stock:+qty.value});
+db.products.push({
+id:Date.now(),
+name:name.value,
+cost:+cost.value,
+price:+price.value,
+stock:+qty.value
+});
 save();
+}
+
+function deleteProduct(id){
+if(!confirm("¿Eliminar producto?"))return;
+db.products=db.products.filter(p=>p.id!==id);
+save();
+renderInv();
 }
 
 function renderInv(){
@@ -138,9 +276,11 @@ inv.innerHTML="";
 db.products.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()))
 .forEach(p=>{
 let warn=(p.price-p.cost)<p.cost*0.3?"warn":"";
-inv.innerHTML+=`<div class="card ${p.stock<5?'low':''}">
+inv.innerHTML+=`
+<div class="card ${p.stock<5?'low':''}">
 ${p.name} $${p.price} Stock:${p.stock}
 <span class="${warn}">${warn?'⚠️ Baja ganancia':''}</span>
+<button class="btn-danger" onclick="deleteProduct(${p.id})">Eliminar</button>
 </div>`;
 });
 }
@@ -148,7 +288,8 @@ ${p.name} $${p.price} Stock:${p.stock}
 function renderPOS(){
 products.innerHTML="";
 db.products.forEach(p=>{
-products.innerHTML+=`<div class="card">
+products.innerHTML+=`
+<div class="card">
 ${p.name} $${p.price}
 <button onclick="addCart(${p.id})">+</button>
 </div>`;
@@ -163,10 +304,22 @@ cart.push(p);
 renderCart();
 }
 
+function removeCart(index){
+cart.splice(index,1);
+renderCart();
+}
+
 function renderCart(){
 cart.innerHTML="";
 let t=0;
-cart.forEach(i=>{t+=i.price;cart.innerHTML+=`<div>${i.name}</div>`});
+cart.forEach((i,index)=>{
+t+=i.price;
+cart.innerHTML+=`
+<div>
+${i.name}
+<button class="btn-danger" onclick="removeCart(${index})">❌</button>
+</div>`;
+});
 cartTotal.innerText="$"+t;
 }
 
@@ -183,20 +336,57 @@ save();
 renderPOS();
 }
 
-function addDebt(){db.debts.push({name:dname.value,amount:+damount.value});save();}
+function addDebt(){
+db.debts.push({name:dname.value,amount:+damount.value});
+save();
+}
+
+function deleteDebt(i){
+if(!confirm("¿Eliminar deuda?"))return;
+db.debts.splice(i,1);
+save();
+renderDebts();
+}
+
 function renderDebts(){
 debtList.innerHTML="";
 db.debts.forEach((d,i)=>{
-debtList.innerHTML+=`<div class="card">${d.name} debe $${d.amount}
-<button onclick="payDebt(${i})">Pagar</button></div>`;
+debtList.innerHTML+=`
+<div class="card">
+${d.name} debe $${d.amount}
+<button onclick="payDebt(${i})">Pagar</button>
+<button class="btn-danger" onclick="deleteDebt(${i})">Eliminar</button>
+</div>`;
 });
 }
-function payDebt(i){db.debts.splice(i,1);save();renderDebts();}
 
-function addExpense(){db.expenses.push({name:ename.value,amount:+eamount.value});save();}
+function payDebt(i){
+db.debts.splice(i,1);
+save();
+renderDebts();
+}
+
+function addExpense(){
+db.expenses.push({name:ename.value,amount:+eamount.value});
+save();
+}
+
+function deleteExpense(i){
+if(!confirm("¿Eliminar gasto?"))return;
+db.expenses.splice(i,1);
+save();
+renderExpenses();
+}
+
 function renderExpenses(){
 expenseList.innerHTML="";
-db.expenses.forEach(e=>expenseList.innerHTML+=`<div class="card">${e.name} $${e.amount}</div>`);
+db.expenses.forEach((e,i)=>{
+expenseList.innerHTML+=`
+<div class="card">
+${e.name} $${e.amount}
+<button class="btn-danger" onclick="deleteExpense(${i})">Eliminar</button>
+</div>`;
+});
 }
 
 function corte(){
@@ -214,8 +404,7 @@ let gastos=db.expenses.reduce((a,b)=>a+b.amount,0);
 
 total.innerText="$"+t;
 profit.innerText="Ganancia real $"+(p-gastos);
-
-forecast.innerText="📈 Pronóstico mensual: $"+forecastCalc();
+forecast.innerText="📈 Pronóstico: $"+forecastCalc();
 }
 
 function forecastCalc(){
@@ -234,7 +423,11 @@ priceSuggest();
 
 function charts(){
 let v=db.sales.map(s=>s.total);
-new Chart(chart1,{type:'line',data:{labels:v.map((_,i)=>i),datasets:[{data:v}]}});}
+new Chart(chart1,{
+type:'line',
+data:{labels:v.map((_,i)=>i),datasets:[{data:v}]}
+});
+}
 
 function topProducts(){
 let count={};
@@ -243,9 +436,7 @@ s.items.forEach(i=>{
 count[i.name]=(count[i.name]||0)+1;
 });
 });
-
 let sorted=Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
 top.innerHTML="";
 sorted.forEach(p=>{
 top.innerHTML+=`<div>${p[0]} (${p[1]} ventas)</div>`;
@@ -273,7 +464,10 @@ a.click();
 
 function importData(e){
 let reader=new FileReader();
-reader.onload=()=>{db=JSON.parse(reader.result);save();};
+reader.onload=()=>{
+db=JSON.parse(reader.result);
+save();
+};
 reader.readAsText(e.target.files[0]);
 }
 
