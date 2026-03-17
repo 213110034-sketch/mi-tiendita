@@ -14,7 +14,6 @@ font-family:-apple-system,BlinkMacSystemFont,"San Francisco",sans-serif;
 background:linear-gradient(180deg,#0f2027,#203a43,#2c5364);
 color:white;
 }
-
 header{
 position:fixed;
 top:0;
@@ -25,28 +24,14 @@ font-weight:bold;
 backdrop-filter:blur(15px);
 background:rgba(255,255,255,0.08);
 }
-
-.page{
-display:none;
-padding:80px 15px;
-animation:fade .4s ease;
-}
+.page{display:none;padding:80px 15px;}
 .active{display:block}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
-}
-
 .card{
 background:rgba(255,255,255,0.1);
-backdrop-filter:blur(10px);
 padding:15px;
 border-radius:20px;
 margin:10px 0;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
-
 button{
 width:100%;
 padding:12px;
@@ -54,16 +39,10 @@ margin:6px 0;
 border:none;
 border-radius:15px;
 font-weight:bold;
-background:linear-gradient(145deg,#00c6ff,#0072ff);
+background:#0072ff;
 color:white;
 }
-
-button:active{transform:scale(.95)}
-
-.btn-danger{
-background:linear-gradient(145deg,#ff416c,#ff4b2b);
-}
-
+.btn-danger{background:#ff4b2b;}
 input{
 width:100%;
 padding:12px;
@@ -73,20 +52,11 @@ border:none;
 background:rgba(255,255,255,0.1);
 color:white;
 }
-
-.low{color:#ff6b6b}
-.warn{color:#ffd166}
-
 .watermark{
 position:fixed;
 bottom:10px;
 left:10px;
 opacity:.25;
-}
-
-canvas{
-background:white;
-border-radius:15px;
 }
 </style>
 </head>
@@ -100,24 +70,16 @@ border-radius:15px;
 <h2 id="total">$0</h2>
 <p id="profit"></p>
 <p id="forecast"></p>
-<p id="frase" style="opacity:.8;font-style:italic;"></p>
+<p id="frase"></p>
 </div>
 
 <button onclick="show('pos')">🛒 Vender</button>
 <button onclick="show('inventory')">📦 Inventario</button>
 <button onclick="show('stats')">📊 Inteligencia</button>
-<button onclick="show('debts')">💳 Fiado</button>
-<button onclick="show('expenses')">💰 Gastos</button>
-<button onclick="corte()">💸 Corte</button>
-
-<button onclick="exportData()">📤 Respaldar</button>
-<input type="file" onchange="importData(event)">
 </div>
 
 <div id="inventory" class="page">
 <button onclick="show('home')">⬅️</button>
-
-<input id="search" placeholder="🔎 Buscar..." onkeyup="renderInv()">
 
 <input id="name" placeholder="Producto">
 <input id="cost" placeholder="Costo">
@@ -141,60 +103,25 @@ border-radius:15px;
 </div>
 </div>
 
-<div id="debts" class="page">
-<button onclick="show('home')">⬅️</button>
-
-<input id="dname" placeholder="Cliente">
-<input id="damount" placeholder="Monto">
-<button onclick="addDebt()">Agregar</button>
-
-<div id="debtList"></div>
-</div>
-
-<div id="expenses" class="page">
-<button onclick="show('home')">⬅️</button>
-
-<input id="ename" placeholder="Gasto">
-<input id="eamount" placeholder="Monto">
-<button onclick="addExpense()">Agregar</button>
-
-<div id="expenseList"></div>
-</div>
-
 <div id="stats" class="page">
 <button onclick="show('home')">⬅️</button>
-
 <canvas id="chart1"></canvas>
-
-<div class="card">
-<h3>🔥 Top productos</h3>
 <div id="top"></div>
-</div>
-
-<div class="card">
-<h3>💸 Sugerencias de precios</h3>
 <div id="suggest"></div>
-</div>
 </div>
 
 <div class="watermark">cruzzz</div>
 
 <script>
 
-let db=JSON.parse(localStorage.getItem('db'))||{
-products:[],sales:[],debts:[],expenses:[]
-};
-
+let db=JSON.parse(localStorage.getItem('db'))||{products:[],sales:[]};
 let carrito=[];
 
 function show(p){
 document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
 document.getElementById(p).classList.add('active');
-
 if(p==='inventory')renderInv();
 if(p==='pos')renderPOS();
-if(p==='debts')renderDebts();
-if(p==='expenses')renderExpenses();
 if(p==='stats')intelligence();
 }
 
@@ -203,53 +130,59 @@ localStorage.setItem('db',JSON.stringify(db));
 update();
 }
 
-/* INVENTARIO */
+/* 🔥 PRODUCTOS */
 function addProduct(){
+
+if(!name.value.trim()){
+alert("Ponle nombre al producto bro 😅");
+return;
+}
+
+if(!price.value || !qty.value){
+alert("Completa los datos");
+return;
+}
+
 db.products.push({
 id:Date.now(),
-name:name.value,
-cost:+cost.value,
+name:name.value.trim(),
+cost:+cost.value||0,
 price:+price.value,
 stock:+qty.value
 });
+
 name.value=cost.value=price.value=qty.value="";
 save();
 renderInv();
 }
 
 function deleteProduct(id){
-if(!confirm("¿Eliminar producto?"))return;
 db.products=db.products.filter(p=>p.id!==id);
 save();
 renderInv();
 }
 
 function renderInv(){
-let cont=document.getElementById("inv");
-cont.innerHTML="";
-db.products.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()))
-.forEach(p=>{
-let warn=(p.price-p.cost)<p.cost*0.3?"warn":"";
-cont.innerHTML+=`
-<div class="card ${p.stock<5?'low':''}">
+inv.innerHTML="";
+db.products.forEach(p=>{
+inv.innerHTML+=`
+<div class="card">
 ${p.name} $${p.price} Stock:${p.stock}
-<span class="${warn}">${warn?'⚠️ Baja ganancia':''}</span>
 <button class="btn-danger" onclick="deleteProduct(${p.id})">Eliminar</button>
 </div>`;
 });
 }
 
-/* POS */
+/* 🔥 POS */
 function renderPOS(){
-let cont=document.getElementById("products");
-cont.innerHTML="";
+products.innerHTML="";
 db.products.forEach(p=>{
-cont.innerHTML+=`
+products.innerHTML+=`
 <div class="card">
-${p.name} $${p.price}
+${p.name || "Producto sin nombre"} $${p.price}
 
-<button onclick="addCart(${p.id})">➕ Agregar</button>
-<button class="btn-danger" onclick="deleteFromPOS(${p.id})">❌ Eliminar</button>
+<button onclick="addCart(${p.id})">➕</button>
+<button class="btn-danger" onclick="deleteFromPOS(${p.id})">❌</button>
 
 </div>`;
 });
@@ -257,8 +190,8 @@ renderCart();
 }
 
 function deleteFromPOS(id){
-if(!confirm("¿Eliminar este producto completamente?"))return;
-db.products = db.products.filter(p => p.id !== id);
+if(!confirm("¿Eliminar producto?"))return;
+db.products=db.products.filter(p=>p.id!==id);
 save();
 renderPOS();
 }
@@ -270,24 +203,23 @@ carrito.push(p);
 renderCart();
 }
 
-function removeCart(index){
-carrito.splice(index,1);
+function removeCart(i){
+carrito.splice(i,1);
 renderCart();
 }
 
 function renderCart(){
-let cont=document.getElementById("cart");
-cont.innerHTML="";
+cart.innerHTML="";
 let t=0;
 carrito.forEach((i,index)=>{
 t+=i.price;
-cont.innerHTML+=`
+cart.innerHTML+=`
 <div>
 ${i.name}
-<button class="btn-danger" onclick="removeCart(${index})">❌</button>
+<button onclick="removeCart(${index})">❌</button>
 </div>`;
 });
-document.getElementById("cartTotal").innerText="$"+t;
+cartTotal.innerText="$"+t;
 }
 
 function sell(){
@@ -297,187 +229,44 @@ total+=i.price;
 cost+=i.cost;
 db.products.find(p=>p.id===i.id).stock--;
 });
-db.sales.push({items:carrito,total,profit:total-cost,date:new Date()});
+db.sales.push({items:carrito,total,profit:total-cost});
 carrito=[];
 save();
 renderPOS();
 }
 
-/* DEUDAS */
-function addDebt(){
-db.debts.push({name:dname.value,amount:+damount.value});
-dname.value=damount.value="";
-save();
-renderDebts();
-}
-
-function deleteDebt(i){
-if(!confirm("¿Eliminar deuda?"))return;
-db.debts.splice(i,1);
-save();
-renderDebts();
-}
-
-function renderDebts(){
-let cont=document.getElementById("debtList");
-cont.innerHTML="";
-db.debts.forEach((d,i)=>{
-cont.innerHTML+=`
-<div class="card">
-${d.name} debe $${d.amount}
-<button onclick="payDebt(${i})">Pagar</button>
-<button class="btn-danger" onclick="deleteDebt(${i})">Eliminar</button>
-</div>`;
-});
-}
-
-function payDebt(i){
-db.debts.splice(i,1);
-save();
-renderDebts();
-}
-
-/* GASTOS */
-function addExpense(){
-db.expenses.push({name:ename.value,amount:+eamount.value});
-ename.value=eamount.value="";
-save();
-renderExpenses();
-}
-
-function deleteExpense(i){
-if(!confirm("¿Eliminar gasto?"))return;
-db.expenses.splice(i,1);
-save();
-renderExpenses();
-}
-
-function renderExpenses(){
-let cont=document.getElementById("expenseList");
-cont.innerHTML="";
-db.expenses.forEach((e,i)=>{
-cont.innerHTML+=`
-<div class="card">
-${e.name} $${e.amount}
-<button class="btn-danger" onclick="deleteExpense(${i})">Eliminar</button>
-</div>`;
-});
-}
-
-/* CORTE */
-function corte(){
-let hoy=new Date().toLocaleDateString();
-let ventas=db.sales.filter(s=>new Date(s.date).toLocaleDateString()===hoy);
-let total=ventas.reduce((a,b)=>a+b.total,0);
-let profit=ventas.reduce((a,b)=>a+b.profit,0);
-alert(`💸 Corte\nVentas:$${total}\nGanancia:$${profit}`);
-}
-
 /* DASH */
 function update(){
 let t=db.sales.reduce((a,b)=>a+b.total,0);
-let p=db.sales.reduce((a,b)=>a+b.profit,0);
-let gastos=db.expenses.reduce((a,b)=>a+b.amount,0);
-
 total.innerText="$"+t;
-profit.innerText="Ganancia real $"+(p-gastos);
-forecast.innerText="📈 Pronóstico: $"+forecastCalc();
-}
-
-function forecastCalc(){
-if(db.sales.length<2)return 0;
-let dias=[...new Set(db.sales.map(s=>new Date(s.date).toLocaleDateString()))].length;
-let total=db.sales.reduce((a,b)=>a+b.total,0);
-let promedio=total/dias;
-return (promedio*30).toFixed(2);
 }
 
 /* INTELIGENCIA */
 function intelligence(){
-charts();
-topProducts();
-priceSuggest();
-}
-
-function charts(){
 let v=db.sales.map(s=>s.total);
-new Chart(chart1,{
-type:'line',
-data:{labels:v.map((_,i)=>i),datasets:[{data:v}]}
-});
-}
+new Chart(chart1,{type:'line',data:{labels:v.map((_,i)=>i),datasets:[{data:v}]}});
 
-function topProducts(){
 let count={};
 db.sales.forEach(s=>{
 s.items.forEach(i=>{
 count[i.name]=(count[i.name]||0)+1;
 });
 });
-let sorted=Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,5);
-top.innerHTML="";
-sorted.forEach(p=>{
-top.innerHTML+=`<div>${p[0]} (${p[1]} ventas)</div>`;
-});
-}
 
-function priceSuggest(){
-suggest.innerHTML="";
-db.products.forEach(p=>{
-let profit=p.price-p.cost;
-if(profit<p.cost*0.3){
-let rec=(p.cost*1.3).toFixed(2);
-suggest.innerHTML+=`<div class="warn">${p.name} sube a $${rec}</div>`;
-}
+top.innerHTML="";
+Object.entries(count).forEach(p=>{
+top.innerHTML+=`<div>${p[0]} ${p[1]}</div>`;
 });
 }
 
 /* FRASES */
-let frases=[
-"💸 Cada venta cuenta, sigue así",
-"🔥 Hoy puede ser tu mejor día",
-"📈 Pequeñas ventas, grandes resultados",
-"💪 La constancia hace crecer tu negocio",
-"🧠 Trabaja inteligente, no solo duro",
-"🏪 Tu tiendita está creciendo",
-"🚀 Vas por buen camino",
-"💰 Más control = más dinero"
-];
-
-function fraseRandom(){
-let f=frases[Math.floor(Math.random()*frases.length)];
-let el=document.getElementById("frase");
-if(el){
-el.style.opacity=0;
-setTimeout(()=>{
-el.innerText=f;
-el.style.opacity=1;
-},200);
-}
-}
-
-setInterval(fraseRandom,5000);
-fraseRandom();
-
-/* BACKUP */
-function exportData(){
-let blob=new Blob([JSON.stringify(db)],{type:"application/json"});
-let a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download="backup.json";
-a.click();
-}
-
-function importData(e){
-let reader=new FileReader();
-reader.onload=()=>{
-db=JSON.parse(reader.result);
-save();
-};
-reader.readAsText(e.target.files[0]);
-}
+let frases=["💸 Sigue vendiendo","🔥 Vas bien","📈 Creciendo"];
+setInterval(()=>{
+frase.innerText=frases[Math.floor(Math.random()*frases.length)];
+},4000);
 
 update();
+
 </script>
 
 </body>
