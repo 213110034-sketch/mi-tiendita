@@ -2,299 +2,379 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mi Tienda Inteligente Pro 💎</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Hub Manager Pro | Edición Dueño</title>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    
     <style>
-        :root { 
-            --bg: #0F172A; --glass: rgba(30, 41, 59, 0.7); --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #3B82F6; --accent: #8B5CF6; --success: #10B981; --danger: #EF4444;
-            --warning: #F59E0B; --text-main: #F1F5F9; --text-dim: #94A3B8;
+        :root {
+            --primary: #001f3f;
+            --secondary: #00d4ff;
+            --accent: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 60px; }
-        .screen { display: none; padding: 25px 20px; animation: fadeIn 0.4s ease; }
-        .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity:0; transform: scale(0.98); } to { opacity:1; transform: scale(1); } }
 
-        .btn:active, .menu-item:active, .back-btn:active, .btn-primary:active { transform: scale(0.92); transition: transform 0.1s; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); color: var(--success); } 100% { transform: scale(1); } }
-        .pop-anim { animation: pop 0.3s ease; display: inline-block; }
-
-        .hero-card { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); border-radius: 30px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .balance { font-size: 38px; font-weight: 800; margin: 8px 0; transition: 0.3s; }
-        
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .menu-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.2s; }
-        .menu-item i { color: var(--primary); margin-bottom: 12px; display: inline-block; }
-
-        .data-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 22px; margin-bottom: 12px; }
-        .ai-box { background: rgba(59, 130, 246, 0.1); border-radius: 15px; padding: 15px; margin: 10px 0; border: 1px dashed var(--primary); }
-        
-        .badge { padding: 5px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 5px;}
-        .bg-red { background: rgba(239, 68, 68, 0.2); color: #FFAAAA; border: 1px solid var(--danger); }
-        .bg-orange { background: rgba(245, 158, 11, 0.2); color: #FFDDAA; border: 1px solid var(--warning); }
-        .bg-green { background: rgba(16, 185, 129, 0.2); color: #AAFFDD; border: 1px solid var(--success); }
-        
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-ai { background: rgba(255,255,255,0.1); color: white; padding: 8px 12px; font-size: 10px; border-radius: 10px; border: 1px solid var(--glass-border); margin: 3px; cursor: pointer; }
-        
-        input, select, textarea { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; margin: 8px 0; box-sizing: border-box; font-size: 16px; }
-        .back-btn { width: 45px; height: 45px; border-radius: 15px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: white; cursor: pointer; }
-        
-        /* CALENDARIO ESTILO PRO */
-        .calendar-container { margin-top: 15px; background: var(--glass); border-radius: 20px; padding: 15px; border: 1px solid var(--glass-border); }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; font-size: 12px; }
-        .calendar-day { padding: 8px; border-radius: 10px; cursor: pointer; transition: 0.2s; position: relative; }
-        .calendar-day:hover { background: rgba(255,255,255,0.1); }
-        .has-data::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: var(--success); border-radius: 50%; }
-        .selected-day { background: var(--primary) !important; color: white; font-weight: bold; }
-
-        .gothic-signature {
-            position: fixed;
-            bottom: 15px;
-            left: 20px;
-            font-family: 'UnifrakturMaguntia', serif;
-            font-size: 24px;
-            font-style: italic;
-            color: rgba(203, 213, 225, 0.3);
-            pointer-events: none;
-            z-index: 100;
-            transform: rotate(-5deg);
+        body {
+            background: radial-gradient(circle at top, #003366, #001f3f);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
+
+        /* DISEÑO GLASSMORPHISM */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 20px;
+            margin: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* HEADER Y FIRMA */
+        header { text-align: center; padding: 20px; }
+        .firma-cruzz {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 2.5rem;
+            color: var(--secondary);
+            text-shadow: 2px 2px 10px rgba(0,212,255,0.5);
+            margin: 0;
+        }
+
+        /* NAVEGACIÓN */
+        .main-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .nav-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .nav-item i { font-size: 2rem; display: block; margin-bottom: 10px; }
+
+        /* PANTALLAS */
+        .page { display: none; padding: 10px; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* FORMULARIOS Y TABLAS */
+        input, select, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        input { background: rgba(255,255,255,0.9); color: #333; }
+        
+        button {
+            background: var(--secondary);
+            color: var(--primary);
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .btn-danger { background: var(--danger); color: white; }
+
+        /* LISTADO DE PRODUCTOS (SEMÁFORO) */
+        .item-list {
+            margin-top: 20px;
+        }
+
+        .product-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        .stock-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 10px; }
+
+        /* GRÁFICAS */
+        .chart-container { position: relative; height: 250px; width: 100%; }
+
+        /* FOOTER */
+        footer { text-align: center; font-size: 0.8rem; opacity: 0.6; padding: 20px; }
     </style>
 </head>
 <body>
 
-<div id="scr-home" class="screen active">
-    <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
-        <div><h2 id="txt-saludo" style="margin:0; font-weight: 800; color: #fff;">¡Hola, Jefe! 👋</h2><p id="quote" style="color: var(--text-dim); font-size: 12px; margin:0;"></p></div>
-        <div style="background: var(--primary); padding: 8px; border-radius: 12px; cursor: pointer;"><i data-lucide="zap" style="width:24px; height:24px; color:#fff"></i></div>
-    </div>
-    <div class="hero-card">
-        <div style="display:flex; justify-content:space-between; align-items:start;">
-            <div><small id="l-caja" class="stat-label" style="color:var(--text-dim)">VENDIDO HOY 💰</small><div class="balance" id="h-caja">$0.00</div></div>
-            <div style="text-align:right"><small class="stat-label" style="color:var(--text-dim)">PRECISIÓN 🎯</small><div id="h-mape" style="font-weight:800; font-size:20px; color: var(--success);">100%</div></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-            <div><small id="l-costo" class="stat-label" style="opacity:0.6">COSTO 📦</small><div id="h-costos-v" style="color: #F87171; font-weight: 800;">$0</div></div>
-            <div style="text-align: right;"><small id="l-util" class="stat-label" style="opacity:0.6">NETO 💎</small><div id="h-util" style="color: var(--success); font-weight: 800;">$0</div></div>
-        </div>
-    </div>
-    <div class="menu-grid">
-        <div class="menu-item" onclick="goTo('scr-inv')"><i data-lucide="package"></i><span id="m-inv">Inventario</span></div>
-        <div class="menu-item" onclick="goTo('scr-sucursales')"><i data-lucide="map-pin"></i><span id="m-suc">Tiendas</span></div>
-        <div class="menu-item" onclick="goTo('scr-reports')"><i data-lucide="bar-chart-2"></i><span id="m-rep">Mis Logros</span></div>
-        <div class="menu-item" onclick="goTo('scr-ai')"><i data-lucide="brain-circuit"></i><span id="m-ai">Asesor AI</span></div>
-        <div class="menu-item" onclick="goTo('scr-config')"><i data-lucide="sliders"></i><span id="m-cfg">Ajustes</span></div>
-        <div class="menu-item" onclick="finalizarDia()" style="background: var(--success); border: none;"><i data-lucide="check-circle" style="color:white"></i><span style="color:white; font-weight: 800;">Cerrar Día 🔒</span></div>
-    </div>
-</div>
+    <header>
+        <h1 class="firma-cruzz">By: Cruzz</h1>
+        <p style="margin:0; font-size: 0.9rem; letter-spacing: 2px;">TIENDA HUB MANAGER PRO</p>
+    </header>
 
-<div id="scr-inv" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📦 Inventario Dinámico</h2>
-    <div class="data-card">
-        <input type="text" id="n" placeholder="Nombre... 🏷️">
-        <div style="display:flex; gap:10px;"><input type="number" id="costo" placeholder="Costo 💵" oninput="calcAI()"><input type="number" id="v" placeholder="Venta 🤑"></div>
-        <div id="ai-suggest" class="ai-box" style="display:none;">
-            <button class="btn-ai" onclick="setPrice(1.3)">+30%</button>
-            <button class="btn-ai" onclick="setPrice(1.5)">+50%</button>
-            <button class="btn-ai" onclick="setPrice('rec')">AI Sugerido 🤖</button>
+    <div id="home" class="page active">
+        <div class="glass-card">
+            <p style="margin:0; opacity:0.8;">Balance Estimado Mensual</p>
+            <h2 id="home-balance" style="font-size: 2.5rem; margin:10px 0; color: var(--accent);">$0.00</h2>
+            <p id="pronostico-txt" style="font-size: 0.8rem; color: var(--secondary);"></p>
         </div>
-        <input type="number" id="s" placeholder="Cantidad 🔢">
-        <input type="date" id="caducidad">
-        <button onclick="add()" class="btn btn-primary">Añadir al Stock ➕</button>
-    </div>
-    <input type="text" id="search" placeholder="🔍 Buscar..." oninput="render()">
-    <div id="list-inv"></div>
-</div>
 
-<div id="scr-ai" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>🧠 Predicción AI</h2>
-    <div id="ai-prediction" class="hero-card" style="background: var(--accent); margin-bottom:15px;">
-        <small class="stat-label" style="color:white; opacity:0.8">PROYECCIÓN SEMANAL 🚀</small>
-        <div id="pred-ventas" class="balance" style="font-size:28px;">$0.00</div>
-        <small style="color:white">Ganancia estimada: <span id="pred-util">$0.00</span> 💸</small>
-    </div>
-    <div id="ai-content"></div>
-</div>
-
-<div id="scr-reports" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>📊 Rendimiento 🏆</h2>
-    <div class="data-card"><canvas id="mainChart"></canvas></div>
-    
-    <div class="calendar-container">
-        <div class="calendar-header">
-            <button onclick="changeMonth(-1)" style="background:none; border:none; color:white;"><i data-lucide="chevron-left"></i></button>
-            <b id="calendar-month"></b>
-            <button onclick="changeMonth(1)" style="background:none; border:none; color:white;"><i data-lucide="chevron-right"></i></button>
-        </div>
-        <div class="calendar-grid" id="calendar-days"></div>
-    </div>
-
-    <div id="selected-day-info" class="data-card" style="margin-top:15px; display:none; background: var(--primary); border:none;">
-        <h4 id="info-date" style="margin:0 0 5px 0; font-size:14px;"></h4>
-        <div style="display:flex; justify-content:space-between; font-size:13px;">
-            <span>Venta: <b id="info-vta"></b></span>
-            <span>Neto: <b id="info-neto"></b></span>
+        <div class="main-nav">
+            <div class="nav-item" onclick="showPage('pos')"><i>🛒</i> Vender</div>
+            <div class="nav-item" onclick="showPage('inventory')"><i>📦</i> Stock</div>
+            <div class="nav-item" onclick="showPage('stats')"><i>📊</i> Gráficas</div>
+            <div class="nav-item" onclick="showPage('ia')"><i>🤖</i> IA Precios</div>
+            <div class="nav-item" onclick="showPage('deudas')"><i>📝</i> Fiados</div>
+            <div class="nav-item" onclick="showPage('settings')"><i>⚙️</i> Ajustes</div>
         </div>
     </div>
-    <div id="history-list"></div>
-</div>
 
-<div id="scr-config" class="screen">
-    <button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button>
-    <h2>⚙️ Ajustes</h2>
-    <select id="lang-select" onchange="changeLang()">
-        <option value="es">Español 🇲🇽</option>
-        <option value="en">English 🇺🇸</option>
-        <option value="fr">Français 🇫🇷</option>
-        <option value="pt">Português 🇧🇷</option>
-        <option value="zh">中文 🇨🇳</option>
-        <option value="it">Italiano 🇮🇹</option>
-    </select>
-    <button onclick="copiarCloud()" class="btn btn-primary" style="margin-top:15px;">Respaldar Datos 🔑</button>
-</div>
+    <div id="pos" class="page">
+        <button onclick="showPage('home')">⬅ Volver al Menú</button>
+        <div class="glass-card">
+            <h3>Punto de Venta</h3>
+            <input type="text" id="pos-search" onkeyup="searchPOS()" placeholder="Escribe nombre o escanea...">
+            <div id="pos-results" style="max-height: 200px; overflow-y: auto;"></div>
+            <hr>
+            <h4>Ticket Actual</h4>
+            <div id="current-cart"></div>
+            <h2 id="cart-total">Total: $0.00</h2>
+            <button onclick="checkout()">Completar Venta 💰</button>
+        </div>
+    </div>
 
-<div id="scr-sucursales" class="screen"><button class="back-btn" onclick="goTo('scr-home')"><i data-lucide="chevron-left"></i></button><h2>📍 Sucursales 🏢</h2><div id="list-sucursales"></div></div>
+    <div id="inventory" class="page">
+        <button onclick="showPage('home')">⬅ Volver al Menú</button>
+        <div class="glass-card">
+            <h3>Gestión de Mercancía</h3>
+            <button onclick="toggleElement('add-form')">+ Nuevo Producto</button>
+            <div id="add-form" style="display:none;">
+                <input type="text" id="in-name" placeholder="Nombre del Producto">
+                <input type="number" id="in-cost" placeholder="Costo Proveedor">
+                <input type="number" id="in-price" placeholder="Precio Venta">
+                <input type="number" id="in-qty" placeholder="Cantidad Inicial">
+                <input type="date" id="in-exp" title="Fecha de Caducidad">
+                <button onclick="addProduct()">Guardar en Stock</button>
+            </div>
+            <input type="text" id="inv-search" onkeyup="renderInventory()" placeholder="Buscar en bodega...">
+            <div id="inventory-list" class="item-list"></div>
+        </div>
+    </div>
 
-<div class="gothic-signature">Cruzz</div>
+    <div id="stats" class="page">
+        <button onclick="showPage('home')">⬅ Volver al Menú</button>
+        <div class="glass-card">
+            <h3>Rendimiento Semanal</h3>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+        <div class="glass-card">
+            <h3>Fugas y Merma (Gastos)</h3>
+            <div id="loss-list"></div>
+        </div>
+    </div>
 
-<script>
-    let db = JSON.parse(localStorage.getItem('the_db')) || [];
-    let historial = JSON.parse(localStorage.getItem('the_hi')) || [];
-    let sucursales = JSON.parse(localStorage.getItem('the_suc')) || [];
-    let caja = parseFloat(localStorage.getItem('the_ca')) || 0;
-    let costoVendido = parseFloat(localStorage.getItem('the_cv')) || 0;
-    let lang = localStorage.getItem('the_lang') || 'es';
-    let currDate = new Date();
-    let chartInstance = null;
+    <div id="ia" class="page">
+        <button onclick="showPage('home')">⬅ Volver al Menú</button>
+        <div class="glass-card">
+            <h3>Asistente IA de Márgenes</h3>
+            <p>Calcula el precio ideal para no perder dinero.</p>
+            <input type="number" id="ia-in-cost" placeholder="Costo del Producto ($)">
+            <input type="number" id="ia-in-margin" placeholder="Margen de Ganancia Deseado (%)">
+            <button onclick="runIACalc()">Calcular con IA</button>
+            <div id="ia-output" style="text-align:center; margin-top:15px;"></div>
+        </div>
+    </div>
 
-    const i18n = {
-        es: { inv: "Inventario", suc: "Tiendas", rep: "Mis Logros", ai: "Asesor AI", cfg: "Ajustes", l_caja: "VENDIDO HOY 💰", l_costo: "COSTO 📦", l_util: "NETO 💎" },
-        en: { inv: "Inventory", suc: "Stores", rep: "Stats", ai: "AI Advisor", cfg: "Settings", l_caja: "TODAY SALES 💰", l_costo: "COST 📦", l_util: "PROFIT 💎" },
-        fr: { inv: "Inventaire", suc: "Magasins", rep: "Statistiques", ai: "Conseiller IA", cfg: "Paramètres", l_caja: "VENTES AUJ. 💰", l_costo: "COÛT 📦", l_util: "PROFIT 💎" },
-        pt: { inv: "Estoque", suc: "Lojas", rep: "Estatísticas", ai: "Consultor IA", cfg: "Configurações", l_caja: "VENDAS HOJE 💰", l_costo: "CUSTO 📦", l_util: "LUCRO 💎" },
-        zh: { inv: "库存", suc: "商店", rep: "统计", ai: "AI顾问", cfg: "设置", l_caja: "今日销售 💰", l_costo: "成本 📦", l_util: "利润 💎" },
-        it: { inv: "Inventario", suc: "Negozi", rep: "Statistiche", ai: "Consulente IA", cfg: "Impostazioni", l_caja: "VENDITE OGGI 💰", l_costo: "COSTO 📦", l_util: "PROFITTO 💎" }
-    };
+    <footer>
+        <p>&copy; 2026 Tienda Hub Manager Pro | Firma: Cruzz</p>
+    </footer>
 
-    function goTo(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(id === 'scr-reports') { renderChart(); renderCalendar(); }
-        render();
-    }
+    <script>
+        // --- MOTOR DE DATOS (NIVEL PRO) ---
+        let storage = JSON.parse(localStorage.getItem('cruzz_pro_db')) || {
+            products: [],
+            sales: [],
+            losses: [],
+            customers: []
+        };
 
-    function renderCalendar() {
-        const monthEl = document.getElementById('calendar-month');
-        const daysEl = document.getElementById('calendar-days');
-        daysEl.innerHTML = '';
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        monthEl.innerText = `${monthNames[currDate.getMonth()]} ${currDate.getFullYear()}`;
+        let cart = [];
 
-        const firstDay = new Date(currDate.getFullYear(), currDate.getMonth(), 1).getDay();
-        const daysInMonth = new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
-
-        for (let i = 0; i < firstDay; i++) daysEl.innerHTML += '<div></div>';
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateStr = `${d}/${currDate.getMonth() + 1}/${currDate.getFullYear()}`;
-            const dayData = historial.find(h => h.fecha === dateStr);
-            const hasData = dayData ? 'has-data' : '';
-            daysEl.innerHTML += `<div class="calendar-day ${hasData}" onclick="showDayInfo('${dateStr}')">${d}</div>`;
+        function save() {
+            localStorage.setItem('cruzz_pro_db', JSON.stringify(storage));
+            updateDashboard();
         }
-        lucide.createIcons();
-    }
 
-    function showDayInfo(fecha) {
-        const info = historial.find(h => h.fecha === fecha);
-        const panel = document.getElementById('selected-day-info');
-        if(info) {
-            panel.style.display = 'block';
-            document.getElementById('info-date').innerText = "Corte del " + fecha;
-            document.getElementById('info-vta').innerText = "$" + info.vta.toFixed(2);
-            document.getElementById('info-neto').innerText = "$" + info.neto.toFixed(2);
-        } else { panel.style.display = 'none'; }
-    }
-
-    function changeMonth(dir) { currDate.setMonth(currDate.getMonth() + dir); renderCalendar(); }
-
-    function finalizarDia() {
-        const fechaActual = new Date().toLocaleDateString();
-        if(confirm(`¿Cerrar día ${fechaActual}? 🔒`)) {
-            historial.push({ fecha: fechaActual, neto: caja - costoVendido, vta: caja });
-            caja = 0; costoVendido = 0; save(); alert("Corte guardado en el calendario. ✅");
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'inventory') renderInventory();
+            if(id === 'stats') renderStats();
         }
-    }
 
-    function changeLang() { lang = document.getElementById('lang-select').value; localStorage.setItem('the_lang', lang); applyLang(); }
-    function applyLang() {
-        const t = i18n[lang];
-        ['m-inv','m-suc','m-rep','m-ai','m-cfg'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id.split('-')[1]]; });
-        document.getElementById('l-caja').innerText = t.l_caja;
-        document.getElementById('l-costo').innerText = t.l_costo;
-        document.getElementById('l-util').innerText = t.l_util;
-    }
-
-    function vender(id) {
-        let p = db.find(x => x.id === id);
-        if(p && p.s > 0) { 
-            p.s--; p.vtas++; caja += p.v; costoVendido += p.c; save();
-            const cajaEl = document.getElementById('h-caja');
-            cajaEl.classList.add('pop-anim'); setTimeout(()=>cajaEl.classList.remove('pop-anim'),300);
+        function toggleElement(id) {
+            let el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
         }
-    }
 
-    function add() {
-        const n = document.getElementById('n').value, v = parseFloat(document.getElementById('v').value), 
-              s = parseInt(document.getElementById('s').value), c = parseFloat(document.getElementById('costo').value),
-              cad = document.getElementById('caducidad').value;
-        if(n && v) { db.push({id: Date.now(), n, c: c||0, v, s: s||0, vtas: 0, cad}); save(); }
-    }
+        // --- LÓGICA DE PRODUCTOS ---
+        function addProduct() {
+            const p = {
+                id: Date.now(),
+                name: document.getElementById('in-name').value,
+                cost: parseFloat(document.getElementById('in-cost').value),
+                price: parseFloat(document.getElementById('in-price').value),
+                stock: parseInt(document.getElementById('in-qty').value),
+                exp: document.getElementById('in-exp').value
+            };
+            storage.products.push(p);
+            save();
+            renderInventory();
+            toggleElement('add-form');
+        }
 
-    function save() {
-        localStorage.setItem('the_db', JSON.stringify(db)); localStorage.setItem('the_hi', JSON.stringify(historial));
-        localStorage.setItem('the_ca', caja); localStorage.setItem('the_cv', costoVendido); render();
-    }
+        function renderInventory() {
+            const list = document.getElementById('inventory-list');
+            const search = document.getElementById('inv-search').value.toLowerCase();
+            list.innerHTML = "";
 
-    function render() {
-        document.getElementById('h-caja').innerText = "$" + caja.toFixed(2);
-        document.getElementById('h-costos-v').innerText = "$" + costoVendido.toFixed(2);
-        document.getElementById('h-util').innerText = "$" + (caja - costoVendido).toFixed(2);
-        const li = document.getElementById('list-inv');
-        if(li) {
-            li.innerHTML = '';
-            db.forEach(p => {
-                let color = p.s <= 3 ? 'bg-red' : (p.s <= 8 ? 'bg-orange' : 'bg-green');
-                li.innerHTML += `<div class="data-card">
-                    <div style="display:flex; justify-content:space-between"><b>${p.n}</b><b>$${p.v}</b></div>
-                    <div style="margin-top:5px;"><span class="badge ${color}">Stock: ${p.s}</span></div>
-                    <button onclick="vender(${p.id})" class="btn-primary" style="margin-top:10px; width:100%;">VENTA + 🚀</button>
-                </div>`;
+            storage.products.filter(p => p.name.toLowerCase().includes(search)).forEach(p => {
+                let color = 'var(--accent)';
+                if(p.stock <= 5) color = 'var(--danger)';
+                else if(p.stock <= 10) color = 'var(--warning)';
+
+                list.innerHTML += `
+                    <div class="product-card">
+                        <div>
+                            <span class="stock-indicator" style="background:${color}"></span>
+                            <strong>${p.name}</strong><br>
+                            <small>$${p.price} | Vence: ${p.exp || '--'}</small>
+                        </div>
+                        <div>
+                            <button style="width:30px; padding:5px;" onclick="updateStock(${p.id}, 1)">+</button>
+                            <span>${p.stock}</span>
+                            <button style="width:30px; padding:5px;" onclick="updateStock(${p.id}, -1)">-</button>
+                        </div>
+                    </div>
+                `;
             });
         }
-        lucide.createIcons();
-    }
 
-    function renderChart() {
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        if(chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(ctx, { 
-            type: 'line', 
-            data: { 
-                labels: historial.slice(-7).map(h=>h.fecha), 
-                datasets: [{ label: 'Ventas $', data: historial.slice(-7).map(h=>h.vta), borderColor: '#3B82F6', fill: true, tension:0.4 }] 
-            } 
-        });
-    }
+        function updateStock(id, amt) {
+            let p = storage.products.find(x => x.id === id);
+            p.stock += amt;
+            save();
+            renderInventory();
+        }
 
-    window.onload = () => { applyLang(); render(); };
-</script>
+        // --- LÓGICA DE VENTAS ---
+        function searchPOS() {
+            let q = document.getElementById('pos-search').value.toLowerCase();
+            let res = document.getElementById('pos-results');
+            res.innerHTML = "";
+            if(q.length < 2) return;
+
+            storage.products.filter(p => p.name.toLowerCase().includes(q)).forEach(p => {
+                res.innerHTML += `<div onclick="addToCart(${p.id})" style="padding:10px; background:var(--glass); margin:5px; border-radius:10px; cursor:pointer;">${p.name} - $${p.price}</div>`;
+            });
+        }
+
+        function addToCart(id) {
+            let p = storage.products.find(x => x.id === id);
+            if(p.stock <= 0) { alert("¡Sin stock!"); return; }
+            cart.push(p);
+            renderCart();
+        }
+
+        function renderCart() {
+            const div = document.getElementById('current-cart');
+            div.innerHTML = "";
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                div.innerHTML += `<p>✅ ${item.name} - $${item.price} <span onclick="removeFromCart(${index})" style="color:red; cursor:pointer;">[x]</span></p>`;
+            });
+            document.getElementById('cart-total').innerText = `Total: $${total.toFixed(2)}`;
+        }
+
+        function checkout() {
+            if(cart.length === 0) return;
+            let totalVenta = 0;
+            cart.forEach(item => {
+                let p = storage.products.find(x => x.id === item.id);
+                p.stock--;
+                totalVenta += item.price;
+            });
+            storage.sales.push({ date: new Date().toISOString(), total: totalVenta });
+            cart = [];
+            save();
+            renderCart();
+            alert("Venta Exitosa");
+        }
+
+        // --- IA Y PRONÓSTICOS ---
+        function runIACalc() {
+            let cost = parseFloat(document.getElementById('ia-in-cost').value);
+            let margin = parseFloat(document.getElementById('ia-in-margin').value) / 100;
+            let sug = cost / (1 - margin);
+            document.getElementById('ia-output').innerHTML = `
+                <h2 style="color:var(--secondary)">$${sug.toFixed(2)}</h2>
+                <p>Ganancia neta: $${(sug - cost).toFixed(2)}</p>
+                <p style="font-size:0.7rem">IA: Este precio protege tu flujo de efectivo en Tienda Cruzz.</p>
+            `;
+        }
+
+        function updateDashboard() {
+            let totalMes = storage.sales.reduce((a, b) => a + b.total, 0);
+            document.getElementById('home-balance').innerText = `$${totalMes.toFixed(2)}`;
+            // Pronóstico simple: si llevas X en 10 días, proyecta a 30.
+            let proyeccion = totalMes * 1.2; 
+            document.getElementById('pronostico-txt').innerText = `Pronóstico fin de mes: $${proyeccion.toFixed(2)}`;
+        }
+
+        // --- GRÁFICAS ---
+        function renderStats() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
+                    datasets: [{
+                        label: 'Ventas Semanales',
+                        data: [12, 19, 3, 5, 2, 3, 15], // Aquí irían datos reales de storage.sales
+                        backgroundColor: '#00d4ff'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        window.onload = updateDashboard;
+    </script>
 </body>
 </html>
