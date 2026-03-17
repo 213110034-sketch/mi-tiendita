@@ -204,29 +204,15 @@ update();
 }
 
 /* INVENTARIO */
-
 function addProduct(){
-
-if(!name.value.trim()){
-alert("Ponle nombre al producto bro 😅");
-return;
-}
-
-if(!price.value || !qty.value){
-alert("Completa los datos");
-return;
-}
-
 db.products.push({
 id:Date.now(),
-name:name.value.trim(),
-cost:+cost.value || 0,
+name:name.value,
+cost:+cost.value,
 price:+price.value,
 stock:+qty.value
 });
-
 name.value=cost.value=price.value=qty.value="";
-
 save();
 renderInv();
 }
@@ -260,7 +246,7 @@ cont.innerHTML="";
 db.products.forEach(p=>{
 cont.innerHTML+=`
 <div class="card">
-${p.name || "Producto sin nombre"} $${p.price}
+${p.name} $${p.price}
 
 <button onclick="addCart(${p.id})">➕ Agregar</button>
 <button class="btn-danger" onclick="deleteFromPOS(${p.id})">❌ Eliminar</button>
