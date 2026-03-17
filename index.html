@@ -203,7 +203,7 @@ localStorage.setItem('db',JSON.stringify(db));
 update();
 }
 
-/* PRODUCTOS */
+/* INVENTARIO */
 function addProduct(){
 db.products.push({
 id:Date.now(),
@@ -247,10 +247,20 @@ db.products.forEach(p=>{
 cont.innerHTML+=`
 <div class="card">
 ${p.name} $${p.price}
-<button onclick="addCart(${p.id})">+</button>
+
+<button onclick="addCart(${p.id})">➕ Agregar</button>
+<button class="btn-danger" onclick="deleteFromPOS(${p.id})">❌ Eliminar</button>
+
 </div>`;
 });
 renderCart();
+}
+
+function deleteFromPOS(id){
+if(!confirm("¿Eliminar este producto completamente?"))return;
+db.products = db.products.filter(p => p.id !== id);
+save();
+renderPOS();
 }
 
 function addCart(id){
