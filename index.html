@@ -3,283 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi tiendita</title>
+<title>Mi tiendita V3</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root{
---primary:#001f3f;
---secondary:#00d4ff;
---accent:#2ecc71;
---danger:#e74c3c;
---glass:rgba(255,255,255,0.1);
-}
-
-body{
-margin:0;
-font-family:'Poppins',sans-serif;
-background:radial-gradient(circle at top,#003366,#001f3f);
-color:white;
-}
-
-.page{display:none;padding:15px;}
-.active{display:block;}
-
-.card{
-background:var(--glass);
-padding:15px;
-border-radius:15px;
-margin:10px 0;
-backdrop-filter:blur(10px);
-}
-
-input,button{
-width:100%;
-padding:12px;
-margin:6px 0;
-border:none;
-border-radius:10px;
-font-size:1rem;
-}
-
-input{background:white;color:black;}
-
-button{
-background:var(--secondary);
-color:black;
-font-weight:bold;
-cursor:pointer;
-}
-
-h1,h2{text-align:center;}
-
-.nav button{
-margin:5px 0;
-}
-
-/* watermark */
-.watermark{
-position:fixed;
-bottom:10px;
-left:10px;
-font-size:0.8rem;
-opacity:0.3;
-color:#00d4ff;
-letter-spacing:2px;
-pointer-events:none;
-}
+body{margin:0;font-family:sans-serif;background:linear-gradient(#001f3f,#000);color:white}
+header{position:fixed;top:0;width:100%;padding:15px;background:#001f3f;text-align:center}
+.page{display:none;padding:80px 15px}
+.active{display:block}
+.card{background:rgba(255,255,255,0.1);padding:15px;border-radius:15px;margin:10px 0}
+button,input{width:100%;padding:10px;margin:5px 0;border-radius:10px;border:none}
+button{background:#00d4ff;color:black;font-weight:bold}
+.low{color:red}
+.warn{color:orange}
+.watermark{position:fixed;bottom:10px;left:10px;opacity:.3;color:#00d4ff}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login" class="page active">
-<h1>🏪 Mi tiendita</h1>
-<h2>🔐 Iniciar sesión</h2>
-<input id="user" placeholder="Usuario">
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
-</div>
+<header>🏪 Mi tiendita V3 🧠</header>
 
-<!-- HOME -->
-<div id="home" class="page">
+<div id="home" class="page active">
+<div class="card">
 <h2 id="total">$0</h2>
-<h3 id="profit">Ganancia $0</h3>
-
-<div class="nav">
-<button onclick="showPage('pos')">🛒 Vender</button>
-<button onclick="showPage('inventory')">📦 Inventario</button>
+<p id="profit"></p>
+<p id="forecast"></p>
 </div>
 
-<div id="adminPanel" style="display:none">
-<button onclick="showPage('users')">👥 Usuarios</button>
-<button onclick="showPage('owner')">👑 Panel dueño</button>
-<button onclick="showPage('logs')">📜 Logs</button>
-</div>
-</div>
+<button onclick="show('pos')">🛒 Vender</button>
+<button onclick="show('inventory')">📦 Inventario</button>
+<button onclick="show('stats')">📊 Inteligencia</button>
+<button onclick="show('debts')">💳 Fiado</button>
+<button onclick="show('expenses')">💰 Gastos</button>
+<button onclick="corte()">💸 Corte</button>
 
-<!-- USUARIOS -->
-<div id="users" class="page">
-<button onclick="showPage('home')">⬅️ Volver</button>
-
-<h2>👥 Crear empleado</h2>
-<input id="newUser" placeholder="Usuario">
-<input id="newPass" placeholder="Contraseña">
-<button onclick="createUser()">Crear usuario</button>
-
-<div id="userList"></div>
+<button onclick="exportData()">📤 Respaldar</button>
+<input type="file" onchange="importData(event)">
 </div>
 
 <!-- INVENTARIO -->
 <div id="inventory" class="page">
-<button onclick="showPage('home')">⬅️ Volver</button>
+<button onclick="show('home')">⬅️</button>
+<input id="search" placeholder="🔎 Buscar..." onkeyup="renderInv()">
 
-<div id="adminOnly">
 <input id="name" placeholder="Producto">
 <input id="cost" placeholder="Costo">
 <input id="price" placeholder="Precio">
 <input id="qty" placeholder="Cantidad">
-<button onclick="addProduct()">Agregar producto</button>
-</div>
+<button onclick="addProduct()">Agregar</button>
 
 <div id="inv"></div>
 </div>
 
 <!-- POS -->
 <div id="pos" class="page">
-<button onclick="showPage('home')">⬅️ Volver</button>
-
+<button onclick="show('home')">⬅️</button>
 <div id="products"></div>
 
-<h3>🧾 Carrito</h3>
+<div class="card">
+<h3>🧾 Ticket</h3>
 <div id="cart"></div>
 <h2 id="cartTotal">$0</h2>
-
-<button onclick="sell()">Finalizar venta</button>
+<button onclick="sell()">Cobrar</button>
+</div>
 </div>
 
-<!-- OWNER -->
-<div id="owner" class="page">
-<button onclick="showPage('home')">⬅️ Volver</button>
-<h2>👑 Panel del dueño</h2>
-<div id="ownerStats"></div>
+<!-- FIADO -->
+<div id="debts" class="page">
+<button onclick="show('home')">⬅️</button>
+<input id="dname" placeholder="Cliente">
+<input id="damount" placeholder="Monto">
+<button onclick="addDebt()">Agregar</button>
+<div id="debtList"></div>
 </div>
 
-<!-- LOGS -->
-<div id="logs" class="page">
-<button onclick="showPage('home')">⬅️ Volver</button>
-<h2>📜 Movimientos</h2>
-<div id="logList"></div>
+<!-- GASTOS -->
+<div id="expenses" class="page">
+<button onclick="show('home')">⬅️</button>
+<input id="ename" placeholder="Gasto">
+<input id="eamount" placeholder="Monto">
+<button onclick="addExpense()">Agregar</button>
+<div id="expenseList"></div>
 </div>
 
-<!-- WATERMARK -->
+<!-- INTELIGENCIA -->
+<div id="stats" class="page">
+<button onclick="show('home')">⬅️</button>
+
+<canvas id="chart1"></canvas>
+
+<div class="card">
+<h3>🔥 Top productos</h3>
+<div id="top"></div>
+</div>
+
+<div class="card">
+<h3>💸 Sugerencias de precios</h3>
+<div id="suggest"></div>
+</div>
+
+</div>
+
 <div class="watermark">cruzzz</div>
 
 <script>
-let db = JSON.parse(localStorage.getItem('db')) || {
-products:[],
-sales:[],
-logs:[],
-users:[{user:"admin",pass:"admin123",role:"admin"}]
+let db=JSON.parse(localStorage.getItem('db'))||{
+products:[],sales:[],debts:[],expenses:[]
 };
 
-let currentUser=null;
 let cart=[];
 
-// LOGIN
-function login(){
-let u=user.value;
-let p=pass.value;
+function save(){localStorage.setItem('db',JSON.stringify(db));update();}
 
-let found=db.users.find(x=>x.user===u && x.pass===p);
-
-if(!found) return alert("Datos incorrectos");
-
-currentUser=found;
-
-if(found.role==="admin"){
-adminPanel.style.display="block";
-adminOnly.style.display="block";
-}else{
-adminOnly.style.display="none";
-}
-
-showPage('home');
-}
-
-// CREAR USUARIO
-function createUser(){
-if(currentUser.role!=="admin") return;
-
-db.users.push({
-user:newUser.value,
-pass:newPass.value,
-role:"emp"
-});
-
-save();
-renderUsers();
-}
-
-// RENDER USERS
-function renderUsers(){
-userList.innerHTML="";
-db.users.forEach(u=>{
-userList.innerHTML+=`<div class="card">${u.user} (${u.role})</div>`;
-});
-}
-
-// NAV
-function showPage(p){
+function show(p){
 document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
 document.getElementById(p).classList.add('active');
 
-if(p==='inventory') renderInv();
-if(p==='pos') renderPOS();
-if(p==='owner') renderOwner();
-if(p==='logs') renderLogs();
-if(p==='users') renderUsers();
+if(p==='inventory')renderInv();
+if(p==='pos')renderPOS();
+if(p==='debts')renderDebts();
+if(p==='expenses')renderExpenses();
+if(p==='stats')intelligence();
 }
 
-// SAVE
-function save(){
-localStorage.setItem('db',JSON.stringify(db));
-update();
-}
-
-// LOG
-function log(a){
-db.logs.push({
-action:a,
-user:currentUser.user,
-date:new Date().toLocaleString()
-});
-}
-
-// INVENTARIO
 function addProduct(){
-if(currentUser.role!=="admin") return;
-
-let p={
-id:Date.now(),
-name:name.value,
-cost:+cost.value,
-price:+price.value,
-stock:+qty.value
-};
-
-db.products.push(p);
-log("Agregó "+p.name);
+db.products.push({id:Date.now(),name:name.value,cost:+cost.value,price:+price.value,stock:+qty.value});
 save();
-renderInv();
 }
 
 function renderInv(){
 inv.innerHTML="";
-db.products.forEach(p=>{
-inv.innerHTML+=`
-<div class="card">
-${p.name} - $${p.price} | Stock: ${p.stock}
-${currentUser.role==="admin" ? `<button onclick="del(${p.id})">Eliminar</button>` : ""}
+db.products.filter(p=>p.name.toLowerCase().includes(search.value.toLowerCase()))
+.forEach(p=>{
+let warn=(p.price-p.cost)<p.cost*0.3?"warn":"";
+inv.innerHTML+=`<div class="card ${p.stock<5?'low':''}">
+${p.name} $${p.price} Stock:${p.stock}
+<span class="${warn}">${warn?'⚠️ Baja ganancia':''}</span>
 </div>`;
 });
 }
 
-function del(id){
-db.products=db.products.filter(p=>p.id!==id);
-log("Eliminó producto");
-save();
-renderInv();
-}
-
-// POS
 function renderPOS(){
 products.innerHTML="";
 db.products.forEach(p=>{
-products.innerHTML+=`
-<div class="card">
+products.innerHTML+=`<div class="card">
 ${p.name} $${p.price}
-<button onclick="addCart(${p.id})">Agregar</button>
+<button onclick="addCart(${p.id})">+</button>
 </div>`;
 });
 renderCart();
@@ -287,8 +158,7 @@ renderCart();
 
 function addCart(id){
 let p=db.products.find(x=>x.id===id);
-if(p.stock<=0) return alert("Sin stock");
-
+if(p.stock<=0)return alert("Sin stock");
 cart.push(p);
 renderCart();
 }
@@ -296,75 +166,115 @@ renderCart();
 function renderCart(){
 cart.innerHTML="";
 let t=0;
-
-cart.forEach(i=>{
-t+=i.price;
-cart.innerHTML+=`<div>${i.name}</div>`;
-});
-
+cart.forEach(i=>{t+=i.price;cart.innerHTML+=`<div>${i.name}</div>`});
 cartTotal.innerText="$"+t;
 }
 
-// VENDER
 function sell(){
 let total=0,cost=0;
-
 cart.forEach(i=>{
 total+=i.price;
 cost+=i.cost;
 db.products.find(p=>p.id===i.id).stock--;
 });
-
-db.sales.push({
-total,
-profit:total-cost,
-user:currentUser.user,
-date:new Date()
-});
-
-log("Venta de $"+total);
-
+db.sales.push({items:cart,total,profit:total-cost,date:new Date()});
 cart=[];
 save();
 renderPOS();
 }
 
-// OWNER
-function renderOwner(){
-let t=0,p=0;
-
-db.sales.forEach(s=>{
-t+=s.total;
-p+=s.profit;
-});
-
-ownerStats.innerHTML=`
-<div class="card">
-<h2>Ventas: $${t}</h2>
-<h3>Ganancia real: $${p}</h3>
-</div>`;
-}
-
-// LOGS
-function renderLogs(){
-logList.innerHTML="";
-db.logs.forEach(l=>{
-logList.innerHTML+=`
-<div class="card">
-${l.action}<br>
-👤 ${l.user}<br>
-📅 ${l.date}
-</div>`;
+function addDebt(){db.debts.push({name:dname.value,amount:+damount.value});save();}
+function renderDebts(){
+debtList.innerHTML="";
+db.debts.forEach((d,i)=>{
+debtList.innerHTML+=`<div class="card">${d.name} debe $${d.amount}
+<button onclick="payDebt(${i})">Pagar</button></div>`;
 });
 }
+function payDebt(i){db.debts.splice(i,1);save();renderDebts();}
 
-// DASHBOARD
+function addExpense(){db.expenses.push({name:ename.value,amount:+eamount.value});save();}
+function renderExpenses(){
+expenseList.innerHTML="";
+db.expenses.forEach(e=>expenseList.innerHTML+=`<div class="card">${e.name} $${e.amount}</div>`);
+}
+
+function corte(){
+let hoy=new Date().toLocaleDateString();
+let ventas=db.sales.filter(s=>new Date(s.date).toLocaleDateString()===hoy);
+let total=ventas.reduce((a,b)=>a+b.total,0);
+let profit=ventas.reduce((a,b)=>a+b.profit,0);
+alert(`💸 Corte\nVentas:$${total}\nGanancia:$${profit}`);
+}
+
 function update(){
 let t=db.sales.reduce((a,b)=>a+b.total,0);
 let p=db.sales.reduce((a,b)=>a+b.profit,0);
+let gastos=db.expenses.reduce((a,b)=>a+b.amount,0);
 
 total.innerText="$"+t;
-profit.innerText="Ganancia $"+p;
+profit.innerText="Ganancia real $"+(p-gastos);
+
+forecast.innerText="📈 Pronóstico mensual: $"+forecastCalc();
+}
+
+function forecastCalc(){
+if(db.sales.length<2)return 0;
+let dias=[...new Set(db.sales.map(s=>new Date(s.date).toLocaleDateString()))].length;
+let total=db.sales.reduce((a,b)=>a+b.total,0);
+let promedio=total/dias;
+return (promedio*30).toFixed(2);
+}
+
+function intelligence(){
+charts();
+topProducts();
+priceSuggest();
+}
+
+function charts(){
+let v=db.sales.map(s=>s.total);
+new Chart(chart1,{type:'line',data:{labels:v.map((_,i)=>i),datasets:[{data:v}]}});}
+
+function topProducts(){
+let count={};
+db.sales.forEach(s=>{
+s.items.forEach(i=>{
+count[i.name]=(count[i.name]||0)+1;
+});
+});
+
+let sorted=Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+top.innerHTML="";
+sorted.forEach(p=>{
+top.innerHTML+=`<div>${p[0]} (${p[1]} ventas)</div>`;
+});
+}
+
+function priceSuggest(){
+suggest.innerHTML="";
+db.products.forEach(p=>{
+let profit=p.price-p.cost;
+if(profit<p.cost*0.3){
+let rec=(p.cost*1.3).toFixed(2);
+suggest.innerHTML+=`<div class="warn">${p.name} sube a $${rec}</div>`;
+}
+});
+}
+
+function exportData(){
+let blob=new Blob([JSON.stringify(db)],{type:"application/json"});
+let a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download="backup.json";
+a.click();
+}
+
+function importData(e){
+let reader=new FileReader();
+reader.onload=()=>{db=JSON.parse(reader.result);save();};
+reader.readAsText(e.target.files[0]);
 }
 
 update();
